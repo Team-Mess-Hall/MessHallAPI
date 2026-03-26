@@ -1,0 +1,264 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\carst\\OneDrive\\Desktop\\Mess Hall API\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{9DAA823D-6989-8644-A7CB-B0823C267006}|MessHallAPI.csproj|c:\\users\\carst\\onedrive\\desktop\\mess hall api\\config\\instanceconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9DAA823D-6989-8644-A7CB-B0823C267006}|MessHallAPI.csproj|solutionrelative:config\\instanceconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9DAA823D-6989-8644-A7CB-B0823C267006}|MessHallAPI.csproj|c:\\users\\carst\\onedrive\\desktop\\mess hall api\\networking\\messhallnetworktransform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9DAA823D-6989-8644-A7CB-B0823C267006}|MessHallAPI.csproj|solutionrelative:networking\\messhallnetworktransform.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9DAA823D-6989-8644-A7CB-B0823C267006}|MessHallAPI.csproj|c:\\users\\carst\\onedrive\\desktop\\mess hall api\\base\\references.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9DAA823D-6989-8644-A7CB-B0823C267006}|MessHallAPI.csproj|solutionrelative:base\\references.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9DAA823D-6989-8644-A7CB-B0823C267006}|MessHallAPI.csproj|c:\\users\\carst\\onedrive\\desktop\\mess hall api\\managers\\modstorage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9DAA823D-6989-8644-A7CB-B0823C267006}|MessHallAPI.csproj|solutionrelative:managers\\modstorage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9DAA823D-6989-8644-A7CB-B0823C267006}|MessHallAPI.csproj|c:\\users\\carst\\onedrive\\desktop\\mess hall api\\managers\\assetbundleloader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9DAA823D-6989-8644-A7CB-B0823C267006}|MessHallAPI.csproj|solutionrelative:managers\\assetbundleloader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9DAA823D-6989-8644-A7CB-B0823C267006}|MessHallAPI.csproj|c:\\users\\carst\\onedrive\\desktop\\mess hall api\\networking\\networkmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9DAA823D-6989-8644-A7CB-B0823C267006}|MessHallAPI.csproj|solutionrelative:networking\\networkmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9DAA823D-6989-8644-A7CB-B0823C267006}|MessHallAPI.csproj|c:\\users\\carst\\onedrive\\desktop\\mess hall api\\patches\\reliabledatapatch.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9DAA823D-6989-8644-A7CB-B0823C267006}|MessHallAPI.csproj|solutionrelative:patches\\reliabledatapatch.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9DAA823D-6989-8644-A7CB-B0823C267006}|MessHallAPI.csproj|c:\\users\\carst\\onedrive\\desktop\\mess hall api\\networking\\rpcregistry.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9DAA823D-6989-8644-A7CB-B0823C267006}|MessHallAPI.csproj|solutionrelative:networking\\rpcregistry.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9DAA823D-6989-8644-A7CB-B0823C267006}|MessHallAPI.csproj|c:\\users\\carst\\onedrive\\desktop\\mess hall api\\networking\\networksender.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9DAA823D-6989-8644-A7CB-B0823C267006}|MessHallAPI.csproj|solutionrelative:networking\\networksender.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9DAA823D-6989-8644-A7CB-B0823C267006}|MessHallAPI.csproj|c:\\users\\carst\\onedrive\\desktop\\mess hall api\\networking\\messhallrpc.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9DAA823D-6989-8644-A7CB-B0823C267006}|MessHallAPI.csproj|solutionrelative:networking\\messhallrpc.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9DAA823D-6989-8644-A7CB-B0823C267006}|MessHallAPI.csproj|c:\\users\\carst\\onedrive\\desktop\\mess hall api\\base\\core.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9DAA823D-6989-8644-A7CB-B0823C267006}|MessHallAPI.csproj|solutionrelative:base\\core.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9DAA823D-6989-8644-A7CB-B0823C267006}|MessHallAPI.csproj|c:\\users\\carst\\onedrive\\desktop\\mess hall api\\base\\modassembly.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9DAA823D-6989-8644-A7CB-B0823C267006}|MessHallAPI.csproj|solutionrelative:base\\modassembly.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9DAA823D-6989-8644-A7CB-B0823C267006}|MessHallAPI.csproj|c:\\users\\carst\\onedrive\\desktop\\mess hall api\\config\\settings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9DAA823D-6989-8644-A7CB-B0823C267006}|MessHallAPI.csproj|solutionrelative:config\\settings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9DAA823D-6989-8644-A7CB-B0823C267006}|MessHallAPI.csproj|c:\\users\\carst\\onedrive\\desktop\\mess hall api\\debugger\\logging.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9DAA823D-6989-8644-A7CB-B0823C267006}|MessHallAPI.csproj|solutionrelative:debugger\\logging.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9DAA823D-6989-8644-A7CB-B0823C267006}|MessHallAPI.csproj|c:\\users\\carst\\onedrive\\desktop\\mess hall api\\messhallapi.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|",
+      "RelativeMoniker": "D:0:0:{9DAA823D-6989-8644-A7CB-B0823C267006}|MessHallAPI.csproj|solutionrelative:messhallapi.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 4,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "MessHallNetworkTransform.cs",
+              "DocumentMoniker": "C:\\Users\\carst\\OneDrive\\Desktop\\Mess Hall API\\Networking\\MessHallNetworkTransform.cs",
+              "RelativeDocumentMoniker": "Networking\\MessHallNetworkTransform.cs",
+              "ToolTip": "C:\\Users\\carst\\OneDrive\\Desktop\\Mess Hall API\\Networking\\MessHallNetworkTransform.cs",
+              "RelativeToolTip": "Networking\\MessHallNetworkTransform.cs",
+              "ViewState": "AgIAAFsAAAAAAAAAAAAmwGIAAAArAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-16T11:15:14.176Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "NetworkManager.cs",
+              "DocumentMoniker": "C:\\Users\\carst\\OneDrive\\Desktop\\Mess Hall API\\Networking\\NetworkManager.cs",
+              "RelativeDocumentMoniker": "Networking\\NetworkManager.cs",
+              "ToolTip": "C:\\Users\\carst\\OneDrive\\Desktop\\Mess Hall API\\Networking\\NetworkManager.cs",
+              "RelativeToolTip": "Networking\\NetworkManager.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAE0AAABTAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-15T19:13:07.919Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "RPCRegistry.cs",
+              "DocumentMoniker": "C:\\Users\\carst\\OneDrive\\Desktop\\Mess Hall API\\Networking\\RPCRegistry.cs",
+              "RelativeDocumentMoniker": "Networking\\RPCRegistry.cs",
+              "ToolTip": "C:\\Users\\carst\\OneDrive\\Desktop\\Mess Hall API\\Networking\\RPCRegistry.cs",
+              "RelativeToolTip": "Networking\\RPCRegistry.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-15T21:00:57.008Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "InstanceConfig.cs",
+              "DocumentMoniker": "C:\\Users\\carst\\OneDrive\\Desktop\\Mess Hall API\\Config\\InstanceConfig.cs",
+              "RelativeDocumentMoniker": "Config\\InstanceConfig.cs",
+              "ToolTip": "C:\\Users\\carst\\OneDrive\\Desktop\\Mess Hall API\\Config\\InstanceConfig.cs",
+              "RelativeToolTip": "Config\\InstanceConfig.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAA7AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-16T20:21:54.693Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "NetworkSender.cs",
+              "DocumentMoniker": "C:\\Users\\carst\\OneDrive\\Desktop\\Mess Hall API\\Networking\\NetworkSender.cs",
+              "RelativeDocumentMoniker": "Networking\\NetworkSender.cs",
+              "ToolTip": "C:\\Users\\carst\\OneDrive\\Desktop\\Mess Hall API\\Networking\\NetworkSender.cs",
+              "RelativeToolTip": "Networking\\NetworkSender.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-15T20:35:18.825Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "ReliableDataPatch.cs",
+              "DocumentMoniker": "C:\\Users\\carst\\OneDrive\\Desktop\\Mess Hall API\\Patches\\ReliableDataPatch.cs",
+              "RelativeDocumentMoniker": "Patches\\ReliableDataPatch.cs",
+              "ToolTip": "C:\\Users\\carst\\OneDrive\\Desktop\\Mess Hall API\\Patches\\ReliableDataPatch.cs",
+              "RelativeToolTip": "Patches\\ReliableDataPatch.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-15T22:36:43.444Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "AssetBundleLoader.cs",
+              "DocumentMoniker": "C:\\Users\\carst\\OneDrive\\Desktop\\Mess Hall API\\Managers\\AssetBundleLoader.cs",
+              "RelativeDocumentMoniker": "Managers\\AssetBundleLoader.cs",
+              "ToolTip": "C:\\Users\\carst\\OneDrive\\Desktop\\Mess Hall API\\Managers\\AssetBundleLoader.cs",
+              "RelativeToolTip": "Managers\\AssetBundleLoader.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-15T13:35:23.803Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ModStorage.cs",
+              "DocumentMoniker": "C:\\Users\\carst\\OneDrive\\Desktop\\Mess Hall API\\Managers\\ModStorage.cs",
+              "RelativeDocumentMoniker": "Managers\\ModStorage.cs",
+              "ToolTip": "C:\\Users\\carst\\OneDrive\\Desktop\\Mess Hall API\\Managers\\ModStorage.cs",
+              "RelativeToolTip": "Managers\\ModStorage.cs",
+              "ViewState": "AgIAAB4AAAAAAAAAAAA/wAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-15T13:35:37.538Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "References.cs",
+              "DocumentMoniker": "C:\\Users\\carst\\OneDrive\\Desktop\\Mess Hall API\\Base\\References.cs",
+              "RelativeDocumentMoniker": "Base\\References.cs",
+              "ToolTip": "C:\\Users\\carst\\OneDrive\\Desktop\\Mess Hall API\\Base\\References.cs",
+              "RelativeToolTip": "Base\\References.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-15T16:57:44.392Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "MessHallRPC.cs",
+              "DocumentMoniker": "C:\\Users\\carst\\OneDrive\\Desktop\\Mess Hall API\\Networking\\MessHallRPC.cs",
+              "RelativeDocumentMoniker": "Networking\\MessHallRPC.cs",
+              "ToolTip": "C:\\Users\\carst\\OneDrive\\Desktop\\Mess Hall API\\Networking\\MessHallRPC.cs",
+              "RelativeToolTip": "Networking\\MessHallRPC.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-15T21:22:46.533Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "Core.cs",
+              "DocumentMoniker": "C:\\Users\\carst\\OneDrive\\Desktop\\Mess Hall API\\Base\\Core.cs",
+              "RelativeDocumentMoniker": "Base\\Core.cs",
+              "ToolTip": "C:\\Users\\carst\\OneDrive\\Desktop\\Mess Hall API\\Base\\Core.cs",
+              "RelativeToolTip": "Base\\Core.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-15T13:00:59.967Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "ModAssembly.cs",
+              "DocumentMoniker": "C:\\Users\\carst\\OneDrive\\Desktop\\Mess Hall API\\Base\\ModAssembly.cs",
+              "RelativeDocumentMoniker": "Base\\ModAssembly.cs",
+              "ToolTip": "C:\\Users\\carst\\OneDrive\\Desktop\\Mess Hall API\\Base\\ModAssembly.cs",
+              "RelativeToolTip": "Base\\ModAssembly.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-19T13:45:26.083Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "Settings.cs",
+              "DocumentMoniker": "C:\\Users\\carst\\OneDrive\\Desktop\\Mess Hall API\\Config\\Settings.cs",
+              "RelativeDocumentMoniker": "Config\\Settings.cs",
+              "ToolTip": "C:\\Users\\carst\\OneDrive\\Desktop\\Mess Hall API\\Config\\Settings.cs",
+              "RelativeToolTip": "Config\\Settings.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-15T13:31:20.19Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "Logging.cs",
+              "DocumentMoniker": "C:\\Users\\carst\\OneDrive\\Desktop\\Mess Hall API\\Debugger\\Logging.cs",
+              "RelativeDocumentMoniker": "Debugger\\Logging.cs",
+              "ToolTip": "C:\\Users\\carst\\OneDrive\\Desktop\\Mess Hall API\\Debugger\\Logging.cs",
+              "RelativeToolTip": "Debugger\\Logging.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAD8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-15T13:33:12.896Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "MessHallAPI",
+              "DocumentMoniker": "C:\\Users\\carst\\OneDrive\\Desktop\\Mess Hall API\\MessHallAPI.csproj",
+              "RelativeDocumentMoniker": "MessHallAPI.csproj",
+              "ToolTip": "C:\\Users\\carst\\OneDrive\\Desktop\\Mess Hall API\\MessHallAPI.csproj",
+              "RelativeToolTip": "MessHallAPI.csproj",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-03-17T23:13:51.69Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

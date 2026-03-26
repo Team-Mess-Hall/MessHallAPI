@@ -1,0 +1,1404 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v6.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v6.0": {
+      "MessHallAPI/1.0.0": {
+        "dependencies": {
+          "0Harmony": "2.10.2.0",
+          "Assembly-CSharp": "0.0.0.0",
+          "Il2CppFusion.Addressables": "0.0.0.0",
+          "Il2CppFusion.Common": "1.1.8.0",
+          "Il2CppFusion.Realtime": "1.1.8.0",
+          "Il2CppFusion.Runtime": "1.1.8.0",
+          "Il2CppFusion.Scripts": "0.0.0.0",
+          "Il2CppFusion.Sockets": "1.1.8.0",
+          "Il2CppInterop.Common": "1.5.1.0",
+          "Il2CppInterop.Generator": "1.5.1.0",
+          "Il2CppInterop.HarmonySupport": "1.5.1.0",
+          "Il2CppInterop.Runtime": "1.5.1.0",
+          "Il2Cppmscorlib": "4.0.0.0",
+          "Il2CppPhoton3Unity3D": "4.1.7.1",
+          "Il2CppPhotonRealtime": "0.0.0.0",
+          "Il2CppPhotonVoice.API": "0.0.0.0",
+          "Il2CppPhotonVoice": "0.0.0.0",
+          "Il2CppPhotonVoice.Fusion": "0.0.0.0",
+          "Il2CppSG.Airlock": "0.0.0.0",
+          "Il2CppSG.AutoPerf.Data.Airlock": "0.0.0.0",
+          "Il2CppSG.AutoPerf.Data": "0.0.0.0",
+          "Il2CppSG.AutoPerf": "0.0.0.0",
+          "Il2CppSG.Core": "0.0.0.0",
+          "Il2CppSG.EosSDK2": "0.0.0.0",
+          "Il2CppSG.FusionSimulator": "0.0.0.0",
+          "Il2CppSG.GlobalEvents": "0.0.0.0",
+          "Il2CppSystem": "4.0.0.0",
+          "MelonLoader": "0.7.2.0",
+          "Newtonsoft.Json": "13.0.0.0",
+          "Unity.Addressables": "0.0.0.0",
+          "UnityEngine.AssetBundleModule": "0.0.0.0",
+          "UnityEngine.CoreModule": "0.0.0.0",
+          "UnityEngine": "0.0.0.0",
+          "UnityEngine.ImageConversionModule": "0.0.0.0",
+          "UnityEngine.IMGUIModule": "0.0.0.0",
+          "UnityEngine.InputModule": "0.0.0.0",
+          "UnityEngine.PhysicsModule": "0.0.0.0",
+          "UnityEngine.UI": "1.0.0.0",
+          "UnityEngine.UIElementsModule": "0.0.0.0",
+          "UnityEngine.UIModule": "0.0.0.0"
+        },
+        "runtime": {
+          "MessHallAPI.dll": {}
+        }
+      },
+      "0Harmony/2.10.2.0": {
+        "runtime": {
+          "0Harmony.dll": {
+            "assemblyVersion": "2.10.2.0",
+            "fileVersion": "2.10.2.0"
+          }
+        }
+      },
+      "Assembly-CSharp/0.0.0.0": {
+        "runtime": {
+          "Assembly-CSharp.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Il2CppFusion.Addressables/0.0.0.0": {
+        "runtime": {
+          "Il2CppFusion.Addressables.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Il2CppFusion.Common/1.1.8.0": {
+        "runtime": {
+          "Il2CppFusion.Common.dll": {
+            "assemblyVersion": "1.1.8.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Il2CppFusion.Realtime/1.1.8.0": {
+        "runtime": {
+          "Il2CppFusion.Realtime.dll": {
+            "assemblyVersion": "1.1.8.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Il2CppFusion.Runtime/1.1.8.0": {
+        "runtime": {
+          "Il2CppFusion.Runtime.dll": {
+            "assemblyVersion": "1.1.8.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Il2CppFusion.Scripts/0.0.0.0": {
+        "runtime": {
+          "Il2CppFusion.Scripts.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Il2CppFusion.Sockets/1.1.8.0": {
+        "runtime": {
+          "Il2CppFusion.Sockets.dll": {
+            "assemblyVersion": "1.1.8.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Il2CppInterop.Common/1.5.1.0": {
+        "runtime": {
+          "Il2CppInterop.Common.dll": {
+            "assemblyVersion": "1.5.1.0",
+            "fileVersion": "1.5.1.0"
+          }
+        }
+      },
+      "Il2CppInterop.Generator/1.5.1.0": {
+        "runtime": {
+          "Il2CppInterop.Generator.dll": {
+            "assemblyVersion": "1.5.1.0",
+            "fileVersion": "1.5.1.0"
+          }
+        }
+      },
+      "Il2CppInterop.HarmonySupport/1.5.1.0": {
+        "runtime": {
+          "Il2CppInterop.HarmonySupport.dll": {
+            "assemblyVersion": "1.5.1.0",
+            "fileVersion": "1.5.1.0"
+          }
+        }
+      },
+      "Il2CppInterop.Runtime/1.5.1.0": {
+        "runtime": {
+          "Il2CppInterop.Runtime.dll": {
+            "assemblyVersion": "1.5.1.0",
+            "fileVersion": "1.5.1.0"
+          }
+        }
+      },
+      "Il2Cppmscorlib/4.0.0.0": {
+        "runtime": {
+          "Il2Cppmscorlib.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Il2CppPhoton3Unity3D/4.1.7.1": {
+        "runtime": {
+          "Il2CppPhoton3Unity3D.dll": {
+            "assemblyVersion": "4.1.7.1",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Il2CppPhotonRealtime/0.0.0.0": {
+        "runtime": {
+          "Il2CppPhotonRealtime.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Il2CppPhotonVoice.API/0.0.0.0": {
+        "runtime": {
+          "Il2CppPhotonVoice.API.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Il2CppPhotonVoice/0.0.0.0": {
+        "runtime": {
+          "Il2CppPhotonVoice.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Il2CppPhotonVoice.Fusion/0.0.0.0": {
+        "runtime": {
+          "Il2CppPhotonVoice.Fusion.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Il2CppSG.Airlock/0.0.0.0": {
+        "runtime": {
+          "Il2CppSG.Airlock.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Il2CppSG.AutoPerf.Data.Airlock/0.0.0.0": {
+        "runtime": {
+          "Il2CppSG.AutoPerf.Data.Airlock.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Il2CppSG.AutoPerf.Data/0.0.0.0": {
+        "runtime": {
+          "Il2CppSG.AutoPerf.Data.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Il2CppSG.AutoPerf/0.0.0.0": {
+        "runtime": {
+          "Il2CppSG.AutoPerf.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Il2CppSG.Core/0.0.0.0": {
+        "runtime": {
+          "Il2CppSG.Core.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Il2CppSG.EosSDK2/0.0.0.0": {
+        "runtime": {
+          "Il2CppSG.EosSDK2.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Il2CppSG.FusionSimulator/0.0.0.0": {
+        "runtime": {
+          "Il2CppSG.FusionSimulator.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Il2CppSG.GlobalEvents/0.0.0.0": {
+        "runtime": {
+          "Il2CppSG.GlobalEvents.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Il2CppSystem/4.0.0.0": {
+        "runtime": {
+          "Il2CppSystem.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "MelonLoader/0.7.2.0": {
+        "runtime": {
+          "MelonLoader.dll": {
+            "assemblyVersion": "0.7.2.0",
+            "fileVersion": "0.7.2.0"
+          }
+        }
+      },
+      "Newtonsoft.Json/13.0.0.0": {
+        "runtime": {
+          "Newtonsoft.Json.dll": {
+            "assemblyVersion": "13.0.0.0",
+            "fileVersion": "13.0.4.30916"
+          }
+        }
+      },
+      "Unity.Addressables/0.0.0.0": {
+        "runtime": {
+          "Unity.Addressables.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "UnityEngine.AssetBundleModule/0.0.0.0": {
+        "runtime": {
+          "UnityEngine.AssetBundleModule.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "UnityEngine.CoreModule/0.0.0.0": {
+        "runtime": {
+          "UnityEngine.CoreModule.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "UnityEngine/0.0.0.0": {
+        "runtime": {
+          "UnityEngine.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "UnityEngine.ImageConversionModule/0.0.0.0": {
+        "runtime": {
+          "UnityEngine.ImageConversionModule.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "UnityEngine.IMGUIModule/0.0.0.0": {
+        "runtime": {
+          "UnityEngine.IMGUIModule.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "UnityEngine.InputModule/0.0.0.0": {
+        "runtime": {
+          "UnityEngine.InputModule.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "UnityEngine.PhysicsModule/0.0.0.0": {
+        "runtime": {
+          "UnityEngine.PhysicsModule.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "UnityEngine.UI/1.0.0.0": {
+        "runtime": {
+          "UnityEngine.UI.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "UnityEngine.UIElementsModule/0.0.0.0": {
+        "runtime": {
+          "UnityEngine.UIElementsModule.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "UnityEngine.UIModule/0.0.0.0": {
+        "runtime": {
+          "UnityEngine.UIModule.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Mono.Cecil/0.11.6.0": {
+        "runtime": {
+          "Mono.Cecil.dll": {
+            "assemblyVersion": "0.11.6.0",
+            "fileVersion": "0.11.6.0"
+          }
+        }
+      },
+      "UnityEngine.AudioModule/0.0.0.0": {
+        "runtime": {
+          "UnityEngine.AudioModule.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "UnityEngine.ParticleSystemModule/0.0.0.0": {
+        "runtime": {
+          "UnityEngine.ParticleSystemModule.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Il2CppSG.SoundCore/0.0.0.0": {
+        "runtime": {
+          "Il2CppSG.SoundCore.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "UnityEngine.AnimationModule/0.0.0.0": {
+        "runtime": {
+          "UnityEngine.AnimationModule.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Il2CppSG.Vignettitor/0.0.0.0": {
+        "runtime": {
+          "Il2CppSG.Vignettitor.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Unity.ResourceManager/0.0.0.0": {
+        "runtime": {
+          "Unity.ResourceManager.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Il2CppSystem.Core/4.0.0.0": {
+        "runtime": {
+          "Il2CppSystem.Core.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "UnityEngine.UnityWebRequestModule/0.0.0.0": {
+        "runtime": {
+          "UnityEngine.UnityWebRequestModule.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "UnityEngine.Physics2DModule/0.0.0.0": {
+        "runtime": {
+          "UnityEngine.Physics2DModule.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "UnityEngine.TextRenderingModule/0.0.0.0": {
+        "runtime": {
+          "UnityEngine.TextRenderingModule.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Il2CppNanoSockets/1.0.0.0": {
+        "runtime": {
+          "Il2CppNanoSockets.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Iced/1.21.0.0": {
+        "runtime": {
+          "Iced.dll": {
+            "assemblyVersion": "1.21.0.0",
+            "fileVersion": "1.21.0.0"
+          }
+        }
+      },
+      "AsmResolver.DotNet/6.0.0.0": {
+        "runtime": {
+          "AsmResolver.DotNet.dll": {
+            "assemblyVersion": "6.0.0.0",
+            "fileVersion": "6.0.0.0"
+          }
+        }
+      },
+      "AsmResolver.PE/6.0.0.0": {
+        "runtime": {
+          "AsmResolver.PE.dll": {
+            "assemblyVersion": "6.0.0.0",
+            "fileVersion": "6.0.0.0"
+          }
+        }
+      },
+      "AsmResolver/6.0.0.0": {
+        "runtime": {
+          "AsmResolver.dll": {
+            "assemblyVersion": "6.0.0.0",
+            "fileVersion": "6.0.0.0"
+          }
+        }
+      },
+      "MonoMod.Backports/1.1.2.0": {
+        "runtime": {
+          "MonoMod.Backports.dll": {
+            "assemblyVersion": "1.1.2.0",
+            "fileVersion": "1.1.2.0"
+          }
+        }
+      },
+      "Il2CppSystem.Numerics/4.0.0.0": {
+        "runtime": {
+          "Il2CppSystem.Numerics.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "UnityEngine.AndroidJNIModule/0.0.0.0": {
+        "runtime": {
+          "UnityEngine.AndroidJNIModule.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Il2CppToxMod/0.0.0.0": {
+        "runtime": {
+          "Il2CppToxMod.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "UnityEngine.XRModule/0.0.0.0": {
+        "runtime": {
+          "UnityEngine.XRModule.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Unity.TextMeshPro/0.0.0.0": {
+        "runtime": {
+          "Unity.TextMeshPro.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Unity.InputSystem/1.7.0.0": {
+        "runtime": {
+          "Unity.InputSystem.dll": {
+            "assemblyVersion": "1.7.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Il2CppSG.LightUI/0.0.0.0": {
+        "runtime": {
+          "Il2CppSG.LightUI.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Il2CppSG.LightTween/0.0.0.0": {
+        "runtime": {
+          "Il2CppSG.LightTween.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Unity.RenderPipelines.Universal.Runtime/0.0.0.0": {
+        "runtime": {
+          "Unity.RenderPipelines.Universal.Runtime.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Il2CppSG.PlayerLoops/0.0.0.0": {
+        "runtime": {
+          "Il2CppSG.PlayerLoops.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Il2CppNewtonsoft.Json/13.0.0.0": {
+        "runtime": {
+          "Il2CppNewtonsoft.Json.dll": {
+            "assemblyVersion": "13.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Unity.Timeline/1.0.0.0": {
+        "runtime": {
+          "Unity.Timeline.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "UnityEngine.DirectorModule/0.0.0.0": {
+        "runtime": {
+          "UnityEngine.DirectorModule.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Unity.RenderPipelines.Core.Runtime/0.0.0.0": {
+        "runtime": {
+          "Unity.RenderPipelines.Core.Runtime.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Il2CppGilgaMesh.Runtime/1.0.0.0": {
+        "runtime": {
+          "Il2CppGilgaMesh.Runtime.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Il2CppSG.SkuBuild/0.0.0.0": {
+        "runtime": {
+          "Il2CppSG.SkuBuild.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Il2CppSystem.Net.Http/4.0.0.0": {
+        "runtime": {
+          "Il2CppSystem.Net.Http.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Il2CppEpic.OnlineServices/0.0.0.0": {
+        "runtime": {
+          "Il2CppEpic.OnlineServices.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Il2CppMono.Security/4.0.0.0": {
+        "runtime": {
+          "Il2CppMono.Security.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Il2CppSystem.Configuration/4.0.0.0": {
+        "runtime": {
+          "Il2CppSystem.Configuration.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Il2CppSystem.Xml/4.0.0.0": {
+        "runtime": {
+          "Il2CppSystem.Xml.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "MonoMod.Utils/22.7.31.1": {
+        "runtime": {
+          "MonoMod.Utils.dll": {
+            "assemblyVersion": "22.7.31.1",
+            "fileVersion": "22.7.31.1"
+          }
+        }
+      },
+      "MonoMod.RuntimeDetour/22.7.31.1": {
+        "runtime": {
+          "MonoMod.RuntimeDetour.dll": {
+            "assemblyVersion": "22.7.31.1",
+            "fileVersion": "22.7.31.1"
+          }
+        }
+      },
+      "bHapticsLib/1.0.6.0": {
+        "runtime": {
+          "bHapticsLib.dll": {
+            "assemblyVersion": "1.0.6.0",
+            "fileVersion": "1.0.6.0"
+          }
+        }
+      },
+      "AssetRipper.Primitives/3.2.0.0": {
+        "runtime": {
+          "AssetRipper.Primitives.dll": {
+            "assemblyVersion": "3.2.0.0",
+            "fileVersion": "3.2.0.0"
+          }
+        }
+      },
+      "Tomlet/6.2.0.0": {
+        "runtime": {
+          "Tomlet.dll": {
+            "assemblyVersion": "6.2.0.0",
+            "fileVersion": "6.2.0.0"
+          }
+        }
+      },
+      "AssetsTools.NET/3.0.0.0": {
+        "runtime": {
+          "AssetsTools.NET.dll": {
+            "assemblyVersion": "3.0.0.0",
+            "fileVersion": "3.0.0.0"
+          }
+        }
+      },
+      "Microsoft.Diagnostics.Runtime/3.1.10.12801": {
+        "runtime": {
+          "Microsoft.Diagnostics.Runtime.dll": {
+            "assemblyVersion": "3.1.10.12801",
+            "fileVersion": "3.1.10.12801"
+          }
+        }
+      },
+      "Mono.Cecil.Mdb/0.11.6.0": {
+        "runtime": {
+          "Mono.Cecil.Mdb.dll": {
+            "assemblyVersion": "0.11.6.0",
+            "fileVersion": "0.11.6.0"
+          }
+        }
+      },
+      "Mono.Cecil.Pdb/0.11.6.0": {
+        "runtime": {
+          "Mono.Cecil.Pdb.dll": {
+            "assemblyVersion": "0.11.6.0",
+            "fileVersion": "0.11.6.0"
+          }
+        }
+      },
+      "Mono.Cecil.Rocks/0.11.6.0": {
+        "runtime": {
+          "Mono.Cecil.Rocks.dll": {
+            "assemblyVersion": "0.11.6.0",
+            "fileVersion": "0.11.6.0"
+          }
+        }
+      },
+      "AsmResolver.PE.File/6.0.0.0": {
+        "runtime": {
+          "AsmResolver.PE.File.dll": {
+            "assemblyVersion": "6.0.0.0",
+            "fileVersion": "6.0.0.0"
+          }
+        }
+      },
+      "UnityEngine.InputLegacyModule/0.0.0.0": {
+        "runtime": {
+          "UnityEngine.InputLegacyModule.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "UnityEngine.TextCoreTextEngineModule/0.0.0.0": {
+        "runtime": {
+          "UnityEngine.TextCoreTextEngineModule.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "UnityEngine.JSONSerializeModule/0.0.0.0": {
+        "runtime": {
+          "UnityEngine.JSONSerializeModule.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Unity.XR.Management/0.0.0.0": {
+        "runtime": {
+          "Unity.XR.Management.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Unity.Profiling.Core/0.0.0.0": {
+        "runtime": {
+          "Unity.Profiling.Core.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "MonoMod.ILHelpers/1.1.0.0": {
+        "runtime": {
+          "MonoMod.ILHelpers.dll": {
+            "assemblyVersion": "1.1.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "UnityEngine.SubsystemsModule/0.0.0.0": {
+        "runtime": {
+          "UnityEngine.SubsystemsModule.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "UnityEngine.TextCoreFontEngineModule/0.0.0.0": {
+        "runtime": {
+          "UnityEngine.TextCoreFontEngineModule.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Unity.RenderPipeline.Universal.ShaderLibrary/0.0.0.0": {
+        "runtime": {
+          "Unity.RenderPipeline.Universal.ShaderLibrary.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Unity.Mathematics/1.0.0.0": {
+        "runtime": {
+          "Unity.Mathematics.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Il2CppSystem.Xml.Linq/4.0.0.0": {
+        "runtime": {
+          "Il2CppSystem.Xml.Linq.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Il2CppSystem.Runtime.Serialization/4.0.0.0": {
+        "runtime": {
+          "Il2CppSystem.Runtime.Serialization.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Il2CppSystem.Data/4.0.0.0": {
+        "runtime": {
+          "Il2CppSystem.Data.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "WebSocketDotNet/1.0.0.0": {
+        "runtime": {
+          "WebSocketDotNet.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "MessHallAPI/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "0Harmony/2.10.2.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Assembly-CSharp/0.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Il2CppFusion.Addressables/0.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Il2CppFusion.Common/1.1.8.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Il2CppFusion.Realtime/1.1.8.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Il2CppFusion.Runtime/1.1.8.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Il2CppFusion.Scripts/0.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Il2CppFusion.Sockets/1.1.8.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Il2CppInterop.Common/1.5.1.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Il2CppInterop.Generator/1.5.1.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Il2CppInterop.HarmonySupport/1.5.1.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Il2CppInterop.Runtime/1.5.1.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Il2Cppmscorlib/4.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Il2CppPhoton3Unity3D/4.1.7.1": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Il2CppPhotonRealtime/0.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Il2CppPhotonVoice.API/0.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Il2CppPhotonVoice/0.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Il2CppPhotonVoice.Fusion/0.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Il2CppSG.Airlock/0.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Il2CppSG.AutoPerf.Data.Airlock/0.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Il2CppSG.AutoPerf.Data/0.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Il2CppSG.AutoPerf/0.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Il2CppSG.Core/0.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Il2CppSG.EosSDK2/0.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Il2CppSG.FusionSimulator/0.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Il2CppSG.GlobalEvents/0.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Il2CppSystem/4.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "MelonLoader/0.7.2.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Newtonsoft.Json/13.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Unity.Addressables/0.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "UnityEngine.AssetBundleModule/0.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "UnityEngine.CoreModule/0.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "UnityEngine/0.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "UnityEngine.ImageConversionModule/0.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "UnityEngine.IMGUIModule/0.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "UnityEngine.InputModule/0.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "UnityEngine.PhysicsModule/0.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "UnityEngine.UI/1.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "UnityEngine.UIElementsModule/0.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "UnityEngine.UIModule/0.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Mono.Cecil/0.11.6.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "UnityEngine.AudioModule/0.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "UnityEngine.ParticleSystemModule/0.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Il2CppSG.SoundCore/0.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "UnityEngine.AnimationModule/0.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Il2CppSG.Vignettitor/0.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Unity.ResourceManager/0.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Il2CppSystem.Core/4.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "UnityEngine.UnityWebRequestModule/0.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "UnityEngine.Physics2DModule/0.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "UnityEngine.TextRenderingModule/0.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Il2CppNanoSockets/1.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Iced/1.21.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "AsmResolver.DotNet/6.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "AsmResolver.PE/6.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "AsmResolver/6.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "MonoMod.Backports/1.1.2.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Il2CppSystem.Numerics/4.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "UnityEngine.AndroidJNIModule/0.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Il2CppToxMod/0.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "UnityEngine.XRModule/0.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Unity.TextMeshPro/0.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Unity.InputSystem/1.7.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Il2CppSG.LightUI/0.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Il2CppSG.LightTween/0.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Unity.RenderPipelines.Universal.Runtime/0.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Il2CppSG.PlayerLoops/0.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Il2CppNewtonsoft.Json/13.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Unity.Timeline/1.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "UnityEngine.DirectorModule/0.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Unity.RenderPipelines.Core.Runtime/0.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Il2CppGilgaMesh.Runtime/1.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Il2CppSG.SkuBuild/0.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Il2CppSystem.Net.Http/4.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Il2CppEpic.OnlineServices/0.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Il2CppMono.Security/4.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Il2CppSystem.Configuration/4.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Il2CppSystem.Xml/4.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "MonoMod.Utils/22.7.31.1": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "MonoMod.RuntimeDetour/22.7.31.1": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "bHapticsLib/1.0.6.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "AssetRipper.Primitives/3.2.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Tomlet/6.2.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "AssetsTools.NET/3.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Microsoft.Diagnostics.Runtime/3.1.10.12801": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Mono.Cecil.Mdb/0.11.6.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Mono.Cecil.Pdb/0.11.6.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Mono.Cecil.Rocks/0.11.6.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "AsmResolver.PE.File/6.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "UnityEngine.InputLegacyModule/0.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "UnityEngine.TextCoreTextEngineModule/0.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "UnityEngine.JSONSerializeModule/0.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Unity.XR.Management/0.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Unity.Profiling.Core/0.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "MonoMod.ILHelpers/1.1.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "UnityEngine.SubsystemsModule/0.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "UnityEngine.TextCoreFontEngineModule/0.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Unity.RenderPipeline.Universal.ShaderLibrary/0.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Unity.Mathematics/1.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Il2CppSystem.Xml.Linq/4.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Il2CppSystem.Runtime.Serialization/4.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Il2CppSystem.Data/4.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "WebSocketDotNet/1.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
