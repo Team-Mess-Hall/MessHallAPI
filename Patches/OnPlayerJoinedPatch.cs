@@ -1,54 +1,58 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using HarmonyLib;
 using Il2CppFusion;
 using MelonLoader;
-using MessHallAPI.Base;
 using MessHallAPI.Config;
+using MessHallAPI.Debugger;
 using MessHallAPI.Networking;
 using UnityEngine;
 
 namespace MessHallAPI.Patches
 {
-    [HarmonyPatch(typeof(NetworkRunner), nameof(NetworkRunner.Fusion_Simulation_ICallbacks_PlayerJoined))]
     internal class OnPlayerJoinedPatch
     {
-        public static readonly Dictionary<int, string> Keys = new();
+        public static readonly Dictionary<int, string> ReliableKeys = new();
 
-        private static void Postfix(NetworkRunner __instance, PlayerRef player)
+        public static bool TryGetKey(int id, out string? key)
         {
-            Settings.IsHost = __instance.LocalPlayer.PlayerId == 9;
-            if (Settings.IsHost) MelonCoroutines.Start(AssignRpcKey(__instance, player));
+            return ReliableKeys.TryGetValue(id, out key);
         }
 
-        private static IEnumerator AssignRpcKey(NetworkRunner runner, PlayerRef player)
+        [HarmonyPatch(typeof(NetworkRunner), nameof(NetworkRunner.Fusion_Simulation_ICallbacks_PlayerJoined))]
+        private static class Patch
         {
-            yield return new WaitForSeconds(8f);
-
-            if (runner == null || !runner.IsPlayerValid(player))
-                yield break;
-
-            var key = System.Guid.NewGuid().ToString();
-
-            Keys[player.PlayerId] = key;
-
-            var data = new Dictionary<string, object>
+            private static void Prefix(PlayerRef player)
             {
-                { "RpcName", "KeyExchange" },
-                { "Key", key },
-                { "UnreliableActor", runner.LocalPlayer.PlayerId }
-            };
+                if (!Settings.IsHost)
+                    return;
 
-            string json = Newtonsoft.Json.JsonConvert.SerializeObject(data);
-            byte[] jsonBytes = System.Text.Encoding.UTF8.GetBytes(json);
+                MelonCoroutines.Start(ExchangeKeys(player.PlayerId));
+            }
+        }
 
-            byte[] payload = new byte[jsonBytes.Length + 1];
-            payload[0] = PacketConstants.MHAPI;
-            Buffer.BlockCopy(jsonBytes, 0, payload, 1, jsonBytes.Length);
+        private static IEnumerator ExchangeKeys(int playerId)
+        {
+            yield return new WaitForSeconds(9f);
 
-            NetworkSender.SendToPlayer(player, payload);
+            string guid = Guid.NewGuid().ToString();
 
-            MelonLogger.Msg($"[rpc] sent key to {player.PlayerId}: {key}");
+            ReliableKeys[playerId] = guid;
+            if (playerId == 9)
+            {
+                RPCRegistry.ReliableKey = guid;
+                Logging.Log($"Host player joined, set key: {guid}");
+            }
+            else NetworkManager.InvokeRPC("MessHallAPI", "RPC_ExchangeKeys", playerId, guid);
+        }
+
+        [MessHallRPC(RPCTarget.All, RPCCaller.HostOnly)]
+        public static void RPC_ExchangeKeys([RPCTarget] int target, string Key)
+        {
+            if (string.IsNullOrEmpty(RPCRegistry.ReliableKey))
+                RPCRegistry.ReliableKey = Key;
+            Logging.Log($"Received key from host: {Key} for player {target}");
         }
     }
 }

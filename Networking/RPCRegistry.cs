@@ -6,6 +6,15 @@ namespace MessHallAPI.Networking
 {
     public static class RPCRegistry
     {
+        public class RPCPacket
+        {
+            public string? ModId { get; set; }
+            public string? ReliableKey { get; set; }
+            public string? Method { get; set; }
+            public int ActorId { get; set; }
+            public object[]? Args { get; set; }
+        }
+
         internal record RPCEntry(
             object Owner,
             MethodInfo Method,
@@ -14,8 +23,7 @@ namespace MessHallAPI.Networking
         );
 
         private static readonly Dictionary<string, RPCEntry> _entries = new();
-        internal static string ReliableKey = string.Empty;
-
+        internal static string ReliableKey = "";
         public static void Register(object instance, string modId)
         {
             ScanAndRegister(instance, instance.GetType(), modId);
@@ -23,45 +31,64 @@ namespace MessHallAPI.Networking
 
         internal static void AutoDiscover()
         {
-            foreach (MelonMod melon in MelonMod.RegisteredMelons)
+            foreach (var mod in MelonMod.RegisteredMelons)
             {
-                var assembly = melon.GetType().Assembly;
-                var modId = melon.Info.Name;
+                var assembly = mod.GetType().Assembly;
+                var modId = mod.Info.Name;
 
                 foreach (var type in assembly.GetTypes())
                 {
-                    MethodInfo[]? methods = type.GetMethods(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+                    var methods = type.GetMethods(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
 
-                    foreach (MethodInfo method in methods)
+                    foreach (var method in methods)
                     {
                         var attr = method.GetCustomAttribute<MessHallRPCAttribute>();
                         if (attr == null)
                             continue;
 
-                        var owner = method.IsStatic ? null : TryGetInstance(type);
-                        if (!method.IsStatic && owner == null)
+                        object instance = null;
+
+                        if (!method.IsStatic)
                         {
-                            try { owner = Activator.CreateInstance(type); } catch { }
+                            instance = TryGetInstance(type);
+                            if (instance == null)
+                            {
+                                try { instance = Activator.CreateInstance(type); }
+                                catch { }
+                            }
                         }
 
-                        var key = $"{modId}::{method.Name}";
+                        string key = $"{modId}::{method.Name}";
+
                         if (_entries.ContainsKey(key))
+                        {
+                            Logging.Warn($"Duplicate RPC '{key}' — skipping.");
                             continue;
+                        }
 
                         ValidateSignature(method);
 
-                        _entries[key] = new RPCEntry(owner, method, attr, modId);
-                        Logging.Log($"RPC {key}");
+                        _entries[key] = new RPCEntry(instance, method, attr, modId);
+
+                        Logging.Log($"[RPC REGISTERED] {key}");
                     }
                 }
             }
+
+            Logging.Log($"[RPC] Total Registered: {_entries.Count}");
         }
 
         public static void Unregister(string modId)
         {
-            var keys = _entries.Where(x => x.Value.ModId == modId).Select(x => x.Key).ToList();
-            foreach (var k in keys)
-                _entries.Remove(k);
+            var keys = _entries
+                .Where(kv => kv.Value.ModId == modId)
+                .Select(kv => kv.Key)
+                .ToList();
+
+            foreach (var key in keys)
+                _entries.Remove(key);
+
+            Logging.Warn($"Unregistered {keys.Count} RPCs for mod '{modId}'");
         }
 
         internal static bool TryGet(string key, out RPCEntry entry)
@@ -71,43 +98,84 @@ namespace MessHallAPI.Networking
 
         private static void ScanAndRegister(object instance, Type type, string modId)
         {
-            foreach (MethodInfo? method in type.GetMethods(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic))
+            foreach (var method in type.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static))
             {
-                var RpcAttribute = method.GetCustomAttribute<MessHallRPCAttribute>();
-                if (RpcAttribute == null)
+                var attr = method.GetCustomAttribute<MessHallRPCAttribute>();
+                if (attr == null)
                     continue;
 
-                Object? owner = method.IsStatic ? null : instance;
+                object owner = method.IsStatic ? null : instance;
 
-                var key = $"{modId}::{method.Name}";
+                if (!method.IsStatic && owner == null)
+                {
+                    try { owner = Activator.CreateInstance(type); }
+                    catch { }
+                }
+
+                string key = $"{modId}::{method.Name}";
+
                 if (_entries.ContainsKey(key))
+                {
+                    Logging.Warn($"Duplicate RPC '{key}' — skipping.");
                     continue;
+                }
 
                 ValidateSignature(method);
 
-                _entries[key] = new RPCEntry(owner, method, RpcAttribute, modId);
-                Logging.Log($"RPC {key}");
+                _entries[key] = new RPCEntry(owner, method, attr, modId);
+
+                Logging.Log($"[RPC REGISTERED] {key}");
             }
         }
 
         private static void ValidateSignature(MethodInfo method)
         {
             if (method.ReturnType != typeof(void))
-                throw new InvalidOperationException();
+                throw new InvalidOperationException($"RPC '{method.Name}' must return void.");
 
-            Type[] type = new[] { typeof(int), typeof(float), typeof(bool), typeof(string), typeof(byte) };
+            var supported = new[] {
+                typeof(int), typeof(float), typeof(bool),
+                typeof(string), typeof(byte)
+            };
 
-            foreach (ParameterInfo? property in method.GetParameters())
-                if (!type.Contains(property.ParameterType))
-                    throw new NotSupportedException();
+            foreach (var param in method.GetParameters())
+            {
+                if (!supported.Contains(param.ParameterType))
+                    throw new NotSupportedException($"RPC '{method.Name}' has unsupported parameter type '{param.ParameterType.Name}'. Supported: int, float, bool, string, byte.");
+            }
         }
 
-        private static object? TryGetInstance(Type type)
+        private static object TryGetInstance(Type type)
         {
-            PropertyInfo? property = type.GetProperty("Instance", BindingFlags.Static | BindingFlags.Public) ?? type.GetProperty("Singleton", BindingFlags.Static | BindingFlags.Public);
+            var instanceProp = type.GetProperty("Instance", BindingFlags.Static | BindingFlags.Public)
+                            ?? type.GetProperty("Singleton", BindingFlags.Static | BindingFlags.Public);
 
-            if (property != null) return property.GetValue(null);
+            if (instanceProp != null)
+                return instanceProp.GetValue(null);
+
             return null;
+        }
+
+        public static void Execute(string modId, string methodName, params object[] args)
+        {
+            string key = $"{modId}::{methodName}";
+
+            if (!_entries.TryGetValue(key, out var entry))
+            {
+                Logging.Error($"RPC not found: {key}");
+                foreach (var k in _entries.Keys)
+                    Logging.Log($"RPC: {k}");
+                return;
+            }
+
+            try
+            {
+                entry.Method.Invoke(entry.Method.IsStatic ? null : entry.Owner, args);
+            }
+            catch (Exception ex)
+            {
+                Logging.Error($"RPC invoke failed: {ex}");
+            }
         }
     }
 }

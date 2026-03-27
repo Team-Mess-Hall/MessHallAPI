@@ -24,17 +24,22 @@ namespace MessHallAPI.Base
                 trace = "Setting Nulls";
                 ReferencesSet = false;
                 Client = null;
+                Peer = null;
+                GameState = null;
+                Spawn = null;
+                networkRunner = null;
 
                 trace = "Client";
                 Client = FindObjectOfType<XRRig>();
+                trace = "Peer";
+                Peer = FindObjectOfType<AirlockPeer>();
+                IsHost = Peer.Runner.LocalPlayer.PlayerId == 9;
                 trace = "GameState";
                 GameState = FindObjectOfType<GameStateManager>();
                 trace = "Spawn";
                 Spawn = FindObjectOfType<SpawnManager>();
                 trace = "networkRunner";
-                networkRunner = FindObjectOfType<AirlockNetworkRunner>();
-                IsHost = networkRunner.LocalPlayer.PlayerId == 9;
-
+                networkRunner = FindObjectOfType<AirlockNetworkRunner>();            
             }
             catch
             {

@@ -144,8 +144,4 @@
     </Reference>
   </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="@echo off&#xD;&#xA;del /F /Q &quot;C:\Program Files (x86)\Steam\steamapps\common\Among Us 3D\Mods\MessHallAPI.dll&quot; 2&gt;nul&#xD;&#xA;&#xD;&#xA;copy /Y &quot;$(TargetDir)$(TargetFileName)&quot; &quot;C:\Program Files (x86)\Steam\steamapps\common\Among Us 3D\Mods\MessHallAPI.dll&quot;&#xD;&#xA;" />
-  </Target>
-
 </Project>

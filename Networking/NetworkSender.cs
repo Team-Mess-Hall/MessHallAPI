@@ -3,7 +3,6 @@ using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using static MessHallAPI.Base.References;
 using MessHallAPI.Debugger;
 using Il2CppSG.Airlock.Network;
-using MelonLoader;
 
 namespace MessHallAPI.Networking
 {
@@ -14,12 +13,16 @@ namespace MessHallAPI.Networking
         /// </summary>
         internal static void SendToPlayer(PlayerRef target, byte[] payload)
         {
-            var runner = UnityEngine.Object.FindObjectOfType<AirlockNetworkRunner>();
-            networkRunner = runner;
+            if (networkRunner == null && target.IsValid)
+            {
+                Logging.Error("NetworkRunner not available.");
+                networkRunner = UnityEngine.Object.FindObjectOfType<AirlockNetworkRunner>();
+                Logging.Log($"Fixed? {networkRunner != null}");
 
-            runner.SendReliableDataToPlayer(target, new Il2CppStructArray<byte>(Wrap(payload)));
-            MelonLogger.Msg($"Null: {networkRunner == null}, 2null: {runner == null}");
+                return;
+            }
 
+            networkRunner.SendReliableDataToPlayer(target, new Il2CppStructArray<byte>(Wrap(payload)));
         }
 
         /// <summary>
@@ -27,12 +30,13 @@ namespace MessHallAPI.Networking
         /// </summary>
         internal static void SendToServer(byte[] payload)
         {
-            var runner = UnityEngine.Object.FindObjectOfType<AirlockNetworkRunner>();
-            networkRunner = runner;
+            if (networkRunner == null)
+            {
+                Logging.Error("NetworkRunner not available.");
+                return;
+            }
 
             networkRunner.SendReliableDataToServer(new Il2CppStructArray<byte>(Wrap(payload)));
-            MelonLogger.Msg($"Null: {networkRunner == null}, 2null: {runner == null}");
-
         }
 
         /// <summary>
@@ -40,6 +44,7 @@ namespace MessHallAPI.Networking
         /// </summary>
         internal static void SendToAll(byte[] payload, bool includeLocal = false)
         {
+            if (networkRunner == null) return;
 
             foreach (var playerState in Spawn.ActivePlayerStates)
             {
@@ -49,6 +54,8 @@ namespace MessHallAPI.Networking
                 SendToPlayer(playerState.PlayerId, payload);
             }
         }
+
+
 
         private static byte[] Wrap(byte[] payload)
         {

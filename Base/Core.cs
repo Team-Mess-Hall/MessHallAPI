@@ -1,10 +1,11 @@
-﻿using Il2CppInterop.Runtime.Injection;
+﻿using Il2CppFusion;
+using Il2CppInterop.Runtime.Injection;
+using Il2CppSystem.Collections;
 using MelonLoader;
+using MessHallAPI.APIDebug;
 using MessHallAPI.Config;
 using MessHallAPI.Managers;
 using MessHallAPI.Networking;
-using MessHallAPI.Patches;
-using Rewind.Managers;
 using UnityEngine;
 using static MessHallAPI.Base.References;
 using static MessHallAPI.Config.Settings;
@@ -22,67 +23,104 @@ namespace MessHallAPI.Base
         {
             foreach (Type type in System.Reflection.Assembly.GetExecutingAssembly().GetTypes())
             {
-                try { ClassInjector.RegisterTypeInIl2Cpp(type); }
+                try
+                {
+                    ClassInjector.RegisterTypeInIl2Cpp(type);
+                }
                 catch { }
             }
-
-            if (InstanceConfig.MultipleInstancesEnabled && ShouldMakeAnotherInstance())
-            {
-                for (int i = 0; i < InstanceConfig.InstanceAmount; i++)
-                {
-                    System.Diagnostics.Process.Start(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
-                }
-            }
-
-            IsVR = Application.productName.Contains("VR");
             RPCRegistry.AutoDiscover();
-
-
+            IsVR = Application.productName.Contains("VR");
         }
-        public override void OnSceneWasLoaded(int buildIndex, string sceneName)
+        public override void OnSceneWasInitialized(int buildIndex, string sceneName)
         {
             SceneName = sceneName;
             InGame = SceneName != "Title" && SceneName != "Boot";
             if (SceneName == "Title")
             {
                 ModStorage.LoadModStamp();
+                RPCRegistry.ReliableKey = string.Empty;
             }
             if (InGame)
             {
-                if (ReferencesSet != true)
+                if (!ReferencesSet)
                 {
                     ResetReferences();
+                    MelonCoroutines.Start(DelayedReset());
                 }
             }
         }
 
-        private Rect window = new Rect(10, 10, 220, 140);
+        private static System.Collections.IEnumerator DelayedReset()
+        {
+            if (networkRunner == null)
+            {
+                yield return new WaitForSeconds(2.5f);
+                ResetReferences();
+            }
+        }
+
 
         public override void OnGUI()
         {
-            GUI.depth = -1000;
-            window = GUI.Window(1337, window, (GUI.WindowFunction)DrawWindow, "RPC Test");
-        }
-
-        private void DrawWindow(int id)
-        {
-            if (GUI.Button(new Rect(10, 20, 200, 30), "SendRpc"))
+            float y = 10f;
+            if (GUI.Button(new Rect(10, y, 100, 30), "RPC0"))
             {
-                NetworkManager.InvokeRPC("MessHallAPI", "TestRPC1");
+                NetworkManager.InvokeRPC("MessHallAPI", "RPC_Sabotage", 0, "hello");
             }
-
-            if (GUI.Button(new Rect(10, 50, 200, 30), "Spoof GUID"))
+            y += 30f;
+            if (GUI.Button(new Rect(10, y, 100, 30), "RPC1"))
             {
-                RPCRegistry.ReliableKey = "fuckyou";
+                NetworkManager.InvokeRPC("MessHallAPI", "RPC_Sabotage", 1, "hello");
             }
+            y += 30f;
 
-
-            if (GUI.Button(new Rect(10, 70, 200, 30), "Fix GUID"))
+            if (GUI.Button(new Rect(10, y, 100, 30), "RPC2"))
             {
-                RPCRegistry.ReliableKey = OnPlayerJoinedPatch.Keys[References.networkRunner.LocalPlayer];
-                MelonLogger.Msg($"Set RPC key to {RPCRegistry.ReliableKey}");
+                NetworkManager.InvokeRPC("MessHallAPI", "RPC_Sabotage", 2, "hello");
             }
-            GUI.DragWindow();
+            y += 30f;
+
+            if (GUI.Button(new Rect(10, y, 100, 30), "RPC3"))
+            {
+                NetworkManager.InvokeRPC("MessHallAPI", "RPC_Sabotage", 3, "hello");
+            }
+            y += 30f;
+
+            if (GUI.Button(new Rect(10, y, 100, 30), "RPC4"))
+            {
+                NetworkManager.InvokeRPC("MessHallAPI", "RPC_Sabotage", 4, "hello");
+            }
+            y += 30f;
+
+            if (GUI.Button(new Rect(10, y, 100, 30), "RPC5"))
+            {
+                NetworkManager.InvokeRPC("MessHallAPI", "RPC_Sabotage", 5, "hello");
+            }
+            y += 30f;
+
+            if (GUI.Button(new Rect(10, y, 100, 30), "RPC6"))
+            {
+                NetworkManager.InvokeRPC("MessHallAPI", "RPC_Sabotage", 6, "hello");
+            }
+            y += 30f;
+
+            if (GUI.Button(new Rect(10, y, 100, 30), "RPC7"))
+            {
+                NetworkManager.InvokeRPC("MessHallAPI", "RPC_Sabotage", 7, "hello");
+            }
+            y += 30f;
+
+            if (GUI.Button(new Rect(10, y, 100, 30), "RPC8"))
+            {
+                NetworkManager.InvokeRPC("MessHallAPI", "RPC_Sabotage", 8, "hello");
+            }
+            y += 30f;
+
+            if (GUI.Button(new Rect(10, y, 100, 30), "RPC9"))
+            {
+                NetworkManager.InvokeRPC("MessHallAPI", "RPC_Sabotage", 9, "hello");
+            }
         }
     }
 }

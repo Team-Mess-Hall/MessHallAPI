@@ -1,389 +1,193 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Numerics;
+using System.Text.Json;
 using Il2CppFusion;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using Il2CppSG.Airlock;
-using Il2CppSG.Airlock.Sabotage;
 using MelonLoader;
 using MessHallAPI.Base;
 using MessHallAPI.Config;
 using MessHallAPI.Debugger;
 using MessHallAPI.Patches;
+using UnityEngine.Playables;
 using static MessHallAPI.Base.References;
+using static MessHallAPI.Networking.RPCRegistry;
 
 namespace MessHallAPI.Networking
 {
     public static class NetworkManager
     {
 
-        public static void InvokeRPC(string ModId, string Method, params object[] Args)
+        public static void InvokeRPC(string modId, string methodName, params object[] args)
         {
             if (!Settings.InGame)
             {
-                MelonLogger.Msg("[RPC] Not in game");
+                Logging.Warn("[RPC] Not in game, exiting early.");
                 return;
             }
 
-            string Key = ModId + "::" + Method;
+            string key = modId + "::" + methodName;
 
-            if (!RPCRegistry.TryGet(Key, out var Entry))
+            if (!RPCRegistry.TryGet(key, out var entry))
             {
-                MelonLogger.Msg($"[RPC] Not registered: {Key}");
+                Logging.Error($"[RPC] {key} is not registered!");
                 return;
             }
 
-            if (Entry.Attr.Caller == RPCCaller.HostOnly && !Settings.IsHost)
+            if (entry.Attr.Caller == RPCCaller.HostOnly && !Settings.IsHost)
             {
-                MelonLogger.Msg($"[RPC] Blocked HostOnly: {Key}");
+                Logging.DebugWarn($"[RPC] HostOnly Rpc {key} blocked");
                 return;
-            }
-
-            var Encoding = System.Text.Encoding.UTF8;
-            string ReliableKey = RPCRegistry.ReliableKey ?? "";
-            int Actor = References.networkRunner.LocalPlayer.PlayerId;
-
-            byte[] Buffer = new byte[1024];
-            int Offset = 0;
-
-            Buffer[Offset++] = PacketConstants.MHAPI;
-
-            void WriteString(string Str)
-            {
-                var Bytes = Encoding.GetBytes(Str ?? "");
-                Buffer[Offset++] = (byte)TypeTag.String;
-                System.Buffer.BlockCopy(BitConverter.GetBytes(Bytes.Length), 0, Buffer, Offset, 4);
-                Offset += 4;
-                System.Buffer.BlockCopy(Bytes, 0, Buffer, Offset, Bytes.Length);
-                Offset += Bytes.Length;
-            }
-
-            void WriteInt(int Val)
-            {
-                Buffer[Offset++] = (byte)TypeTag.Int;
-                System.Buffer.BlockCopy(BitConverter.GetBytes(Val), 0, Buffer, Offset, 4);
-                Offset += 4;
-            }
-
-            WriteString(ModId);
-            WriteInt(Actor);
-            WriteString(ReliableKey);
-            WriteString(Method);
-
-            System.Buffer.BlockCopy(BitConverter.GetBytes(Args.Length), 0, Buffer, Offset, 4);
-            Offset += 4;
-
-            foreach (var Arg in Args)
-            {
-                switch (Arg)
-                {
-                    case int I:
-                        WriteInt(I);
-                        break;
-
-                    case float F:
-                        Buffer[Offset++] = (byte)TypeTag.Float;
-                        System.Buffer.BlockCopy(BitConverter.GetBytes(F), 0, Buffer, Offset, 4);
-                        Offset += 4;
-                        break;
-
-                    case bool B:
-                        Buffer[Offset++] = (byte)TypeTag.Bool;
-                        Buffer[Offset++] = B ? (byte)1 : (byte)0;
-                        break;
-
-                    case byte BT:
-                        Buffer[Offset++] = (byte)TypeTag.Byte;
-                        Buffer[Offset++] = BT;
-                        break;
-
-                    case string S:
-                        WriteString(S);
-                        break;
-
-                    default:
-                        MelonLogger.Msg($"[RPC] Unknown arg type: {Arg?.GetType()}");
-                        break;
-                }
-            }
-
-            byte[] Final = new byte[Offset];
-            System.Buffer.BlockCopy(Buffer, 0, Final, 0, Offset);
-
-            MelonLogger.Msg($"[RPC] {Key} | Actor {Actor} | Args {Args.Length} | lentgh {Final.Length}");
-
-            switch (Entry.Attr.Target)
-            {
-                case RPCTarget.Host:
-                    MelonLogger.Msg("[RPC] sent to host i think");
-
-                    if (Settings.IsHost)
-                    {
-                        MelonLogger.Msg("[RPC] Executed locally prob");
-                        ExecuteLocal(Entry, Args);
-                    }
-                    else
-                    {
-                        NetworkSender.SendToServer(Final);
-                    }
-                    break;
-
-                case RPCTarget.All:
-                    MelonLogger.Msg("[RPC SEND] All");
-                    NetworkSender.SendToAll(Final, false);
-                    break;
-
-                case RPCTarget.AllInclusive:
-                    MelonLogger.Msg("[RPC SEND] AllInclusive");
-                    ExecuteLocal(Entry, Args);
-                    NetworkSender.SendToAll(Final, false);
-                    break;
-            }
-        }
-
-        public static void OperationReceived(PlayerRef Sender, Il2CppStructArray<byte> DataArray)
-        {
-            if (!Settings.InGame)
-                return;
-
-            byte[] Data = DataArray;
-
-            if (Data.Length < 2 || Data[0] != PacketConstants.MHAPI)
-                return;
-
-            var Encoding = System.Text.Encoding.UTF8;
-            int Offset = 1;
-
-            string ReadString()
-            {
-                int Len = BitConverter.ToInt32(Data, Offset);
-                Offset += 4;
-                string Str = Encoding.GetString(Data, Offset, Len);
-                Offset += Len;
-                return Str;
-            }
-
-            int ReadInt()
-            {
-                int Val = BitConverter.ToInt32(Data, Offset);
-                Offset += 4;
-                return Val;
             }
 
             try
             {
-                Offset++;
-                string ModId = ReadString();
+                int actorId = Client?.PState?.PlayerId ?? -1;
 
-                Offset++;
-                int Actor = ReadInt();
+                int RpcTarget = -1;
 
-                Offset++;
-                string Key = ReadString();
-
-                Offset++;
-                string Method = ReadString();
-
-                int Count = ReadInt();
-
-                MelonLogger.Msg($"[RPC recv] {ModId}::{Method} | From {Actor} | Args {Count}");
-
-                if (!string.IsNullOrEmpty(Key))
+                var parms = entry.Method.GetParameters();
+                for (int i = 0; i < parms.Length && i < args.Length; i++)
                 {
-                    OnPlayerJoinedPatch.Keys[Actor] = Key;
-                    RPCRegistry.ReliableKey = Key;
-                }
-
-                string RpcKey = ModId + "::" + Method;
-
-                if (!RPCRegistry.TryGet(RpcKey, out var Entry))
-                {
-                    MelonLogger.Msg($"[RPC recv] Not registered: {RpcKey}");
-                    return;
-                }
-
-                if (Entry.Attr.Caller == RPCCaller.HostOnly && Sender.PlayerId != 9)
-                {
-                    MelonLogger.Msg($"[RPC recv] Blocked HostOnly: {RpcKey}");
-                    return;
-                }
-
-                object[] Args = new object[Count];
-
-                for (int i = 0; i < Count; i++)
-                {
-                    var Type = (TypeTag)Data[Offset++];
-
-                    switch (Type)
+                    if (Attribute.IsDefined(parms[i], typeof(RPCTargetAttribute)))
                     {
-                        case TypeTag.Int:
-                            Args[i] = ReadInt();
-                            break;
-
-                        case TypeTag.Float:
-                            Args[i] = BitConverter.ToSingle(Data, Offset);
-                            Offset += 4;
-                            break;
-
-                        case TypeTag.Bool:
-                            Args[i] = Data[Offset++] == 1;
-                            break;
-
-                        case TypeTag.Byte:
-                            Args[i] = Data[Offset++];
-                            break;
-
-                        case TypeTag.String:
-                            Args[i] = ReadString();
-                            break;
+                        if (args[i] is int TargetRef)
+                            RpcTarget = TargetRef;
+                        break;
                     }
                 }
 
-                MelonLogger.Msg($"[RPC OK] {RpcKey}");
-
-                ExecuteLocal(Entry, Args);
-            }
-            catch (Exception Ex)
-            {
-                MelonLogger.Error($"[RPC ERROR] {Ex}");
-            }
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        //  No registered RPC: 'MessHallAPITest::SabotageRPC'
-
-
-
-
-
-
-        private static byte[] Serialize(string modId, string methodName, object[] args, string reliableKey, int actor)
-        {
-            var enc = System.Text.Encoding.UTF8;
-
-            // Pre-encode strings (avoid double work)
-            var modBytes = enc.GetBytes(modId ?? "");
-            var keyBytes = enc.GetBytes(reliableKey ?? "");
-            var methodBytes = enc.GetBytes(methodName ?? "");
-
-            int size =
-                1 + // MHAPI
-                4 + modBytes.Length +
-                4 + // actor
-                4 + keyBytes.Length +
-                4 + methodBytes.Length +
-                4; // arg count
-
-            // estimate args
-            foreach (var arg in args)
-            {
-                size += 1;
-                switch (arg)
+                RPCPacket packet = new RPCPacket
                 {
-                    case int: size += 4; break;
-                    case float: size += 4; break;
-                    case bool: size += 1; break;
-                    case byte: size += 1; break;
-                    case string s:
-                        var b = enc.GetBytes(s);
-                        size += 4 + b.Length;
-                        break;
-                }
-            }
-
-            byte[] buffer = new byte[size];
-            int offset = 0;
-
-            buffer[offset++] = PacketConstants.MHAPI;
-
-            Buffer.BlockCopy(BitConverter.GetBytes(modBytes.Length), 0, buffer, offset, 4); offset += 4;
-            Buffer.BlockCopy(modBytes, 0, buffer, offset, modBytes.Length); offset += modBytes.Length;
-
-            Buffer.BlockCopy(BitConverter.GetBytes(actor), 0, buffer, offset, 4); offset += 4;
-
-            Buffer.BlockCopy(BitConverter.GetBytes(keyBytes.Length), 0, buffer, offset, 4); offset += 4;
-            Buffer.BlockCopy(keyBytes, 0, buffer, offset, keyBytes.Length); offset += keyBytes.Length;
-
-            Buffer.BlockCopy(BitConverter.GetBytes(methodBytes.Length), 0, buffer, offset, 4); offset += 4;
-            Buffer.BlockCopy(methodBytes, 0, buffer, offset, methodBytes.Length); offset += methodBytes.Length;
-
-            Buffer.BlockCopy(BitConverter.GetBytes(args.Length), 0, buffer, offset, 4); offset += 4;
-
-            foreach (var arg in args)
-            {
-                switch (arg)
-                {
-                    case int i:
-                        buffer[offset++] = (byte)TypeTag.Int;
-                        Buffer.BlockCopy(BitConverter.GetBytes(i), 0, buffer, offset, 4);
-                        offset += 4;
-                        break;
-
-                    case float f:
-                        buffer[offset++] = (byte)TypeTag.Float;
-                        Buffer.BlockCopy(BitConverter.GetBytes(f), 0, buffer, offset, 4);
-                        offset += 4;
-                        break;
-
-                    case bool b:
-                        buffer[offset++] = (byte)TypeTag.Bool;
-                        buffer[offset++] = b ? (byte)1 : (byte)0;
-                        break;
-
-                    case byte bt:
-                        buffer[offset++] = (byte)TypeTag.Byte;
-                        buffer[offset++] = bt;
-                        break;
-
-                    case string s:
-                        var sb = enc.GetBytes(s ?? "");
-                        buffer[offset++] = (byte)TypeTag.String;
-                        Buffer.BlockCopy(BitConverter.GetBytes(sb.Length), 0, buffer, offset, 4); offset += 4;
-                        Buffer.BlockCopy(sb, 0, buffer, offset, sb.Length); offset += sb.Length;
-                        break;
-                }
-            }
-
-            return buffer;
-        }
-
-        private static void Deserialize(byte[] data, out string modId, out string methodName, out object[] args)
-        {
-            using var ms = new MemoryStream(data);
-            using var reader = new BinaryReader(ms);
-
-            modId = reader.ReadString();
-            methodName = reader.ReadString();
-            int count = reader.ReadInt32();
-            args = new object[count];
-
-            for (int i = 0; i < count; i++)
-            {
-                args[i] = (TypeTag)reader.ReadByte() switch
-                {
-                    TypeTag.Int => reader.ReadInt32(),
-                    TypeTag.Float => reader.ReadSingle(),
-                    TypeTag.Bool => reader.ReadBoolean(),
-                    TypeTag.String => reader.ReadString(),
-                    TypeTag.Byte => reader.ReadByte(),
-                    var t => throw new NotSupportedException($"[MessHallAPI] Unknown TypeTag: {t}")
+                    ModId = modId,
+                    Method = methodName,
+                    ActorId = actorId,
+                    ReliableKey = (entry.Attr.Target == RPCTarget.Host || (Settings.IsHost && RpcTarget != -1)) ? RPCRegistry.ReliableKey : "",
+                    Args = args
                 };
+
+                Logging.DebugLog($"[RPC] Invoking {key} with {packet.Args.Length} args");
+
+                byte[] JsonBytes = JsonSerializer.SerializeToUtf8Bytes(packet);
+
+                if (RpcTarget != -1)
+                {
+                    NetworkSender.SendToPlayer(RpcTarget, JsonBytes);
+                    return;
+                }
+
+                switch (entry.Attr.Target)
+                {
+                    case RPCTarget.InputAuthority:
+                        NetworkSender.SendToPlayer(networkRunner.LocalPlayer, JsonBytes);
+                        break;
+
+                    case RPCTarget.Host:
+                        if (Settings.IsHost)
+                            ExecuteLocal(entry, args);
+                        else
+                            NetworkSender.SendToServer(JsonBytes);
+                        break;
+
+                    case RPCTarget.All:
+                        NetworkSender.SendToAll(JsonBytes, false);
+                        break;
+
+                    case RPCTarget.AllInclusive:
+                        ExecuteLocal(entry, args);
+                        NetworkSender.SendToAll(JsonBytes, false);
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logging.Error($"[RPC] Error: {ex}");
+            }
+        }
+        public static void OperationReceived(PlayerRef sender, Il2CppStructArray<byte> dataArray)
+        {
+            if (!Settings.InGame) return;
+
+            try
+            {
+                byte[] data = dataArray;
+                if (data == null || data.Length < 2) return;
+
+                if (data[0] != PacketConstants.MHAPI) return;
+
+                var span = new ReadOnlySpan<byte>(data, 1, data.Length - 1);
+                RPCPacket? packet = JsonSerializer.Deserialize<RPCPacket>(span);
+                if (packet == null) return;
+
+                if (Settings.IsHost)
+                {
+                    string? ClaimedKey = packet.ReliableKey;
+                    int actor = packet.ActorId;
+
+                    if (string.IsNullOrEmpty(ClaimedKey))
+                    {
+                        Logging.Warn($"[RPC] Missing key from {actor}");
+                        return;
+                    }
+
+                    if (!OnPlayerJoinedPatch.TryGetKey(actor, out var Token))
+                    {
+                        Logging.Warn($"[RPC] No stored key for {actor}");
+                        return;
+                    }
+
+                    if (Token != ClaimedKey)
+                    {
+                        Logging.Warn($"[RPC] Key mismatch for {actor} | expected: {Token} got: {ClaimedKey}");
+                        return;
+                    }
+
+                    Logging.Log($"[RPC] OK for {actor}");
+                }
+
+                string key = packet.ModId + "::" + packet.Method;
+                
+                if (!RPCRegistry.TryGet(key, out var entry)) return;
+
+                if (entry.Attr.Target == RPCTarget.Host && !Settings.IsHost)
+                {
+                    Logging.DebugWarn($"Host targeted Rpc {key} blocked");
+                    return;
+                }
+
+                Logging.DebugLog($"[RPC] Executing {key} from {packet.ActorId}");
+
+                object[] raw = packet.Args ?? Array.Empty<object>();
+                object[] RpcArgs = raw.Length == 0 ? raw : new object[raw.Length];
+
+                for (int i = 0; i < raw.Length; i++)
+                {
+                    object value = raw[i];
+
+                    if (value is JsonElement element)
+                    {
+                        switch (element.ValueKind)
+                        {
+                            case JsonValueKind.String: value = element.GetString(); break;
+                            case JsonValueKind.Number: value = element.GetInt32(); break;
+                            case JsonValueKind.True:
+                            case JsonValueKind.False: value = element.GetBoolean(); break;
+                            default: value = element.ToString(); break;
+                        }
+                    }
+
+                    RpcArgs[i] = value;
+                }
+
+                ExecuteLocal(entry, RpcArgs);
+            }
+            catch (Exception ex)
+            {
+                Logging.Error($"[RPC] Error: {ex}");
             }
         }
 
-        private enum TypeTag : byte { Int, Float, Bool, String, Byte }
 
-        private static void ExecuteLocal(RPCRegistry.RPCEntry entry, object[] args)
+        private static void ExecuteLocal(RPCRegistry.RPCEntry entry, object[]? args)
         {
             try
             {
@@ -391,36 +195,10 @@ namespace MessHallAPI.Networking
             }
             catch (Exception ex)
             {
-                Logging.Error($"RPC execution error in '{entry.Method.Name}': " + $"{ex.InnerException?.Message ?? ex.Message}");
-            }
-        }
-
-        private static bool ValidateKey(byte[] payload, out PlayerRef ReliableSender)
-        {
-            ReliableSender = default;
-
-            try
-            {
-                using var ms = new MemoryStream(payload);
-                using var reader = new BinaryReader(ms);
-
-                string key = reader.ReadString();
-                int actor = reader.ReadInt32();
-
-                if (!OnPlayerJoinedPatch.Keys.TryGetValue(actor, out var expectedKey) || expectedKey != key)
-                    return false;
-
-                ReliableSender = actor;
-                return true;
-            }
-            catch
-            {
-                return false;
+                Logging.Error($"RPC error in {entry.Method.Name}: {ex}");
             }
         }
     }
-
-
 
     internal static class PacketConstants
     {

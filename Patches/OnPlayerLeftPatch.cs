@@ -1,23 +1,23 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using HarmonyLib;
 using Il2CppFusion;
-using MelonLoader;
-using MessHallAPI.Base;
-using MessHallAPI.Networking;
-using UnityEngine;
+using MessHallAPI.Config;
+using MessHallAPI.Debugger;
 
 namespace MessHallAPI.Patches
 {
-    [HarmonyPatch(typeof(NetworkRunner), nameof(NetworkRunner.Fusion_Simulation_ICallbacks_PlayerLeft))]
-    internal class OnPlayerLeft
+    internal class OnPlayerLeftPatch
     {
-        private static void Postfix(NetworkRunner __instance, PlayerRef player)
+        [HarmonyPatch(typeof(NetworkRunner), nameof(NetworkRunner.Fusion_Simulation_ICallbacks_PlayerLeft))]
+        private static class Patch
         {
-            if (OnPlayerJoinedPatch.Keys.ContainsKey(player))
+            private static void Prefix(PlayerRef player)
             {
-                OnPlayerJoinedPatch.Keys.Remove(player);
-                MelonLogger.Msg($"Removed key for {player}");
+                if (!Settings.IsHost)
+                    return;
+
+                OnPlayerJoinedPatch.ReliableKeys.Remove(player.PlayerId);
+                Logging.Log($"Player {player.PlayerId} left, removing their key.");
             }
         }
     }

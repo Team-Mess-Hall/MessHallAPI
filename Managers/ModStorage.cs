@@ -10,7 +10,7 @@ namespace MessHallAPI.Managers
     /// </summary>
     public class ModStorage
     {
-        public static Sprite? ModStamp;
+        public static Sprite ModStamp;
 
         public static Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MessHallAPI.Assets.ModStamp.png");
 

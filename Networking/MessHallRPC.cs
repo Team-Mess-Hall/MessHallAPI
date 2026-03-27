@@ -17,9 +17,12 @@
             Host,
             All,
             AllInclusive,
-        }
 
-    /// <summary>
+            [Obsolete("InputAuthority is for debugging only and should not be used as a real RPCTarget. Use NetworkManager.ExecuteLocal")]
+            InputAuthority
+    }
+
+    /// <summary>loc
     /// Marks a method as a MessHall networked RPC.
     ///
     /// Usage:
@@ -46,5 +49,11 @@
             Caller = caller;
         }
 
+    }
+
+    [AttributeUsage(AttributeTargets.Parameter)]
+    public sealed class RPCTargetAttribute : Attribute 
+    {
+    
     }
 }
