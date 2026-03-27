@@ -1,7 +1,7 @@
 using MessHallAPI.Networking;
 using UnityEngine;
 
-namespace MessHallAPIExample.Manager
+namespace MessHallAPIExample.Managers
 {
     public class NetworkObjectManagerExample
     {
