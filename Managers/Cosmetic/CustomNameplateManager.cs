@@ -38,10 +38,10 @@ namespace MessHallAPI.Managers.Cosmetic
             RenderTexture.active = null;
             RenderTexture.ReleaseTemporary(rt);
 
-            int[] unityYs = { 175, 95, 15 };  // 171*1.024, 93*1.024, 15*1.024
-            int[] xs = { 944, 1312, 1680 };   // 922*1.024, 1281*1.024, 1640*1.024
-            int barW = 351;                    // 343*1.024
-            int barH = 65;                    // 64*1.024
+            int[] unityYs = { 175, 95, 15 };
+            int[] xs = { 944, 1312, 1680 };
+            int barW = 351;
+            int barH = 65;
 
             Texture2D patch = ScaleTexture(nameplate.texture, barW, barH);
             Color[] pixels = patch.GetPixels();
