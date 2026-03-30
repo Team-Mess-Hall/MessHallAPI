@@ -41,7 +41,7 @@ namespace Example.Managers
         {
             if (ExampleSprite == null)
             {
-                LoadSpriteFromResource("Example.Assets.ExamplePlate1."); // Requires it to be an embedded resource. See nameplates.md
+                LoadSpriteFromResource("Example.Assets.ExamplePlate1.png"); // Requires it to be an embedded resource. See nameplates.md
             }
         }
     }
