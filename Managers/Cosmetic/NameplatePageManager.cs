@@ -86,7 +86,6 @@
         //    if (tmp != null) { tmp.text = "NAMEPLATES"; Logging.Log("NameplatePageManager: Label set"); }
         //    else Logging.Log("NameplatePageManager: No TextMeshPro found on button");
 
-        //    // LUIButton on nameplates tab
         //    LUIButton nameplateLUIBtn = GameObject.Find($"{_sidebarPath}/NameplatesSectionButton/LUI_Button_Frame")?.GetComponent<LUIButton>();
         //    if (nameplateLUIBtn != null)
         //    {
@@ -102,7 +101,6 @@
         //    }
         //    else Logging.Log("NameplatePageManager: No LUIButton on nameplates tab");
 
-        //    // MinigameButton on nameplates tab
         //    MinigameButton nameplateMinigameBtn = GameObject.Find($"{_sidebarPath}/NameplatesSectionButton/LUI_Button_Frame")?.GetComponent<MinigameButton>();
         //    if (nameplateMinigameBtn != null)
         //    {
@@ -118,7 +116,6 @@
         //    }
         //    else Logging.Log("NameplatePageManager: No MinigameButton on nameplates tab");
 
-        //    // Restore listeners on other tab buttons
         //    foreach (string btnName in new[] { "HatsSectionButton", "GlovesSectionButton", "SkinsSectionButton", "ColorsSectionButton" })
         //    {
         //        MinigameButton tabBtn = GameObject.Find($"{_sidebarPath}/{btnName}/LUI_Button_Frame")?.GetComponent<MinigameButton>();
