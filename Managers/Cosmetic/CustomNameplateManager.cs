@@ -49,7 +49,7 @@ namespace MessHallAPI.Managers.Cosmetic
                 foreach (int x in xs)
                     edited.SetPixels(x, y, barW, barH, pixels);
             edited.Apply();
-            renderer.sharedMaterial.mainTexture = edited;
+            renderer.material.mainTexture = edited;
         }
 
         private static Texture2D ScaleTexture(Texture2D source, int width, int height)
