@@ -1,11 +1,15 @@
 ﻿using Il2CppFusion;
 using Il2CppInterop.Runtime.Injection;
 using Il2CppSystem.Collections;
+using Il2CppSystem.IO;
 using MelonLoader;
 using MessHallAPI.Config;
 using MessHallAPI.Managers;
 using MessHallAPI.Managers.Cosmetic;
 using MessHallAPI.Networking;
+using MessHallAPI.Patches;
+using MessHallAPIExample.Managers;
+using System.Text.Json;
 using UnityEngine;
 using static MessHallAPI.Base.References;
 using static MessHallAPI.Config.Settings;
@@ -15,7 +19,6 @@ namespace MessHallAPI.Base
     public class Core : MelonMod
     {
         public static string SceneName;
-        public static Sprite Testplate;
         public static bool ShouldMakeAnotherInstance()
         {
             return System.Diagnostics.Process.GetProcessesByName(System.Diagnostics.Process.GetCurrentProcess().ProcessName).Length == 1;
@@ -24,15 +27,20 @@ namespace MessHallAPI.Base
         {
             foreach (Type type in System.Reflection.Assembly.GetExecutingAssembly().GetTypes())
             {
-                try
+                if (type.IsSubclassOf(typeof(MonoBehaviour)))
                 {
                     ClassInjector.RegisterTypeInIl2Cpp(type);
                 }
-                catch { }
             }
             RPCRegistry.AutoDiscover();
             IsVR = Application.productName.Contains("VR");
         }
+
+        public override void OnUpdate()
+        {
+            NameplateGUI.OnUpdate();
+        }
+
         public override void OnSceneWasInitialized(int buildIndex, string sceneName)
         {
             SceneName = sceneName;
@@ -41,6 +49,7 @@ namespace MessHallAPI.Base
             {
                 ModStorage.LoadModStamp();
                 RPCRegistry.ReliableKey = string.Empty;
+                OnPlayerJoinedPatch.ReliableKeys.Clear();
             }
             if (InGame)
             {
@@ -61,7 +70,48 @@ namespace MessHallAPI.Base
             }
         }
 
-        public override void OnUpdate() => NameplateGUI.OnUpdate();
-        public override void OnGUI() => NameplateGUI.OnGUI();
+
+        public override void OnGUI()
+        {
+            float y = 10f;
+
+            NameplateGUI.OnGUI();
+
+            if (GUI.Button(new Rect(10, y, 140, 30), "All Anyone"))
+            {
+                NetworkManager.InvokeRPC("MessHallAPI", "RPC_AllLog", "all anyone");
+            }
+            y += 30f;
+
+            if (GUI.Button(new Rect(10, y, 140, 30), "AllInclusive Anyone"))
+            {
+                NetworkManager.InvokeRPC("MessHallAPI", "RPC_AllIncLog", "allinclusive");
+            }
+            y += 30f;
+
+            if (GUI.Button(new Rect(10, y, 140, 30), "HostOnly All"))
+            {
+                NetworkManager.InvokeRPC("MessHallAPI", "RPC_HostCallLog", "hostonly");
+            }
+            y += 30f;
+
+            if (GUI.Button(new Rect(10, y, 140, 30), "Target RPC"))
+            {
+                NetworkManager.InvokeRPC("MessHallAPI", "RPC_targetLog", 0, "hello 0");
+            }
+            y += 30f;
+
+            for (int i = 0; i <= 9; i++)
+            {
+                int id = i;
+
+                if (GUI.Button(new Rect(10, y, 140, 30), $"Target {id}"))
+                {
+                    NetworkManager.InvokeRPC("MessHallAPI", "RPC_targetLog", id, $"hello {id}");
+                }
+
+                y += 30f;
+            }
+        }
     }
 }

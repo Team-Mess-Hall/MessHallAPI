@@ -2,6 +2,7 @@
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using MessHallAPI.Networking;
 using HarmonyLib;
+using MessHallAPI.Debugger;
 
 namespace MessHallAPI.Patches
 {
@@ -14,6 +15,7 @@ namespace MessHallAPI.Patches
         {
             try
             {
+                Logging.Log($"Received | Length: {dataArray.Length} from: {player}");
                 NetworkManager.OperationReceived(player, dataArray);
             }
             catch { }

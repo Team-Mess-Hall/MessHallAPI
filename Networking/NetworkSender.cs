@@ -1,8 +1,12 @@
 ﻿using Il2CppFusion;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
-using static MessHallAPI.Base.References;
-using MessHallAPI.Debugger;
 using Il2CppSG.Airlock.Network;
+using Il2CppSystem.IO;
+using MessHallAPI.Debugger;
+using MessHallAPI.Patches;
+using System.Text.Json;
+using static MessHallAPI.Base.References;
+using static MessHallAPI.Networking.RPCRegistry;
 
 namespace MessHallAPI.Networking
 {
@@ -15,8 +19,9 @@ namespace MessHallAPI.Networking
         {
             if (networkRunner == null && target.IsValid)
             {
+                Logging.Error("NetworkRunner not available.");
                 networkRunner = UnityEngine.Object.FindObjectOfType<AirlockNetworkRunner>();
-                return;
+                Logging.Log($"Fixed? {networkRunner != null}");
             }
 
             networkRunner.SendReliableDataToPlayer(target, new Il2CppStructArray<byte>(Wrap(payload)));
@@ -30,29 +35,65 @@ namespace MessHallAPI.Networking
             if (networkRunner == null)
             {
                 Logging.Error("NetworkRunner not available.");
-                return;
+                networkRunner = UnityEngine.Object.FindObjectOfType<AirlockNetworkRunner>();
+                Logging.Log($"Fixed? {networkRunner != null}");
             }
 
             networkRunner.SendReliableDataToServer(new Il2CppStructArray<byte>(Wrap(payload)));
         }
 
         /// <summary>
-        /// Broadcast to all players individually.
+        /// Relay to all players individually from server
         /// </summary>
-        internal static void SendToAll(byte[] payload, bool includeLocal = false)
+        internal static void RelayToTargets(RPCEntry entry, int rpcTarget, RPCPacket originalPacket, int senderId)
         {
-            if (networkRunner == null) return;
+            int hostId = networkRunner.LocalPlayer;
 
-            foreach (var playerState in Spawn.ActivePlayerStates)
+            foreach (PlayerRef player in networkRunner.ActivePlayers.ToArray())
             {
-                if (!includeLocal && playerState.PlayerId == networkRunner.LocalPlayer)
+
+                bool send = false;
+
+                if (rpcTarget != -1)
+                {
+                    send = player.PlayerId == rpcTarget && player.PlayerId != hostId;
+                }
+                else
+                {
+                    if (entry.Attr.Target == RPCTarget.All)
+                        send = player.PlayerId != senderId && player.PlayerId != hostId;
+
+                    if (entry.Attr.Target == RPCTarget.AllInclusive)
+                        send = player.PlayerId != hostId;
+
+                    if (entry.Attr.Target == RPCTarget.InputAuthority)
+                        send = player.PlayerId == hostId;
+                }
+
+                if (!send)
                     continue;
 
-                SendToPlayer(playerState.PlayerId, payload);
+                string key = "";
+
+                if (OnPlayerJoinedPatch.TryGetKey(player.PlayerId, out var ReliableKey))
+                    key = ReliableKey;
+
+                RPCPacket packet = new RPCPacket
+                {
+                    ModId = originalPacket.ModId,
+                    Method = originalPacket.Method,
+                    ActorId = originalPacket.ActorId,
+                    ReliableKey = key,
+                    Args = originalPacket.Args
+                };
+
+                byte[] bytes = JsonSerializer.SerializeToUtf8Bytes(packet);
+
+                Logging.Log($"send {packet.Method} to {player.PlayerId}");
+
+                SendToPlayer(player, bytes);
             }
         }
-
-
 
         private static byte[] Wrap(byte[] payload)
         {

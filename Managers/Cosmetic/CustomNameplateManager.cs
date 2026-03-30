@@ -155,7 +155,7 @@ namespace MessHallAPI.Managers.Cosmetic
             );
         }
 
-        [MessHallRPC(RPCTarget.All, RPCCaller.Anyone)]
+        [MessHallRPC(RPCTarget.AllInclusive, RPCCaller.Anyone)]
         public static void RPC_SetNameplate([RPCTarget] int target, string modName, string nameplateId)
         {
             Sprite nameplate = NameplateRegistry.Resolve(modName, nameplateId);

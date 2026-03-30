@@ -11,7 +11,7 @@ namespace MessHallAPI.Managers.Cosmetic
         private static bool _visible = false;
         private static Vector2 _scrollPos = Vector2.zero;
         private const int WindowId = 9001;
-
+        private static Sprite? Testplate = null;
         public static void OnUpdate()
         {
             if (InGame && GameState.InLobbyState())
@@ -20,19 +20,23 @@ namespace MessHallAPI.Managers.Cosmetic
                 {
                     _visible = !_visible;
                 }
-                if (Core.Testplate == null)
+                if (Testplate == null)
                 {
-                    Core.Testplate = CustomNameplateManager.LoadSpriteFromResource("MessHallAPI.Assets.2023_indie_bean_nameplate_fight.png");
+                    Testplate = CustomNameplateManager.LoadSpriteFromResource("MessHallAPI.Assets.2023_indie_bean_nameplate_fight.png");
                     CustomNameplateManager.TestNameplate = CustomNameplateManager.LoadSpriteFromResource("MessHallAPI.Assets.TestNamePlate.png");
                 }
-                if (Core.Testplate != null)
+                if (Testplate != null)
                 {
                     if (NameplateRegistry.GetAll().Count == 0)
                     {
-                        NameplateRegistry.Register("MessHallAPI", "TestPlate1", Core.Testplate);
+                        NameplateRegistry.Register("MessHallAPI", "TestPlate1", Testplate);
                         NameplateRegistry.Register("MessHallAPI", "TestPlate2", CustomNameplateManager.TestNameplate);
                     }
                 }
+            }
+            else
+            {
+                _visible = false;
             }
         }
 
@@ -43,6 +47,10 @@ namespace MessHallAPI.Managers.Cosmetic
                 if (!_visible) return;
 
                 GUI.Window(WindowId, new Rect(100, 100, 400, 500), (GUI.WindowFunction)DrawWindow, "Nameplates");
+            }
+            else
+            {
+                _visible = false;
             }
         }
 

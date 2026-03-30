@@ -1,4 +1,6 @@
 ﻿using System.Numerics;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.Json;
 using Il2CppFusion;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
@@ -16,146 +18,121 @@ namespace MessHallAPI.Networking
 {
     public static class NetworkManager
     {
-
-        public static void InvokeRPC(string modName, string methodName, params object[] args)
+        public static void InvokeRPC(string modId, string methodName, params object[] args)
         {
             if (!Settings.InGame)
-            {
-                Logging.Warn("[RPC] Not in game, exiting early.");
                 return;
-            }
 
-            string key = modName + "::" + methodName;
+            string key = modId + "::" + methodName;
 
             if (!RPCRegistry.TryGet(key, out var entry))
             {
-                Logging.Error($"[RPC] {key} is not registered!");
+                Logging.Log($"rpc not registered {key}");
                 return;
             }
+
+            int actorId = Client?.PState?.PlayerId ?? -1;
 
             if (entry.Attr.Caller == RPCCaller.HostOnly && !Settings.IsHost)
             {
-                Logging.DebugWarn($"[RPC] HostOnly Rpc {key} blocked");
+                Logging.Log("rpc blocked hostonly");
                 return;
             }
 
-            try
+            int rpcTarget = -1;
+
+            var parms = entry.Method.GetParameters();
+            for (int i = 0; i < parms.Length && i < args.Length; i++)
             {
-                int actorId = Client?.PState?.PlayerId ?? -1;
-
-                int RpcTarget = -1;
-
-                var parms = entry.Method.GetParameters();
-                for (int i = 0; i < parms.Length && i < args.Length; i++)
+                if (Attribute.IsDefined(parms[i], typeof(RPCTargetAttribute)))
                 {
-                    if (Attribute.IsDefined(parms[i], typeof(RPCTargetAttribute)))
-                    {
-                        if (args[i] is int TargetRef)
-                            RpcTarget = TargetRef;
-                        break;
-                    }
-                }
-
-                RPCPacket packet = new RPCPacket
-                {
-                    ModName = modName,
-                    Method = methodName,
-                    ActorId = actorId,
-                    ReliableKey = (entry.Attr.Target == RPCTarget.Host || (Settings.IsHost && RpcTarget != -1)) ? RPCRegistry.ReliableKey : "",
-                    Args = args
-                };
-
-                Logging.DebugLog($"[RPC] Invoking {key} with {packet.Args.Length} args");
-
-                byte[] JsonBytes = JsonSerializer.SerializeToUtf8Bytes(packet);
-
-                if (RpcTarget != -1)
-                {
-                    NetworkSender.SendToPlayer(RpcTarget, JsonBytes);
-                    return;
-                }
-
-                switch (entry.Attr.Target)
-                {
-                    case RPCTarget.InputAuthority:
-                        NetworkSender.SendToPlayer(networkRunner.LocalPlayer, JsonBytes);
-                        break;
-
-                    case RPCTarget.Host:
-                        if (Settings.IsHost)
-                            ExecuteLocal(entry, args);
-                        else
-                            NetworkSender.SendToServer(JsonBytes);
-                        break;
-
-                    case RPCTarget.All:
-                        NetworkSender.SendToAll(JsonBytes, false);
-                        break;
-
-                    case RPCTarget.AllInclusive:
-                        ExecuteLocal(entry, args);
-                        NetworkSender.SendToAll(JsonBytes, false);
-                        break;
+                    if (args[i] is int t)
+                        rpcTarget = t;
+                    break;
                 }
             }
-            catch (Exception ex)
+
+
+
+
+            if (rpcTarget == networkRunner.LocalPlayer)
             {
-                Logging.Error($"[RPC] Error: {ex}");
+                Logging.Log($"target {rpcTarget} is host");
+
+                if (Settings.IsHost)
+                    ExecuteLocal(entry, args);
+
+                return;
             }
+
+            RPCPacket packet = new RPCPacket
+            {
+                ModId = modId,
+                ReliableKey = RPCRegistry.ReliableKey,
+                Method = methodName,
+                ActorId = actorId,
+                Args = args
+            };
+
+            byte[] bytes = JsonSerializer.SerializeToUtf8Bytes(packet);
+
+            if (!Settings.IsHost)
+            {
+                Logging.Log($"sending rpc {methodName} to host");
+
+                NetworkSender.SendToServer(bytes);
+
+                if (entry.Attr.Target == RPCTarget.AllInclusive)
+                    ExecuteLocal(entry, args);
+
+                return;
+            }
+            if (entry.Attr.Target == RPCTarget.Host)
+            {
+                Logging.Log($"host executing {packet.Method}");
+                ExecuteLocal(entry, args);
+                return;
+            }
+
+            if (entry.Attr.Target == RPCTarget.AllInclusive)
+            {
+                Logging.Log($"host executing {packet.Method}");
+                ExecuteLocal(entry, args);
+            }
+
+            NetworkSender.RelayToTargets(entry, rpcTarget, packet, actorId);
         }
+
         public static void OperationReceived(PlayerRef sender, Il2CppStructArray<byte> dataArray)
         {
-            if (!Settings.InGame) return;
+            if (!Settings.InGame)
+                return;
 
             try
             {
                 byte[] data = dataArray;
-                if (data == null || data.Length < 2) return;
 
-                if (data[0] != PacketConstants.MHAPI) return;
+                if (data == null || data.Length < 2)
+                    return;
+
+                if (data[0] != PacketConstants.MHAPI)
+                    return;
 
                 var span = new ReadOnlySpan<byte>(data, 1, data.Length - 1);
                 RPCPacket? packet = JsonSerializer.Deserialize<RPCPacket>(span);
-                if (packet == null) return;
 
-                if (Settings.IsHost)
-                {
-                    string? ClaimedKey = packet.ReliableKey;
-                    int actor = packet.ActorId;
-
-                    if (string.IsNullOrEmpty(ClaimedKey))
-                    {
-                        Logging.Warn($"[RPC] Missing key from {actor}");
-                        return;
-                    }
-
-                    if (!OnPlayerJoinedPatch.TryGetKey(actor, out var Token))
-                    {
-                        Logging.Warn($"[RPC] No stored key for {actor}");
-                        return;
-                    }
-
-                    if (Token != ClaimedKey)
-                    {
-                        Logging.Warn($"[RPC] Key mismatch for {actor} | expected: {Token} got: {ClaimedKey}");
-                        return;
-                    }
-                }
-
-                string key = packet.ModName  + "::" + packet.Method;
-                
-                if (!RPCRegistry.TryGet(key, out var entry)) return;
-
-                if (entry.Attr.Target == RPCTarget.Host && !Settings.IsHost)
-                {
-                    Logging.DebugWarn($"Host targeted Rpc {key} blocked");
+                if (packet == null)
                     return;
-                }
 
-                Logging.DebugLog($"[RPC] Executing {key} from {packet.ActorId}");
+                string key = packet.ModId + "::" + packet.Method;
+
+                if (!RPCRegistry.TryGet(key, out var entry))
+                    return;
+
+                Logging.Log($"[RPC] Received {key} from {packet.ActorId}");
 
                 object[] raw = packet.Args ?? Array.Empty<object>();
-                object[] RpcArgs = raw.Length == 0 ? raw : new object[raw.Length];
+                object[] rpcArgs = raw.Length == 0 ? raw : new object[raw.Length];
 
                 for (int i = 0; i < raw.Length; i++)
                 {
@@ -165,22 +142,141 @@ namespace MessHallAPI.Networking
                     {
                         switch (element.ValueKind)
                         {
-                            case JsonValueKind.String: value = element.GetString(); break;
-                            case JsonValueKind.Number: value = element.GetInt32(); break;
+                            case JsonValueKind.String:
+                                value = element.GetString();
+                                break;
+
+                            case JsonValueKind.Number:
+                                if (element.TryGetInt32(out int iVal))
+                                    value = iVal;
+                                else if (element.TryGetSingle(out float fVal))
+                                    value = fVal;
+                                else
+                                    value = (float)element.GetDouble();
+                                break;
+
                             case JsonValueKind.True:
-                            case JsonValueKind.False: value = element.GetBoolean(); break;
-                            default: value = element.ToString(); break;
+                            case JsonValueKind.False:
+                                value = element.GetBoolean();
+                                break;
+
+                            default:
+                                value = element.ToString();
+                                break;
                         }
                     }
 
-                    RpcArgs[i] = value;
+                    rpcArgs[i] = value;
                 }
 
-                ExecuteLocal(entry, RpcArgs);
+                if (Settings.IsHost)
+                {
+                    int realSender = sender.PlayerId;
+                    int claimedSender = packet.ActorId;
+
+                    Logging.Log($"host got rpc {packet.Method} from {realSender}");
+
+                    bool senderIsHost = realSender == networkRunner.LocalPlayer;
+
+                    if (!senderIsHost && realSender != claimedSender)
+                    {
+                        Logging.Warn($"spoof blocked real {realSender} fake {claimedSender}");
+                        return;
+                    }
+
+                    if (entry.Attr.Caller == RPCCaller.HostOnly && realSender != networkRunner.LocalPlayer)
+                    {
+                        Logging.Warn($"client sided blocked hostonly rpc from {realSender}");
+                        return;
+                    }
+
+                    if (packet.Method != "RPC_ExchangeKeys")
+                    {
+                        if (!OnPlayerJoinedPatch.TryGetKey(realSender, out var expectedKey))
+                        {
+                            Logging.Warn($"no key for {realSender}");
+                            return;
+                        }
+
+                        if (packet.ReliableKey != expectedKey)
+                        {
+                            Logging.Warn($"bad key from {realSender}");
+                            return;
+                        }
+
+                        Logging.Log($"verified sender {realSender}");
+                    }
+                    else
+                    {
+                        Logging.Log($"key exchange OK from {realSender}");
+                    }
+
+                    int rpcTarget = -1;
+
+                    var parms = entry.Method.GetParameters();
+                    for (int i = 0; i < parms.Length && i < rpcArgs.Length; i++)
+                    {
+                        if (Attribute.IsDefined(parms[i], typeof(RPCTargetAttribute)))
+                        {
+                            if (rpcArgs[i] is int t)
+                                rpcTarget = t;
+                            break;
+                        }
+                    }
+
+                    if (entry.Attr.Target == RPCTarget.Host ||
+                        entry.Attr.Target == RPCTarget.AllInclusive)
+                    {
+                        Logging.Log($"host executing {packet.Method}");
+                        ExecuteLocal(entry, rpcArgs);
+                    }
+
+                    Logging.Log($"relaying {packet.Method} from {realSender}");
+
+                    NetworkSender.RelayToTargets(entry, rpcTarget, packet, realSender);
+                }
+                else
+                {
+                    int localId = Client?.PState?.PlayerId ?? -1;
+
+                    bool execute = false;
+
+                    int rpcTarget = -1;
+
+                    var parms = entry.Method.GetParameters();
+                    for (int i = 0; i < parms.Length && i < rpcArgs.Length; i++)
+                    {
+                        if (Attribute.IsDefined(parms[i], typeof(RPCTargetAttribute)))
+                        {
+                            if (rpcArgs[i] is int t)
+                                rpcTarget = t;
+                            break;
+                        }
+                    }
+
+                    if (rpcTarget != -1)
+                    {
+                        execute = localId == rpcTarget;
+                    }
+                    else
+                    {
+                        if (entry.Attr.Target == RPCTarget.All)
+                            execute = localId != packet.ActorId;
+
+                        if (entry.Attr.Target == RPCTarget.AllInclusive)
+                            execute = true;
+                    }
+
+                    if (execute)
+                    {
+                        Logging.Log($"client exec {packet.Method}");
+                        ExecuteLocal(entry, rpcArgs);
+                    }
+                }
             }
             catch (Exception ex)
             {
-                Logging.Error($"[RPC] Error: {ex}");
+                Logging.Log($"[RPC] Error: {ex}");
             }
         }
 

@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using HarmonyLib;
+﻿using HarmonyLib;
 using Il2CppFusion;
-using Il2CppSG.Airlock.Network;
+using Il2CppSystem;
 using MelonLoader;
 using MessHallAPI.Config;
 using MessHallAPI.Debugger;
-using MessHallAPI.Managers.Cosmetic;
 using MessHallAPI.Networking;
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using static Il2CppFusion.Simulation;
 
 namespace MessHallAPI.Patches
 {
@@ -34,31 +34,40 @@ namespace MessHallAPI.Patches
             }
         }
 
-        [HarmonyPatch(typeof(SpawnManager), nameof(SpawnManager.OnPlayerJoined))]
-        private static void Postfix(NetworkRunner runner, PlayerRef player)
-        {
-            CustomNameplateManager.RefreshPlayerAtlases();
-        }
-
         private static IEnumerator ExchangeKeys(int playerId)
         {
             yield return new WaitForSeconds(9f);
 
-            string guid = Guid.NewGuid().ToString();
+            string guid = System.Guid.NewGuid().ToString();
 
-            ReliableKeys[playerId] = guid;
             if (playerId == 9)
             {
+                ReliableKeys[playerId] = guid;
                 RPCRegistry.ReliableKey = guid;
+                Logging.Log($"Host player joined, set key: {guid}");
             }
-            else NetworkManager.InvokeRPC("MessHallAPI", "RPC_ExchangeKeys", playerId, guid);
+            else
+            {
+                ReliableKeys[playerId] = guid;
+                NetworkManager.InvokeRPC("MessHallAPI", "RPC_ExchangeKeys", playerId, guid);
+            }
         }
 
         [MessHallRPC(RPCTarget.All, RPCCaller.HostOnly)]
-        public static void RPC_ExchangeKeys([RPCTarget] int target, string Key)
+        public static void RPC_ExchangeKeys([RPCTarget] int target, string key)
         {
-            if (string.IsNullOrEmpty(RPCRegistry.ReliableKey))
-                RPCRegistry.ReliableKey = Key;
+            if (OnPlayerJoinedPatch.ReliableKeys.TryGetValue(target, out var existing))
+            {
+                if (existing == key) return;
+            }
+
+            OnPlayerJoinedPatch.ReliableKeys[target] = key;
+            RPCRegistry.ReliableKey = key;
+
+            Logging.Log($"Stored key for player {target}: {key}");
         }
+
+        [MessHallRPC(RPCTarget.Host, RPCCaller.Anyone)]
+        public static void RPC_KeyReceived() { }
     }
 }
