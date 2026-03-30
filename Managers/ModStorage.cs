@@ -5,14 +5,14 @@ using static UnityEngine.Object;
 
 namespace MessHallAPI.Managers
 {
-    /// <summary>
-    /// this entire class is handled automatically in the API, nothing you need is here.
-    /// </summary>
+    [Obsolete("this entire class is handled automatically in the API, nothing you need is here.")]
     public class ModStorage
     {
         public static Sprite ModStamp;
 
         public static Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MessHallAPI.Assets.ModStamp.png");
+
+        public static Sprite NameplateTest;
 
         public static void LoadModStamp()
         {
@@ -53,6 +53,28 @@ namespace MessHallAPI.Managers
             rect.anchoredPosition = new Vector2(-10, -10);
 
             DontDestroyOnLoad(stampobj);
+        }
+        public static Sprite LoadSpriteFromResource(string resourcePath)
+        {
+            Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourcePath);
+            if (stream == null) return null;
+
+            MemoryStream ms = new MemoryStream();
+            stream.CopyTo(ms);
+            byte[] bytes = ms.ToArray();
+
+            Texture2D tex = new Texture2D(1, 1);
+            ImageConversion.LoadImage(tex, bytes);
+
+            return Sprite.Create(
+                tex,
+                new Rect(0, 0, tex.width, tex.height),
+                new Vector2(0.5f, 0.5f),
+                100, 0,
+                SpriteMeshType.FullRect,
+                new Vector4(0, 0, 0, 0),
+                false, null
+            );
         }
     }
 }

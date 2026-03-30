@@ -15,10 +15,7 @@ namespace MessHallAPI.Networking
         {
             if (networkRunner == null && target.IsValid)
             {
-                Logging.Error("NetworkRunner not available.");
                 networkRunner = UnityEngine.Object.FindObjectOfType<AirlockNetworkRunner>();
-                Logging.Log($"Fixed? {networkRunner != null}");
-
                 return;
             }
 

@@ -8,7 +8,7 @@ namespace MessHallAPI.Networking
     {
         public class RPCPacket
         {
-            public string? ModId { get; set; }
+            public string? ModName { get; set; }
             public string? ReliableKey { get; set; }
             public string? Method { get; set; }
             public int ActorId { get; set; }

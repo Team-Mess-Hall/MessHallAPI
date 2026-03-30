@@ -2,9 +2,9 @@
 using Il2CppInterop.Runtime.Injection;
 using Il2CppSystem.Collections;
 using MelonLoader;
-using MessHallAPI.APIDebug;
 using MessHallAPI.Config;
 using MessHallAPI.Managers;
+using MessHallAPI.Managers.Cosmetic;
 using MessHallAPI.Networking;
 using UnityEngine;
 using static MessHallAPI.Base.References;
@@ -15,6 +15,7 @@ namespace MessHallAPI.Base
     public class Core : MelonMod
     {
         public static string SceneName;
+        public static Sprite Testplate;
         public static bool ShouldMakeAnotherInstance()
         {
             return System.Diagnostics.Process.GetProcessesByName(System.Diagnostics.Process.GetCurrentProcess().ProcessName).Length == 1;
@@ -59,5 +60,8 @@ namespace MessHallAPI.Base
                 ResetReferences();
             }
         }
+
+        public override void OnUpdate() => NameplateGUI.OnUpdate();
+        public override void OnGUI() => NameplateGUI.OnGUI();
     }
 }

@@ -4,9 +4,18 @@ using static MessHallAPI.Debugger.Logging;
 
 namespace MessHallAPI.Managers
 {
+    /// <summary>
+    /// Contains Two RPC's RequestLoadAssetBundle and RequestLoadSceneBundle
+    /// </summary>
     public class AssetBundleLoader
     {
+        /// <summary>
+        /// Dictionary containing loaded Assets Bundles
+        /// </summary>
         public static Dictionary<string, AssetBundle> assetBundles = new Dictionary<string, AssetBundle>();
+        /// <summary>
+        /// Dictionary containing loaded Scene Bundles
+        /// </summary>
         public static Dictionary<string, AssetBundle> sceneBundles = new Dictionary<string, AssetBundle>();
 
         /// <summary>

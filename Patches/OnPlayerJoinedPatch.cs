@@ -3,9 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using HarmonyLib;
 using Il2CppFusion;
+using Il2CppSG.Airlock.Network;
 using MelonLoader;
 using MessHallAPI.Config;
 using MessHallAPI.Debugger;
+using MessHallAPI.Managers.Cosmetic;
 using MessHallAPI.Networking;
 using UnityEngine;
 
@@ -32,6 +34,12 @@ namespace MessHallAPI.Patches
             }
         }
 
+        [HarmonyPatch(typeof(SpawnManager), nameof(SpawnManager.OnPlayerJoined))]
+        private static void Postfix(NetworkRunner runner, PlayerRef player)
+        {
+            CustomNameplateManager.RefreshPlayerAtlases();
+        }
+
         private static IEnumerator ExchangeKeys(int playerId)
         {
             yield return new WaitForSeconds(9f);
@@ -42,7 +50,6 @@ namespace MessHallAPI.Patches
             if (playerId == 9)
             {
                 RPCRegistry.ReliableKey = guid;
-                Logging.Log($"Host player joined, set key: {guid}");
             }
             else NetworkManager.InvokeRPC("MessHallAPI", "RPC_ExchangeKeys", playerId, guid);
         }
@@ -52,7 +59,6 @@ namespace MessHallAPI.Patches
         {
             if (string.IsNullOrEmpty(RPCRegistry.ReliableKey))
                 RPCRegistry.ReliableKey = Key;
-            Logging.Log($"Received key from host: {Key} for player {target}");
         }
     }
 }

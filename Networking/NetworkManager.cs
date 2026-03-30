@@ -17,7 +17,7 @@ namespace MessHallAPI.Networking
     public static class NetworkManager
     {
 
-        public static void InvokeRPC(string modId, string methodName, params object[] args)
+        public static void InvokeRPC(string modName, string methodName, params object[] args)
         {
             if (!Settings.InGame)
             {
@@ -25,7 +25,7 @@ namespace MessHallAPI.Networking
                 return;
             }
 
-            string key = modId + "::" + methodName;
+            string key = modName + "::" + methodName;
 
             if (!RPCRegistry.TryGet(key, out var entry))
             {
@@ -58,7 +58,7 @@ namespace MessHallAPI.Networking
 
                 RPCPacket packet = new RPCPacket
                 {
-                    ModId = modId,
+                    ModName = modName,
                     Method = methodName,
                     ActorId = actorId,
                     ReliableKey = (entry.Attr.Target == RPCTarget.Host || (Settings.IsHost && RpcTarget != -1)) ? RPCRegistry.ReliableKey : "",
@@ -140,11 +140,9 @@ namespace MessHallAPI.Networking
                         Logging.Warn($"[RPC] Key mismatch for {actor} | expected: {Token} got: {ClaimedKey}");
                         return;
                     }
-
-                    Logging.Log($"[RPC] OK for {actor}");
                 }
 
-                string key = packet.ModId + "::" + packet.Method;
+                string key = packet.ModName  + "::" + packet.Method;
                 
                 if (!RPCRegistry.TryGet(key, out var entry)) return;
 

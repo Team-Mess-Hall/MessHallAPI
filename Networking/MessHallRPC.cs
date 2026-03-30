@@ -1,33 +1,28 @@
 ﻿namespace MessHallAPI.Networking
 {
-        /// <summary>
-        /// Who is allowed to SEND this RPC.
-        /// </summary>
-        public enum RPCCaller
-        {
-            Anyone,
-            HostOnly,
-        }
-
-        /// <summary>
-        /// Who RECEIVES this RPC when sent.
-        /// </summary>
-        public enum RPCTarget
-        {
-            Host,
-            All,
-            AllInclusive,
-
-            [Obsolete("InputAuthority is for debugging only and should not be used as a real RPCTarget. Use NetworkManager.ExecuteLocal")]
-            InputAuthority
+    /// <summary>
+    /// Who is allowed to SEND this RPC.
+    /// </summary>
+    public enum RPCCaller
+    {
+        Anyone,
+        HostOnly,
     }
 
-    /// <summary>loc
+    /// <summary>
+    /// Who RECEIVES this RPC when sent.
+    /// </summary>
+    public enum RPCTarget
+    {
+        Host,
+        All,
+        AllInclusive,
+        [Obsolete("InputAuthority is for debugging only and should not be used as a real RPCTarget. Use NetworkManager.ExecuteLocal")]
+        InputAuthority
+    }
+
+    /// <summary>
     /// Marks a method as a MessHall networked RPC.
-    ///
-    /// Usage:
-    ///   [MessHallRPC(RPCTarget.All, RPCCaller.Anyone)]
-    ///   public void MyMethod(string arg) { ... }
     /// </summary>
     [AttributeUsage(AttributeTargets.Method, Inherited = false)]
     public sealed class MessHallRPCAttribute : Attribute

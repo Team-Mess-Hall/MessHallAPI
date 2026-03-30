@@ -8,11 +8,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\2023_d2_bean_nameplate_lightfall.png" />
+    <None Remove="Assets\2023_indie_bean_nameplate_fight.png" />
+    <None Remove="Assets\TestNamePlate.png" />
     <None Remove="ModStamp.png" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Assets\2023_indie_bean_nameplate_fight.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Include="Assets\ModStamp.png" />
+    <EmbeddedResource Include="Assets\TestNamePlate.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -94,6 +102,9 @@
     <Reference Include="Il2CppSG.GlobalEvents">
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Among Us 3D\MelonLoader\Il2CppAssemblies\Il2CppSG.GlobalEvents.dll</HintPath>
     </Reference>
+    <Reference Include="Il2CppSG.LightUI">
+      <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Among Us 3D\MelonLoader\Il2CppAssemblies\Il2CppSG.LightUI.dll</HintPath>
+    </Reference>
     <Reference Include="Il2CppSG.Platform">
       <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Among Us 3D\MelonLoader\Il2CppAssemblies\Il2CppSG.Platform.dll</HintPath>
     </Reference>
@@ -112,6 +123,12 @@
     <Reference Include="Unity.Addressables">
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Among Us 3D\MelonLoader\Il2CppAssemblies\Unity.Addressables.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.InputSystem">
+      <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Among Us 3D\MelonLoader\Il2CppAssemblies\Unity.InputSystem.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Among Us 3D\MelonLoader\Il2CppAssemblies\Unity.TextMeshPro.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine">
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Among Us 3D\MelonLoader\Il2CppAssemblies\UnityEngine.dll</HintPath>
     </Reference>
@@ -126,6 +143,9 @@
     </Reference>
     <Reference Include="UnityEngine.IMGUIModule">
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Among Us 3D\MelonLoader\Il2CppAssemblies\UnityEngine.IMGUIModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.InputLegacyModule">
+      <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Among Us 3D\MelonLoader\Il2CppAssemblies\UnityEngine.InputLegacyModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.InputModule">
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Among Us 3D\MelonLoader\Il2CppAssemblies\UnityEngine.InputModule.dll</HintPath>

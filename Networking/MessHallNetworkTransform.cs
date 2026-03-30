@@ -74,14 +74,13 @@ namespace MessHallAPI.Networking
             _lastRotation = transform.rotation;
             _lastScale = transform.localScale;
 
-            NetworkManager.InvokeRPC(MOD_ID, RPC_SYNC, RPCTarget.All,
-                ObjectId,
+            NetworkManager.InvokeRPC(MOD_ID, RPC_SYNC,ObjectId,
                 transform.position.x, transform.position.y, transform.position.z,
                 transform.rotation.x, transform.rotation.y, transform.rotation.z, transform.rotation.w,
                 transform.localScale.x, transform.localScale.y, transform.localScale.z);
         }
 
-        [MessHallRPC(RPCTarget.AllInclusive, RPCCaller.Anyone, Description = "Syncs a NetworkTransform")]
+        [MessHallRPC(RPCTarget.All, RPCCaller.Anyone, Description = "Syncs a NetworkTransform")]
         public void SyncTransform(string objectId, float px, float py, float pz, float rx, float ry, float rz, float rw, float sx, float sy, float sz)
         {
 
