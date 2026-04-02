@@ -93,7 +93,6 @@ namespace MessHallAPI.Managers.Cosmetic
                     if (GUI.Button(btnRect, content))
                     {
                         NetworkManager.InvokeRPC("MessHallAPI", "RPC_SetNameplate", Client.PState.PlayerId, capturedMod, capturedId);
-                        //CustomNameplateManager.LocalSetNameplate(Client.PState.PlayerId, capturedMod, capturedId);
                         _visible = false;
                     }
                 }
