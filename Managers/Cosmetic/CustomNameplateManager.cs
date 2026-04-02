@@ -2,20 +2,20 @@
 using Il2CppSG.Airlock.XR;
 using Il2CppSG.LightUI;
 using Il2CppTMPro;
+using MessHallAPI.Debugger;
 using MessHallAPI.Networking;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using static MessHallAPI.Base.References;
+using static UnityEngine.GraphicsBuffer;
 
 namespace MessHallAPI.Managers.Cosmetic
 {
     public class CustomNameplateManager
     {
         public static Dictionary<int, Sprite> _nameplates = new Dictionary<int, Sprite>();
-
-        public static Sprite TestNameplate;
 
         public static void SetNameplate(int playerId, Sprite nameplate)
         {
@@ -109,7 +109,7 @@ namespace MessHallAPI.Managers.Cosmetic
 
         public static void RefreshMeetingAtlases()
         {
-            int[] playerIdOrder = { 9, 0, 1, 2, 3, 4, 5, 6, 7, 8 };
+            int[] playerIdOrder = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
             string basePath = "-------- MANAGERS --------/DefaultManagers/VotingManager/VotingUIRoot/MeetingScreen(Clone)/MeetingScreenParent/VotingMain/VotingPlayerLayout_Dynamic/Voting_Player";
 
             for (int i = 0; i < 10; i++)
@@ -156,7 +156,15 @@ namespace MessHallAPI.Managers.Cosmetic
         }
 
         [MessHallRPC(RPCTarget.AllInclusive, RPCCaller.Anyone)]
-        public static void RPC_SetNameplate([RPCTarget] int target, string modName, string nameplateId)
+        public static void RPC_SetNameplate(int target, string modName, string nameplateId)
+        {
+            Sprite nameplate = NameplateRegistry.Resolve(modName, nameplateId);
+            if (nameplate == null) return;
+            SetNameplate(target, nameplate);
+            RefreshPlayerAtlases();
+            Logging.Log("Sent RPC");
+        }
+        public static void LocalSetNameplate(int target, string modName, string nameplateId)
         {
             Sprite nameplate = NameplateRegistry.Resolve(modName, nameplateId);
             if (nameplate == null) return;

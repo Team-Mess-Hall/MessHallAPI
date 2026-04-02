@@ -9,18 +9,25 @@
 
   <ItemGroup>
     <None Remove="Assets\2023_d2_bean_nameplate_lightfall.png" />
-    <None Remove="Assets\2023_indie_bean_nameplate_fight.png" />
-    <None Remove="Assets\TestNamePlate.png" />
+    <None Remove="Assets\auvr banner test.png" />
+    <None Remove="Assets\BoneBash.png" />
+    <None Remove="Assets\Containment.png" />
+    <None Remove="Assets\infectionlogo.png" />
+    <None Remove="Assets\LightOut.png" />
+    <None Remove="Assets\Roundup.png" />
     <None Remove="ModStamp.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Assets\2023_indie_bean_nameplate_fight.png" />
+    <EmbeddedResource Include="Assets\BoneBash.png" />
+    <EmbeddedResource Include="Assets\Containment.png" />
+    <EmbeddedResource Include="Assets\infectionlogo.png" />
+    <EmbeddedResource Include="Assets\LightOut.png" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Assets\ModStamp.png" />
-    <EmbeddedResource Include="Assets\TestNamePlate.png" />
+    <EmbeddedResource Include="Assets\Roundup.png" />
   </ItemGroup>
 
   <ItemGroup>

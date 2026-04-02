@@ -8,7 +8,6 @@ using MessHallAPI.Managers;
 using MessHallAPI.Managers.Cosmetic;
 using MessHallAPI.Networking;
 using MessHallAPI.Patches;
-using MessHallAPIExample.Managers;
 using System.Text.Json;
 using UnityEngine;
 using static MessHallAPI.Base.References;

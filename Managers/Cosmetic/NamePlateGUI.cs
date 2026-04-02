@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using static MessHallAPI.Config.Settings;
 using MessHallAPI.Base;
+using MessHallAPI.Networking;
 
 namespace MessHallAPI.Managers.Cosmetic
 {
@@ -11,26 +12,36 @@ namespace MessHallAPI.Managers.Cosmetic
         private static bool _visible = false;
         private static Vector2 _scrollPos = Vector2.zero;
         private const int WindowId = 9001;
-        private static Sprite? Testplate = null;
+        private static Sprite? Infectionplate = null;
+        private static Sprite? LightsOutplate = null;
+        private static Sprite? ContainmentPlate = null;
+        private static Sprite? BoneBashPlate = null;
+        private static Sprite? RoundUpPlate = null;
         public static void OnUpdate()
         {
             if (InGame && GameState.InLobbyState())
             {
                 if (Keyboard.current.rightAltKey.wasPressedThisFrame)
                 {
-                    _visible = !_visible;
+                    _visible = !_visible; 
                 }
-                if (Testplate == null)
+                if (Infectionplate == null)
                 {
-                    Testplate = CustomNameplateManager.LoadSpriteFromResource("MessHallAPI.Assets.2023_indie_bean_nameplate_fight.png");
-                    CustomNameplateManager.TestNameplate = CustomNameplateManager.LoadSpriteFromResource("MessHallAPI.Assets.TestNamePlate.png");
+                    Infectionplate = CustomNameplateManager.LoadSpriteFromResource("MessHallAPI.Assets.infectionlogo.png");
+                    LightsOutplate = CustomNameplateManager.LoadSpriteFromResource("MessHallAPI.Assets.LightOut.png");
+                    ContainmentPlate = CustomNameplateManager.LoadSpriteFromResource("MessHallAPI.Assets.Containment.png");
+                    BoneBashPlate = CustomNameplateManager.LoadSpriteFromResource("MessHallAPI.Assets.BoneBash.png");
+                    RoundUpPlate = CustomNameplateManager.LoadSpriteFromResource("MessHallAPI.Assets.Roundup.png");
                 }
-                if (Testplate != null)
+                if (Infectionplate != null)
                 {
                     if (NameplateRegistry.GetAll().Count == 0)
                     {
-                        NameplateRegistry.Register("MessHallAPI", "TestPlate1", Testplate);
-                        NameplateRegistry.Register("MessHallAPI", "TestPlate2", CustomNameplateManager.TestNameplate);
+                        NameplateRegistry.Register("MessHallAPI", "InfectionPlate", Infectionplate);
+                        NameplateRegistry.Register("MessHallAPI", "LightsOutPlate", LightsOutplate);
+                        NameplateRegistry.Register("MessHallAPI", "ContainmentPlate", ContainmentPlate);
+                        NameplateRegistry.Register("MessHallAPI", "BoneBashPlate", BoneBashPlate);
+                        NameplateRegistry.Register("MessHallAPI", "RoundUpPlate", RoundUpPlate);
                     }
                 }
             }
@@ -81,7 +92,8 @@ namespace MessHallAPI.Managers.Cosmetic
                     GUIContent content = new GUIContent(capturedId, sprite.texture, "");
                     if (GUI.Button(btnRect, content))
                     {
-                        CustomNameplateManager.RPC_SetNameplate(Client.PState.PlayerId, capturedMod, capturedId);
+                        NetworkManager.InvokeRPC("MessHallAPI", "RPC_SetNameplate", Client.PState.PlayerId, capturedMod, capturedId);
+                        //CustomNameplateManager.LocalSetNameplate(Client.PState.PlayerId, capturedMod, capturedId);
                         _visible = false;
                     }
                 }
@@ -89,7 +101,6 @@ namespace MessHallAPI.Managers.Cosmetic
                 {
                     if (GUI.Button(btnRect, capturedId))
                     {
-                        CustomNameplateManager.RPC_SetNameplate(Client.PState.PlayerId, capturedMod, capturedId);
                         _visible = false;
                     }
                 }
