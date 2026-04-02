@@ -1,4 +1,5 @@
-﻿using Il2CppSG.Airlock.Minigames;
+﻿using Il2CppSG.Airlock;
+using Il2CppSG.Airlock.Minigames;
 using Il2CppSG.Airlock.XR;
 using Il2CppSG.LightUI;
 using Il2CppTMPro;
@@ -109,8 +110,11 @@ namespace MessHallAPI.Managers.Cosmetic
 
         public static void RefreshMeetingAtlases()
         {
-            int[] playerIdOrder = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+            _playerRenderers.Clear();
+            Logging.Log("[MeetingAtlases] Cleared player renderers");
+
             string basePath = "-------- MANAGERS --------/DefaultManagers/VotingManager/VotingUIRoot/MeetingScreen(Clone)/MeetingScreenParent/VotingMain/VotingPlayerLayout_Dynamic/Voting_Player";
+            var found = new List<MeshRenderer>();
 
             for (int i = 0; i < 10; i++)
             {
@@ -124,9 +128,29 @@ namespace MessHallAPI.Managers.Cosmetic
                 MeshRenderer renderer = panel.GetComponent<MeshRenderer>();
                 if (renderer == null) continue;
 
-                _playerRenderers[playerIdOrder[i]] = renderer;
+                Logging.Log($"[MeetingAtlases] Slot {i}: renderer found -> added as found[{found.Count}]");
+                found.Add(renderer);
             }
 
+            Logging.Log($"[MeetingAtlases] Total renderers found: {found.Count}");
+
+            var players = new List<int>();
+            foreach (PlayerState player in Spawn.ActivePlayerStates)
+            {
+                if (!player.IsConnected) continue;
+                if (player.IsSpectating) continue;
+
+                players.Add(player.PlayerId);
+                Logging.Log($"[MeetingAtlases] Connected player: {player.PlayerId}");
+            }
+
+            for (int i = 0; i < found.Count && i < players.Count; i++)
+            {
+                _playerRenderers[players[i]] = found[i];
+                Logging.Log($"[MeetingAtlases] found[{i}] -> playerId {players[i]}");
+            }
+
+            Logging.Log($"[MeetingAtlases] Applying nameplates for {_nameplates.Count} players: [{string.Join(", ", _nameplates.Keys)}]");
             foreach (var playerId in _nameplates.Keys)
                 ApplyToPlayer(playerId);
         }
