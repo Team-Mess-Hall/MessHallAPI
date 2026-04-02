@@ -1,4 +1,5 @@
 using MelonLoader;
+using MessHallAPIExample.Managers;
 
 namespace MessHallExample
 {
@@ -6,7 +7,7 @@ namespace MessHallExample
   {
     public override void OnInitializeMelon
     {
-      object RPCMananger = new ExampleRPCManager();
+      object RPCMananger = new RPCManager();
       RPCRegistry.Register(RPCManager, "MessHallExample");
     }
   }
