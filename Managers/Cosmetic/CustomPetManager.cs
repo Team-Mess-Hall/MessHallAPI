@@ -183,12 +183,6 @@ namespace MessHallAPI.Managers.Cosmetic
             FollowPlayerScript();
         }
 
-        public static void HidePetOnVent()
-        {
-            // TODO: hook into vent enter/exit events
-            // On enter: gameObject.SetActive(false)
-            // On exit:  gameObject.SetActive(true)
-        }
         /*
         public static void AnimatePetOnDeath()
         {
