@@ -37,7 +37,7 @@ namespace MessHallAPI.Base
 
         public override void OnUpdate()
         {
-            NameplateGUI.OnUpdate();
+            CosmeticGUIManager.OnUpdate();
         }
 
         public override void OnSceneWasInitialized(int buildIndex, string sceneName)
@@ -60,6 +60,11 @@ namespace MessHallAPI.Base
             }
         }
 
+        public override void OnSceneWasLoaded(int buildIndex, string sceneName)
+        {
+
+        }
+
         private static System.Collections.IEnumerator DelayedReset()
         {
             if (networkRunner == null)
@@ -74,7 +79,7 @@ namespace MessHallAPI.Base
         {
             float y = 10f;
 
-            NameplateGUI.OnGUI();
+            CosmeticGUIManager.OnGUI();
 
             if (GUI.Button(new Rect(10, y, 140, 30), "All Anyone"))
             {

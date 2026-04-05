@@ -5,6 +5,7 @@ using MessHallAPI.Managers.Cosmetic;
 using MelonLoader;
 using System.Collections;
 using UnityEngine;
+using MessHallAPI.Networking;
 
 namespace MessHallAPI.Patches
 {
@@ -31,7 +32,7 @@ namespace MessHallAPI.Patches
         internal static IEnumerator Run()
         {
             yield return new WaitForSeconds(3f);
-            CustomNameplateManager.RefreshMeetingAtlases();
+            NetworkManager.InvokeRPC("MessHallAPI", "RPC_RefreshMeetingAtlases");
         }
     }
 }

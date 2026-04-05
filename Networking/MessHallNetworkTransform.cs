@@ -7,7 +7,7 @@ namespace MessHallAPI.Networking
 {
     public class MessHallNetworkTransform : MonoBehaviour
     {
-        public string ObjectId { get; private set; }
+        public string? ObjectId { get; set; }
 
         public float SyncInterval = 0.1f;
         public float PositionThreshold = 0.01f;
@@ -47,8 +47,6 @@ namespace MessHallAPI.Networking
             _targetPos = transform.position;
 
             _initialized = true;
-
-            Logging.Log($"[MesshallNetworkTransform] Your object is being networked! {ObjectId}");
         }
 
         private void OnDestroy()

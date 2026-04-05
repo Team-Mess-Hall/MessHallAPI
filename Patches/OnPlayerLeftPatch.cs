@@ -3,6 +3,7 @@ using HarmonyLib;
 using Il2CppFusion;
 using MessHallAPI.Config;
 using MessHallAPI.Debugger;
+using MessHallAPI.Managers.Cosmetic;
 
 namespace MessHallAPI.Patches
 {
@@ -18,6 +19,8 @@ namespace MessHallAPI.Patches
 
                 OnPlayerJoinedPatch.ReliableKeys.Remove(player.PlayerId);
                 Logging.Log($"Player {player.PlayerId} left, removing their key.");
+
+                CustomPetManager.OnPlayerLeft(player.PlayerId);
             }
         }
     }

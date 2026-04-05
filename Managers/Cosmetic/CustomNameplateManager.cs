@@ -27,6 +27,11 @@ namespace MessHallAPI.Managers.Cosmetic
         {
             if (!_nameplates.TryGetValue(playerId, out Sprite nameplate)) return;
             if (!_playerRenderers.TryGetValue(playerId, out MeshRenderer renderer)) return;
+            if (nameplate == null)
+            {
+                Logging.Log($"[CustomNameplateManager] Player {playerId} has no nameplate, skipping.");
+                return;
+            }
 
             Texture original = renderer.sharedMaterial.mainTexture;
 
@@ -108,7 +113,8 @@ namespace MessHallAPI.Managers.Cosmetic
                 ApplyToPlayer(playerId);
         }
 
-        public static void RefreshMeetingAtlases()
+        [MessHallRPC(RPCTarget.AllInclusive, RPCCaller.Anyone)]
+        public static void RPC_RefreshMeetingAtlases()
         {
             _playerRenderers.Clear();
             Logging.Log("[MeetingAtlases] Cleared player renderers");
