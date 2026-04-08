@@ -209,7 +209,7 @@ namespace MessHallAPI.Managers.Cosmetic
         {
             foreach (var go in Resources.FindObjectsOfTypeAll<GameObject>())
             {
-                if (go.name == "SM_Hat_Headslug" && go.transform.parent == null)
+                if (go.name == "AP_Hat_Headslug" && go.transform.parent == null)
                     return go;
             }
             return null;

@@ -15,7 +15,7 @@ namespace MessHallAPI.Patches
         {
             try
             {
-                Logging.Log($"Received | Length: {dataArray.Length} from: {player}");
+                Logging.Log($"Received: {dataArray} | Length: {dataArray.Length} from: {player}");
                 NetworkManager.OperationReceived(player, dataArray);
             }
             catch { }

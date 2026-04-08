@@ -1,16 +1,9 @@
-﻿using System.Numerics;
-using System.Security.Cryptography;
-using System.Text;
-using System.Text.Json;
-using Il2CppFusion;
+﻿using Il2CppFusion;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
-using Il2CppSG.Airlock;
-using MelonLoader;
-using MessHallAPI.Base;
 using MessHallAPI.Config;
 using MessHallAPI.Debugger;
 using MessHallAPI.Patches;
-using UnityEngine.Playables;
+using System.Text.Json;
 using static MessHallAPI.Base.References;
 using static MessHallAPI.Networking.RPCRegistry;
 
@@ -18,12 +11,12 @@ namespace MessHallAPI.Networking
 {
     public static class NetworkManager
     {
-        public static void InvokeRPC(string modId, string methodName, params object[] args)
+        public static void InvokeRPC(string modName, string methodName, params object[] args)
         {
             if (!Settings.InGame)
                 return;
 
-            string key = modId + "::" + methodName;
+            string key = modName + "::" + methodName;
 
             if (!RPCRegistry.TryGet(key, out var entry))
             {
@@ -67,7 +60,7 @@ namespace MessHallAPI.Networking
 
             RPCPacket packet = new RPCPacket
             {
-                ModId = modId,
+                ModId = modName,
                 ReliableKey = RPCRegistry.ReliableKey,
                 Method = methodName,
                 ActorId = actorId,

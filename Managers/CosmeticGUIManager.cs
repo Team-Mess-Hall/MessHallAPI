@@ -41,7 +41,8 @@ namespace MessHallAPI.Managers
         private static GameObject? Penguin = null;
 
         // Backpacks
-        private static GameObject? RevengerScythe = null;   
+        private static GameObject? RevengerScythe = null;
+        private static GameObject? WDGaster = null; // best cosmetic in the game, source: trust
 
         // Hats
         private static GameObject? Overscoped = null;
@@ -93,13 +94,15 @@ namespace MessHallAPI.Managers
                     }
                 }
 
-                if (RevengerScythe == null)
+                if (RevengerScythe == null && WDGaster == null)
                 {
                     RevengerScythe = CustomBackpackManager.FindRevengerScythe();
-                    if (RevengerScythe != null)
+                    WDGaster = CustomBackpackManager.FindGAWings();
+                    if (RevengerScythe != null && WDGaster != null)
                     {
                         CustomBackpackManager.RegisterBackpack("MessHallAPI", "No Backpack", null);
                         CustomBackpackManager.RegisterBackpack("MessHallAPI", "Revenger Scythe", RevengerScythe);
+                        CustomBackpackManager.RegisterBackpack("MessHallAPI", "GA Wings", WDGaster);
                     }
                 }
 
