@@ -1,14 +1,15 @@
 using MelonLoader;
+using MessHallAPI.Networking;
 using MessHallAPIExample.Managers;
 
 namespace MessHallExample
 {
-  public static class Core : MelonMod
+  public class Core : MelonMod
   {
-    public override void OnInitializeMelon
+    public override void OnInitializeMelon()
     {
-      object RPCMananger = new RPCManager();
-      RPCRegistry.Register(RPCManager, "MessHallExample");
+      object RpcMananger = new RPCManager();
+      RPCRegistry.Register(RpcMananger, "MessHallExample");
     }
   }
 }

@@ -140,8 +140,27 @@ namespace MessHallAPI.Networking
 
             foreach (var param in method.GetParameters())
             {
-                if (!supported.Contains(param.ParameterType))
-                    throw new NotSupportedException($"RPC '{method.Name}' has unsupported parameter type '{param.ParameterType.Name}'. Supported: int, float, bool, string, byte.");
+                if (Attribute.IsDefined(param, typeof(RPCInfoAttribute)))
+                {
+                    if (param.ParameterType != typeof(MessHallRpcInfo))
+                    {
+                        throw new NotSupportedException($"RPC '{method.Name}' has invalid RPCInfo parameter type '{param.ParameterType.Name}'");
+                    }
+
+                    continue;
+                }
+
+                Type t = param.ParameterType;
+
+                if (t != typeof(int) &&
+                    t != typeof(float) &&
+                    t != typeof(bool) &&
+                    t != typeof(string) &&
+                    t != typeof(byte))
+                {
+                    throw new NotSupportedException(
+                        $"RPC '{method.Name}' has unsupported parameter type '{t.Name}'. Supported: int, float, bool, string, byte.");
+                }
             }
         }
 

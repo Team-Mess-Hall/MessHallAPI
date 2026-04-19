@@ -52,8 +52,17 @@
     }
 
     [AttributeUsage(AttributeTargets.Parameter)]
-    public sealed class RPCTargetAttribute : Attribute 
+    public sealed class RPCTargetAttribute : Attribute { }
+
+
+
+
+    public struct MessHallRpcInfo
     {
-    
+        public int SenderId;
+        public bool IsHost;
     }
+
+    [AttributeUsage(AttributeTargets.Parameter)]
+    public sealed class RPCInfoAttribute : Attribute { }
 }

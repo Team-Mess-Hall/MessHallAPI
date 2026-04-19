@@ -24,7 +24,11 @@ namespace MessHallAPI.Networking
                 Logging.Log($"Fixed? {networkRunner != null}");
             }
 
-            networkRunner.SendReliableDataToPlayer(target, new Il2CppStructArray<byte>(Wrap(payload)));
+            var arr = new Il2CppStructArray<byte>(payload.Length);
+            for (int i = 0; i < payload.Length; i++)
+                arr[i] = payload[i];
+
+            networkRunner.SendReliableDataToPlayer(target, arr);
         }
 
         /// <summary>
@@ -39,7 +43,11 @@ namespace MessHallAPI.Networking
                 Logging.Log($"Fixed? {networkRunner != null}");
             }
 
-            networkRunner.SendReliableDataToServer(new Il2CppStructArray<byte>(Wrap(payload)));
+            var arr = new Il2CppStructArray<byte>(payload.Length);
+            for (int i = 0; i < payload.Length; i++)
+                arr[i] = payload[i];
+
+            networkRunner.SendReliableDataToServer(arr);
         }
 
         /// <summary>
@@ -87,20 +95,11 @@ namespace MessHallAPI.Networking
                     Args = originalPacket.Args
                 };
 
-                byte[] bytes = JsonSerializer.SerializeToUtf8Bytes(packet);
-
-                Logging.Log($"send {packet.Method} to {player.PlayerId}");
-
+                byte[] bytes = NetworkManager.Serialize(packet);
                 SendToPlayer(player, bytes);
             }
         }
 
-        private static byte[] Wrap(byte[] payload)
-        {
-            var result = new byte[payload.Length + 1];
-            result[0] = PacketConstants.MHAPI;
-            Buffer.BlockCopy(payload, 0, result, 1, payload.Length);
-            return result;
-        }
+
     }
 }

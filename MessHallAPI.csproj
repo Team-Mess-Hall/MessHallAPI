@@ -110,13 +110,13 @@
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Among Us 3D\MelonLoader\Il2CppAssemblies\Il2CppSG.GlobalEvents.dll</HintPath>
     </Reference>
     <Reference Include="Il2CppSG.LightUI">
-      <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Among Us 3D\MelonLoader\Il2CppAssemblies\Il2CppSG.LightUI.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Among Us 3D\MelonLoader\Il2CppAssemblies\Il2CppSG.LightUI.dll</HintPath>
     </Reference>
     <Reference Include="Il2CppSG.Platform">
-      <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Among Us 3D\MelonLoader\Il2CppAssemblies\Il2CppSG.Platform.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Among Us 3D\MelonLoader\Il2CppAssemblies\Il2CppSG.Platform.dll</HintPath>
     </Reference>
     <Reference Include="Il2CppSG.Platform.Steam">
-      <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Among Us 3D\MelonLoader\Il2CppAssemblies\Il2CppSG.Platform.Steam.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Among Us 3D\MelonLoader\Il2CppAssemblies\Il2CppSG.Platform.Steam.dll</HintPath>
     </Reference>
     <Reference Include="Il2CppSystem">
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Among Us 3D\MelonLoader\Il2CppAssemblies\Il2CppSystem.dll</HintPath>
@@ -131,10 +131,10 @@
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Among Us 3D\MelonLoader\Il2CppAssemblies\Unity.Addressables.dll</HintPath>
     </Reference>
     <Reference Include="Unity.InputSystem">
-      <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Among Us 3D\MelonLoader\Il2CppAssemblies\Unity.InputSystem.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Among Us 3D\MelonLoader\Il2CppAssemblies\Unity.InputSystem.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro">
-      <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Among Us 3D\MelonLoader\Il2CppAssemblies\Unity.TextMeshPro.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Among Us 3D\MelonLoader\Il2CppAssemblies\Unity.TextMeshPro.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Among Us 3D\MelonLoader\Il2CppAssemblies\UnityEngine.dll</HintPath>
@@ -152,7 +152,7 @@
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Among Us 3D\MelonLoader\Il2CppAssemblies\UnityEngine.IMGUIModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.InputLegacyModule">
-      <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Among Us 3D\MelonLoader\Il2CppAssemblies\UnityEngine.InputLegacyModule.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Among Us 3D\MelonLoader\Il2CppAssemblies\UnityEngine.InputLegacyModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.InputModule">
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Among Us 3D\MelonLoader\Il2CppAssemblies\UnityEngine.InputModule.dll</HintPath>
@@ -170,5 +170,9 @@
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Among Us 3D\MelonLoader\Il2CppAssemblies\UnityEngine.UIModule.dll</HintPath>
     </Reference>
   </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="del &quot;C:\Program Files (x86)\Steam\steamapps\common\Among Us 3D\Mods\MessHallAPI.dll&quot;&#xD;&#xA;copy /Y &quot;$(TargetPath)&quot; &quot;C:\Program Files (x86)\Steam\steamapps\common\Among Us 3D\Mods\MessHallAPI.dll&quot;" />
+  </Target>
 
 </Project>

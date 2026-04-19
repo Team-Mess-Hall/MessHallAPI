@@ -214,7 +214,7 @@ namespace MessHallAPI.Managers.Cosmetic
             }
             return null;
         }
-        
+
         public static GameObject? FindChocolateScoop()
         {
             foreach (var go in Resources.FindObjectsOfTypeAll<GameObject>())

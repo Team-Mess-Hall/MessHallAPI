@@ -1,7 +1,7 @@
 ﻿using HarmonyLib;
 using Il2CppFusion;
-using Il2CppSystem;
 using MelonLoader;
+using MessHallAPI.Base;
 using MessHallAPI.Config;
 using MessHallAPI.Debugger;
 using MessHallAPI.Networking;
@@ -9,15 +9,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static Il2CppFusion.Simulation;
 
 namespace MessHallAPI.Patches
 {
     internal class OnPlayerJoinedPatch
     {
         public static readonly Dictionary<int, string> ReliableKeys = new();
+        public static readonly HashSet<int> Confirmed = new();
 
-        public static bool TryGetKey(int id, out string? key)
+        public static bool TryGetKey(int id, out string key)
         {
             return ReliableKeys.TryGetValue(id, out key);
         }
@@ -25,49 +25,84 @@ namespace MessHallAPI.Patches
         [HarmonyPatch(typeof(NetworkRunner), nameof(NetworkRunner.Fusion_Simulation_ICallbacks_PlayerJoined))]
         private static class Patch
         {
-            private static void Prefix(PlayerRef player)
+            [HarmonyPostfix]
+            private static void Postfix(PlayerRef player)
             {
                 if (!Settings.IsHost)
                     return;
 
-                MelonCoroutines.Start(ExchangeKeys(player.PlayerId));
+                int id = player.PlayerId;
+
+                string key = Guid.NewGuid().ToString();
+                ReliableKeys[id] = key;
+
+                if (id == References.networkRunner.LocalPlayer)
+                {
+                    RPCRegistry.ReliableKey = key;
+                    Confirmed.Add(id);
+                    return;
+                }
+
+                MelonCoroutines.Start(SendKeyLoop(id));
             }
         }
 
-        private static IEnumerator ExchangeKeys(int playerId)
+        private static IEnumerator SendKeyLoop(int playerId)
         {
-            yield return new WaitForSeconds(9f);
+            int attempts = 0;
 
-            string guid = System.Guid.NewGuid().ToString();
+            yield return new WaitForSeconds(0.5f);
 
-            if (playerId == 9)
+            while (!Confirmed.Contains(playerId) && attempts < 6)
             {
-                ReliableKeys[playerId] = guid;
-                RPCRegistry.ReliableKey = guid;
-                Logging.Log($"Host player joined, set key: {guid}");
+                if (!ReliableKeys.TryGetValue(playerId, out var key))
+                    yield break;
+
+                Logging.Log($"send key to {playerId}");
+
+                NetworkManager.InvokeRPC("MessHallAPI", "RPC_ExchangeKeys", playerId, key);
+
+                attempts++;
+
+                yield return new WaitForSeconds(1.5f);
             }
-            else
+
+            if (!Confirmed.Contains(playerId))
             {
-                ReliableKeys[playerId] = guid;
-                NetworkManager.InvokeRPC("MessHallAPI", "RPC_ExchangeKeys", playerId, guid);
+                Logging.Warn($"key exchange failed for {playerId}");
             }
         }
 
         [MessHallRPC(RPCTarget.All, RPCCaller.HostOnly)]
         public static void RPC_ExchangeKeys([RPCTarget] int target, string key)
         {
-            if (OnPlayerJoinedPatch.ReliableKeys.TryGetValue(target, out var existing))
-            {
-                if (existing == key) return;
-            }
+            int localId = References.Client.PState.PlayerId;
 
-            OnPlayerJoinedPatch.ReliableKeys[target] = key;
+            if (localId != target)
+                return;
+
+            ReliableKeys[localId] = key;
             RPCRegistry.ReliableKey = key;
 
-            Logging.Log($"Stored key for player {target}: {key}");
+            Logging.Log("received key");
+
+            NetworkManager.InvokeRPC("MessHallAPI", "RPC_KeyReceived");
         }
 
         [MessHallRPC(RPCTarget.Host, RPCCaller.Anyone)]
-        public static void RPC_KeyReceived() { }
+        public static void RPC_KeyReceived([RPCInfo] MessHallRpcInfo info)
+        {
+            if (!Settings.IsHost)
+                return;
+
+            int senderId = info.SenderId;
+
+            if (!ReliableKeys.ContainsKey(senderId))
+                return;
+
+            Confirmed.Add(senderId);
+
+            Logging.Log($"key exchange confirmed from {senderId}");
+        }
     }
 }

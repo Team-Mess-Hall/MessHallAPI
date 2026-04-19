@@ -41,8 +41,7 @@ namespace MessHallAPI.Managers
         private static GameObject? Penguin = null;
 
         // Backpacks
-        private static GameObject? RevengerScythe = null;
-        private static GameObject? WDGaster = null; // best cosmetic in the game, source: trust
+        private static GameObject? RevengerScythe = null;   
 
         // Hats
         private static GameObject? Overscoped = null;
@@ -66,6 +65,7 @@ namespace MessHallAPI.Managers
                     _visible = !_visible;
                 }
 
+                /*
                 if (Minicrewmate == null && HeadSlug == null && ChocolateScoop == null && Flytrap == null && Balloon == null && Snowmate == null && Icemate == null && WhippedCream == null && Heart == null && Penguin == null)
                 {
                     Minicrewmate = CustomPetManager.FindMiniCrewmate();
@@ -93,16 +93,14 @@ namespace MessHallAPI.Managers
                         CustomPetManager.RegisterPet("MessHallAPI", "Penguin", Penguin);
                     }
                 }
-
-                if (RevengerScythe == null && WDGaster == null)
+                
+                if (RevengerScythe == null)
                 {
                     RevengerScythe = CustomBackpackManager.FindRevengerScythe();
-                    WDGaster = CustomBackpackManager.FindGAWings();
-                    if (RevengerScythe != null && WDGaster != null)
+                    if (RevengerScythe != null)
                     {
                         CustomBackpackManager.RegisterBackpack("MessHallAPI", "No Backpack", null);
                         CustomBackpackManager.RegisterBackpack("MessHallAPI", "Revenger Scythe", RevengerScythe);
-                        CustomBackpackManager.RegisterBackpack("MessHallAPI", "GA Wings", WDGaster);
                     }
                 }
 
@@ -155,6 +153,7 @@ namespace MessHallAPI.Managers
                     NameplateRegistry.Register("MessHallAPI", "BoneBashPlate", BoneBashPlate);
                     NameplateRegistry.Register("MessHallAPI", "RoundUpPlate", RoundUpPlate);
                 }
+                */
             }
             else
             {

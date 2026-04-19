@@ -21,9 +21,6 @@ namespace MessHallAPI.Patches
                 Logging.Log($"Player {player.PlayerId} left, removing their key.");
 
                 CustomPetManager.OnPlayerLeft(player.PlayerId);
-                CustomBackpackManager.OnPlayerLeft(player.PlayerId);
-                CustomHatManager.OnPlayerLeft(player.PlayerId);
-                CustomVisorManager.OnPlayerLeft(player.PlayerId);
             }
         }
     }

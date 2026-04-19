@@ -8,11 +8,8 @@ using System.Threading.Tasks;
 
 namespace MessHallAPI.Managers.Cosmetic
 {
-    public class CustomSkinManager
+    internal class CustomSkinManager
     {
-        public static void HookSkin()
-        {
 
-        }
     }
 }

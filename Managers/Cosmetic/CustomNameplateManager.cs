@@ -1,7 +1,5 @@
-﻿using Il2CppFusion;
-using Il2CppSG.Airlock;
+﻿using Il2CppSG.Airlock;
 using Il2CppSG.Airlock.Minigames;
-using Il2CppSG.Airlock.UI;
 using Il2CppSG.Airlock.XR;
 using Il2CppSG.LightUI;
 using Il2CppTMPro;
@@ -11,9 +9,7 @@ using System.Reflection;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
-using static Il2CppFusion.NetworkCharacterController;
 using static MessHallAPI.Base.References;
-using static MessHallAPI.Networking.RPCRegistry;
 using static UnityEngine.GraphicsBuffer;
 
 namespace MessHallAPI.Managers.Cosmetic
@@ -118,7 +114,7 @@ namespace MessHallAPI.Managers.Cosmetic
         }
 
         [MessHallRPC(RPCTarget.AllInclusive, RPCCaller.Anyone)]
-        public static void RPC_RefreshSkeldMeetingAtlases()
+        public static void RPC_RefreshMeetingAtlases()
         {
             _playerRenderers.Clear();
             Logging.Log("[MeetingAtlases] Cleared player renderers");
@@ -165,43 +161,6 @@ namespace MessHallAPI.Managers.Cosmetic
                 ApplyToPlayer(playerId);
         }
 
-        [MessHallRPC(RPCTarget.AllInclusive, RPCCaller.Anyone)]
-        public static void RPC_RefreshPolusMeetingAtlas()
-        {
-            // see RPC_RefreshSkeldMeetingAtlas for a path ref
-        }
-
-        [MessHallRPC(RPCTarget.AllInclusive, RPCCaller.Anyone)]
-        public static void RPC_RefreshMessHallMeetingAtlas()
-        {
-            // see RPC_RefreshSkeldMeetingAtlas for a path ref
-        }
-
-        /*error [16:10:29.438] [MessHallAPI] [MessHallAPI]: RPC error in RPC_RefreshMeetingAtlases: System.Reflection.TargetInvocationException: Exception has been thrown by the target of an invocation.
- ---> Il2CppInterop.Runtime.Il2CppException: System.InvalidOperationException: Error when accessing PlayerState.IsConnected.Networked properties can only be accessed when Spawned() has been called.
---- BEGIN IL2CPP STACK TRACE ---
-System.InvalidOperationException: Error when accessing PlayerState.IsConnected.Networked properties can only be accessed when Spawned() has been called.
-  at SG.Airlock.PlayerState.get_IsConnected ()[0x00000] in <00000000000000000000000000000000>:0 
-  at SG.Airlock.Network.SpawnManager+<>c.<get_ActivePlayerStates>b__28_0 (SG.Airlock.PlayerState x)[0x00000] in <00000000000000000000000000000000>:0 
-  at System.Linq.Enumerable+WhereListIterator`1[TSource].MoveNext ()[0x00000] in <00000000000000000000000000000000>:0 
-  at System.Collections.Generic.List`1[T].AddEnumerable (System.Collections.Generic.IEnumerable`1[T] enumerable) [0x00000] in <00000000000000000000000000000000>:0 
-  at System.Collections.Generic.List`1[T]..ctor (System.Collections.Generic.IEnumerable`1[T] collection) [0x00000] in <00000000000000000000000000000000>:0 
-  at SG.Airlock.Network.SpawnManager.get_ActivePlayerStates() [0x00000] in <00000000000000000000000000000000>:0 
---- END IL2CPP STACK TRACE ---
-
-   at Il2CppInterop.Runtime.Il2CppException.RaiseExceptionIfNecessary(IntPtr returnedException) in /home/runner/work/Il2CppInterop/Il2CppInterop/Il2CppInterop.Runtime/Il2CppException.cs:line 36
-   at Il2CppSG.Airlock.Network.SpawnManager.get_ActivePlayerStates()
-   at MessHallAPI.Managers.Cosmetic.CustomNameplateManager.RPC_RefreshMeetingAtlases()
-   --- End of inner exception stack trace ---
-   at System.RuntimeMethodHandle.InvokeMethod(Object target, Span`1& arguments, Signature sig, Boolean constructor, Boolean wrapExceptions)
-   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
-   at System.Reflection.MethodBase.Invoke(Object obj, Object[] parameters)
-   at MessHallAPI.Networking.NetworkManager.ExecuteLocal(RPCEntry entry, Object[] args)
-        */
-
-        // idk man GL lemme know if you figure this out lol
-
-
         [Obsolete("Load a sprite manually in your mod as this only loads stuff in the api")]
         public static Sprite LoadSpriteFromResource(string resourcePath)
         {
@@ -233,6 +192,7 @@ System.InvalidOperationException: Error when accessing PlayerState.IsConnected.N
             if (nameplate == null) return;
             SetNameplate(target, nameplate);
             RefreshPlayerAtlases();
+            Logging.Log("Sent RPC");
         }
         public static void LocalSetNameplate(int target, string modName, string nameplateId)
         {

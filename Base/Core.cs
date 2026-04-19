@@ -49,6 +49,7 @@ namespace MessHallAPI.Base
                 ModStorage.LoadModStamp();
                 RPCRegistry.ReliableKey = string.Empty;
                 OnPlayerJoinedPatch.ReliableKeys.Clear();
+                ReferencesSet = false;
             }
             if (InGame)
             {
@@ -62,7 +63,19 @@ namespace MessHallAPI.Base
 
         public override void OnSceneWasLoaded(int buildIndex, string sceneName)
         {
+            var customization = UnityEngine.Object.FindObjectOfType<Il2CppSG.Airlock.Customization.CustomizationManager>(true);
+            if (customization == null) return;
 
+            foreach (var element in customization._elementCollection.AllCustomizationElements)
+            {
+                try
+                {
+                    var AddOnItem = element.Cast<Il2CppSG.Airlock.Customization.CustomizationAddOnItem>();
+                    AddOnItem._CheckEntitlement = false;
+                    AddOnItem.IsLocked = false;
+                }
+                catch { }
+            }
         }
 
         private static System.Collections.IEnumerator DelayedReset()
@@ -80,6 +93,14 @@ namespace MessHallAPI.Base
             float y = 10f;
 
             CosmeticGUIManager.OnGUI();
+
+            if (GUI.Button(new Rect(10, y, 140, 30), "Reset Refs"))
+            {
+                References.ResetReferences();
+            }
+            y += 30f;
+
+
 
             if (GUI.Button(new Rect(10, y, 140, 30), "All Anyone"))
             {
@@ -99,11 +120,6 @@ namespace MessHallAPI.Base
             }
             y += 30f;
 
-            if (GUI.Button(new Rect(10, y, 140, 30), "Target RPC"))
-            {
-                NetworkManager.InvokeRPC("MessHallAPI", "RPC_targetLog", 0, "hello 0");
-            }
-            y += 30f;
 
             for (int i = 0; i <= 9; i++)
             {

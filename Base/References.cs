@@ -13,7 +13,6 @@ namespace MessHallAPI.Base
         public static AirlockPeer Peer;
         public static GameStateManager GameState;
         public static SpawnManager Spawn;
-
         public static AirlockNetworkRunner networkRunner;
         public static void ResetReferences()
         {
@@ -33,13 +32,13 @@ namespace MessHallAPI.Base
                 Client = FindObjectOfType<XRRig>();
                 trace = "Peer";
                 Peer = FindObjectOfType<AirlockPeer>();
-                IsHost = Peer.Runner.LocalPlayer.PlayerId == 9;
                 trace = "GameState";
                 GameState = FindObjectOfType<GameStateManager>();
                 trace = "Spawn";
                 Spawn = FindObjectOfType<SpawnManager>();
                 trace = "networkRunner";
-                networkRunner = FindObjectOfType<AirlockNetworkRunner>();            
+                networkRunner = FindObjectOfType<AirlockNetworkRunner>();
+                IsHost = Peer.Runner.LocalPlayer.PlayerId == 9;
             }
             catch
             {
