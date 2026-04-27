@@ -9,6 +9,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static MessHallAPI.Networking.MessHallNetworkTransform;
 
 namespace MessHallAPI.Patches
 {
@@ -44,6 +45,7 @@ namespace MessHallAPI.Patches
                 }
 
                 MelonCoroutines.Start(SendKeyLoop(id));
+                SendValuesToJoiningPlayer(id);
             }
         }
 

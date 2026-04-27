@@ -64,8 +64,21 @@ namespace MessHallAPI.Managers.Cosmetic
 
             var instance = GameObject.Instantiate(prefab);
             instance.transform.SetParent(backpackBone, false);
-            instance.transform.localPosition = new Vector3(0, -0.25f, 0.4f);
+            if (instance.name == "P_Char_GuardianAngelWings_01")
+            {
+                instance.transform.localPosition = new Vector3(0, -0.25f, 0.2f);
+            }
+            else
+            {
+                instance.transform.localPosition = new Vector3(0, -0.25f, 0.4f);
+            }
             instance.transform.localRotation = Quaternion.identity;
+            Transform rotationCorrector = instance.transform.Find("RotationCorrector");
+            if (rotationCorrector != null)
+                rotationCorrector.localRotation = Quaternion.identity;
+
+            if (instance.active == false)
+                instance.SetActive(true);
 
             _activeBackpacks[playerId] = instance;
             _playerBackpacks[playerId] = (modId, backpackId);
@@ -90,15 +103,6 @@ namespace MessHallAPI.Managers.Cosmetic
                 _activeBackpacks.Remove(playerId);
             }
             _playerBackpacks.Remove(playerId);
-        }
-        public static GameObject? FindRevengerScythe()
-        {
-            foreach (var go in Resources.FindObjectsOfTypeAll<GameObject>())
-            {
-                if (go.name == "SM_Char_RevengerScythe_01")
-                    return go;
-            }
-            return null;
         }
     }
 }

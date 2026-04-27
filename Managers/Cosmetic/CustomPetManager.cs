@@ -1,4 +1,5 @@
 ﻿using Il2CppSG.Airlock;
+using Il2CppSG.Airlock.Customization;
 using Il2CppSG.Airlock.Network;
 using MessHallAPI.Networking;
 using UnityEngine;
@@ -194,116 +195,6 @@ namespace MessHallAPI.Managers.Cosmetic
             // gameObject.SetActive(false);
         }
         */
-
-        public static GameObject? FindMiniCrewmate()
-        {
-            foreach (var go in Resources.FindObjectsOfTypeAll<GameObject>())
-            {
-                if (go.name == "SM_Hat_MiniCrewmate" && go.transform.parent == null)
-                    return go;
-            }
-            return null;
-        }
-
-        public static GameObject? FindHeadslug()
-        {
-            foreach (var go in Resources.FindObjectsOfTypeAll<GameObject>())
-            {
-                if (go.name == "AP_Hat_Headslug" && go.transform.parent == null)
-                    return go;
-            }
-            return null;
-        }
-
-        public static GameObject? FindChocolateScoop()
-        {
-            foreach (var go in Resources.FindObjectsOfTypeAll<GameObject>())
-            {
-                if (go.name == "SM_Hat_ChocolateScoop" && go.transform.parent == null)
-                    return go;
-            }
-            return null;
-        }
-
-        public static GameObject? FindFlyTrap()
-        {
-            foreach (var go in Resources.FindObjectsOfTypeAll<GameObject>())
-            {
-                if (go.name == "SM_Hat_BeanusFlytrap" && go.transform.parent == null)
-                    return go;
-            }
-            return null;
-        }
-
-        public static GameObject? FindBalloon()
-        {
-            foreach (var go in Resources.FindObjectsOfTypeAll<GameObject>())
-            {
-                if (go.name == "SM_Hat_Balloon" && go.transform.parent == null)
-                    return go;
-            }
-            return null;
-        }
-
-        public static GameObject? FindSnowmate()
-        {
-            foreach (var go in Resources.FindObjectsOfTypeAll<GameObject>())
-            {
-                if (go.name == "SM_Snowmate_01" && go.transform.parent == null)
-                    return go;
-            }
-            return null;
-        }
-
-        public static GameObject? FindIcemate()
-        {
-            foreach (var go in Resources.FindObjectsOfTypeAll<GameObject>())
-            {
-                if (go.name == "SM_IceCrewmate_01" && go.transform.parent == null)
-                    return go;
-            }
-            return null;
-        }
-
-        public static GameObject? FindWhippedCream()
-        {
-            foreach (var go in Resources.FindObjectsOfTypeAll<GameObject>())
-            {
-                if (go.name == "SM_WhippedCream_01" && go.transform.parent == null)
-                    return go;
-            }
-            return null;
-        }
-
-        public static GameObject? FindHeart()
-        {
-            foreach (var go in Resources.FindObjectsOfTypeAll<GameObject>())
-            {
-                if (go.name == "SM_Hat_Heart" && go.transform.parent == null)
-                    return go;
-            }
-            return null;
-        }
-
-        public static GameObject? FindPenguin()
-        {
-            foreach (var go in Resources.FindObjectsOfTypeAll<GameObject>())
-            {
-                if (go.name == "SM_PengYinz_01" && go.transform.parent == null)
-                    return go;
-            }
-            return null;
-        }
-
-        public static GameObject? FindToiletPaper()
-        {
-            foreach (var go in Resources.FindObjectsOfTypeAll<GameObject>())
-            {
-                if (go.name == "SM_Hat_TheLastWipe" && go.transform.parent == null)
-                    return go;
-            }
-            return null;
-        }
 
         public static void AutoAddNetworkTransform(GameObject obj)
         {

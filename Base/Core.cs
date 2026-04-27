@@ -63,19 +63,7 @@ namespace MessHallAPI.Base
 
         public override void OnSceneWasLoaded(int buildIndex, string sceneName)
         {
-            var customization = UnityEngine.Object.FindObjectOfType<Il2CppSG.Airlock.Customization.CustomizationManager>(true);
-            if (customization == null) return;
 
-            foreach (var element in customization._elementCollection.AllCustomizationElements)
-            {
-                try
-                {
-                    var AddOnItem = element.Cast<Il2CppSG.Airlock.Customization.CustomizationAddOnItem>();
-                    AddOnItem._CheckEntitlement = false;
-                    AddOnItem.IsLocked = false;
-                }
-                catch { }
-            }
         }
 
         private static System.Collections.IEnumerator DelayedReset()
@@ -90,48 +78,7 @@ namespace MessHallAPI.Base
 
         public override void OnGUI()
         {
-            float y = 10f;
 
-            CosmeticGUIManager.OnGUI();
-
-            if (GUI.Button(new Rect(10, y, 140, 30), "Reset Refs"))
-            {
-                References.ResetReferences();
-            }
-            y += 30f;
-
-
-
-            if (GUI.Button(new Rect(10, y, 140, 30), "All Anyone"))
-            {
-                NetworkManager.InvokeRPC("MessHallAPI", "RPC_AllLog", "all anyone");
-            }
-            y += 30f;
-
-            if (GUI.Button(new Rect(10, y, 140, 30), "AllInclusive Anyone"))
-            {
-                NetworkManager.InvokeRPC("MessHallAPI", "RPC_AllIncLog", "allinclusive");
-            }
-            y += 30f;
-
-            if (GUI.Button(new Rect(10, y, 140, 30), "HostOnly All"))
-            {
-                NetworkManager.InvokeRPC("MessHallAPI", "RPC_HostCallLog", "hostonly");
-            }
-            y += 30f;
-
-
-            for (int i = 0; i <= 9; i++)
-            {
-                int id = i;
-
-                if (GUI.Button(new Rect(10, y, 140, 30), $"Target {id}"))
-                {
-                    NetworkManager.InvokeRPC("MessHallAPI", "RPC_targetLog", id, $"hello {id}");
-                }
-
-                y += 30f;
-            }
         }
     }
 }

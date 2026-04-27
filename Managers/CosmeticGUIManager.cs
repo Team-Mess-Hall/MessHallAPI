@@ -28,113 +28,20 @@ namespace MessHallAPI.Managers
         private static Sprite? BoneBashPlate = null;
         private static Sprite? RoundUpPlate = null;
 
-        // pets
-        private static GameObject? Minicrewmate = null;
-        private static GameObject? HeadSlug = null;
-        private static GameObject? ChocolateScoop = null;
-        private static GameObject? Flytrap = null;
-        private static GameObject? Balloon = null;
-        private static GameObject? Snowmate = null;
-        private static GameObject? Icemate = null;
-        private static GameObject? WhippedCream = null;
-        private static GameObject? Heart = null;
-        private static GameObject? Penguin = null;
-
-        // Backpacks
-        private static GameObject? RevengerScythe = null;   
-
-        // Hats
-        private static GameObject? Overscoped = null;
-
-        // Visors
-        private static GameObject? VRHat = null;
-        private static GameObject? GasMask = null;
-        private static GameObject? DeluxeScanner = null;
-        private static GameObject? ScientistGoggles = null;
-        private static GameObject? DumSticker = null;
-        private static GameObject? GreatGoalie = null;
-        private static GameObject? Scanner = null;
-
-
         public static void OnUpdate()
         {
             if (InGame && GameState.InLobbyState())
             {
                 if (Keyboard.current.rightAltKey.wasPressedThisFrame)
-                {
                     _visible = !_visible;
-                }
-
-                /*
-                if (Minicrewmate == null && HeadSlug == null && ChocolateScoop == null && Flytrap == null && Balloon == null && Snowmate == null && Icemate == null && WhippedCream == null && Heart == null && Penguin == null)
-                {
-                    Minicrewmate = CustomPetManager.FindMiniCrewmate();
-                    HeadSlug = CustomPetManager.FindHeadslug();
-                    ChocolateScoop = CustomPetManager.FindChocolateScoop();
-                    Flytrap = CustomPetManager.FindFlyTrap();
-                    Balloon = CustomPetManager.FindBalloon();
-                    Snowmate = CustomPetManager.FindSnowmate();
-                    Icemate = CustomPetManager.FindIcemate();
-                    WhippedCream = CustomPetManager.FindWhippedCream();
-                    Heart = CustomPetManager.FindHeart();
-                    Penguin = CustomPetManager.FindPenguin();
-                    if (Minicrewmate != null && HeadSlug != null && ChocolateScoop != null && Flytrap != null && Balloon != null && Snowmate != null && Icemate != null && WhippedCream != null && Heart != null && Penguin != null)
-                    {
-                        CustomPetManager.RegisterPet("MessHallAPI", "No Pet", null);
-                        CustomPetManager.RegisterPet("MessHallAPI", "MiniCrewmate", Minicrewmate);
-                        CustomPetManager.RegisterPet("MessHallAPI", "HeadSlug", HeadSlug);
-                        CustomPetManager.RegisterPet("MessHallAPI", "ChocolateScoop", ChocolateScoop);
-                        CustomPetManager.RegisterPet("MessHallAPI", "FlyTrap", Flytrap);
-                        CustomPetManager.RegisterPet("MessHallAPI", "Balloon", Balloon);
-                        CustomPetManager.RegisterPet("MessHallAPI", "Snowmate", Snowmate);
-                        CustomPetManager.RegisterPet("MessHallAPI", "Icemate", Icemate);
-                        CustomPetManager.RegisterPet("MessHallAPI", "WhippedCream", WhippedCream);
-                        CustomPetManager.RegisterPet("MessHallAPI", "Heart", Heart);
-                        CustomPetManager.RegisterPet("MessHallAPI", "Penguin", Penguin);
-                    }
-                }
                 
-                if (RevengerScythe == null)
-                {
-                    RevengerScythe = CustomBackpackManager.FindRevengerScythe();
-                    if (RevengerScythe != null)
-                    {
-                        CustomBackpackManager.RegisterBackpack("MessHallAPI", "No Backpack", null);
-                        CustomBackpackManager.RegisterBackpack("MessHallAPI", "Revenger Scythe", RevengerScythe);
-                    }
-                }
+                CustomPetManager.RegisterPet("MessHallAPI", "No Pet", null);
 
-                if (Overscoped == null)
-                {
-                    Overscoped = CustomHatManager.FindOverScopedHat();
-                    if (Overscoped != null)
-                    {
-                        CustomHatManager.RegisterHat("MessHallAPI", "No Hat", null);
-                        CustomHatManager.RegisterHat("MessHallAPI", "Overscoped", Overscoped);
-                    }
-                }
+                CustomBackpackManager.RegisterBackpack("MessHallAPI", "No Backpack", null);
 
-                if (VRHat == null && GasMask == null && DeluxeScanner == null && ScientistGoggles == null && DumSticker == null && GreatGoalie == null && Scanner == null)
-                {
-                    VRHat = CustomVisorManager.FindVRHat();
-                    GasMask = CustomVisorManager.FindGasMask();
-                    DeluxeScanner = CustomVisorManager.FindDeluxeScanner();
-                    ScientistGoggles = CustomVisorManager.FindScientistGoggles();
-                    DumSticker = CustomVisorManager.FindDumSticker();
-                    GreatGoalie = CustomVisorManager.FindGreatGoalie();
-                    Scanner = CustomVisorManager.FindScanner();
-                    if (VRHat != null && GasMask != null && DeluxeScanner != null && ScientistGoggles != null && DumSticker != null && GreatGoalie != null && Scanner != null)
-                    {
-                        CustomVisorManager.RegisterVisor("MessHallAPI", "No Visor", null);
-                        CustomVisorManager.RegisterVisor("MessHallAPI", "VR Hat", VRHat);
-                        CustomVisorManager.RegisterVisor("MessHallAPI", "Gas Mask", GasMask);
-                        CustomVisorManager.RegisterVisor("MessHallAPI", "Deluxe Scanner", DeluxeScanner);
-                        CustomVisorManager.RegisterVisor("MessHallAPI", "Scientist Goggles", ScientistGoggles);
-                        CustomVisorManager.RegisterVisor("MessHallAPI", "Dum Sticker", DumSticker);
-                        CustomVisorManager.RegisterVisor("MessHallAPI", "Great Goalie", GreatGoalie);
-                        CustomVisorManager.RegisterVisor("MessHallAPI", "Scanner", Scanner);
-                    }
-                }
+                CustomHatManager.RegisterHat("MessHallAPI", "No Hat", null);
+
+                CustomVisorManager.RegisterVisor("MessHallAPI", "No Visor", null);
 
                 if (Infectionplate == null)
                 {
@@ -153,14 +60,13 @@ namespace MessHallAPI.Managers
                     NameplateRegistry.Register("MessHallAPI", "BoneBashPlate", BoneBashPlate);
                     NameplateRegistry.Register("MessHallAPI", "RoundUpPlate", RoundUpPlate);
                 }
-                */
             }
             else
             {
                 _visible = false;
             }
         }
-        
+
 
         public static void OnGUI()
         {
@@ -196,7 +102,7 @@ namespace MessHallAPI.Managers
             var nameplates = NameplateRegistry.GetAll().ToList();
             if (nameplates.Count == 0)
             {
-                GUI.Label(new Rect(10, 65, 380, 30), "No nameplates registered.");
+                GUI.Label(new Rect(10, 65, 380, 30), "No nameplates registered."); // because we register a Plates by default, if this shows something broke.
                 return;
             }
 
@@ -239,7 +145,7 @@ namespace MessHallAPI.Managers
             var pets = CustomPetManager.GetAllRegistered().ToList();
             if (pets.Count == 0)
             {
-                GUI.Label(new Rect(10, 65, 380, 30), "No pets registered.");
+                GUI.Label(new Rect(10, 65, 380, 30), "No pets registered."); // because we register a "No Pet" option by default, if this shows something broke.
                 return;
             }
 
@@ -273,7 +179,7 @@ namespace MessHallAPI.Managers
             var hats = CustomHatManager.GetAllRegistered().ToList();
             if (hats.Count == 0)
             {
-                GUI.Label(new Rect(10, 65, 380, 30), "No hats registered.");
+                GUI.Label(new Rect(10, 65, 380, 30), "No hats registered."); // because we register a "No Hat" option by default, if this shows something broke.
                 return;
             }
 
@@ -307,7 +213,7 @@ namespace MessHallAPI.Managers
             var visors = CustomVisorManager.GetAllRegistered().ToList();
             if (visors.Count == 0)
             {
-                GUI.Label(new Rect(10, 65, 380, 30), "No visors registered.");
+                GUI.Label(new Rect(10, 65, 380, 30), "No visors registered."); // because we register a "No Visor" option by default, if this shows something broke.
                 return;
             }
 
