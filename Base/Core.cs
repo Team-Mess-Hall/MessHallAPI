@@ -74,11 +74,9 @@ namespace MessHallAPI.Base
                 ResetReferences();
             }
         }
-
-
         public override void OnGUI()
         {
-
+            CosmeticGUIManager.OnGUI();
         }
     }
 }

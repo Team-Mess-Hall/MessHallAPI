@@ -2,7 +2,7 @@
 {
     public class Settings
     {
-        public static bool DebugMode = true;
+        public static bool DebugMode = false;
         public const string ModName = "MessHallAPI";
         public const string ModVersion = "1.0.0";
         public const string ModAuthor = "TeamMessHall";

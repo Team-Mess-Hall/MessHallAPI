@@ -21,7 +21,7 @@ namespace MessHallAPI.Networking
             {
                 Logging.Error("NetworkRunner not available.");
                 networkRunner = UnityEngine.Object.FindObjectOfType<AirlockNetworkRunner>();
-                Logging.Log($"Fixed? {networkRunner != null}");
+                Logging.DebugLog($"Fixed? {networkRunner != null}");
             }
 
             var arr = new Il2CppStructArray<byte>(payload.Length);
@@ -40,7 +40,7 @@ namespace MessHallAPI.Networking
             {
                 Logging.Error("NetworkRunner not available.");
                 networkRunner = UnityEngine.Object.FindObjectOfType<AirlockNetworkRunner>();
-                Logging.Log($"Fixed? {networkRunner != null}");
+                Logging.DebugLog($"Fixed? {networkRunner != null}");
             }
 
             var arr = new Il2CppStructArray<byte>(payload.Length);

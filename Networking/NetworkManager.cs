@@ -29,7 +29,7 @@ namespace MessHallAPI.Networking
 
             if (!RPCRegistry.TryGet(rpcKey, out var entry))
             {
-                Logging.Log("rpc not found " + rpcKey);
+                Logging.DebugLog("rpc not found " + rpcKey);
                 return;
             }
 
@@ -52,7 +52,7 @@ namespace MessHallAPI.Networking
                 ReliableKey = RPCRegistry.ReliableKey,
                 Args = args
             };
-            Logging.Log($"invoke rpc {methodName} with key {key}");
+            Logging.DebugLog($"invoke rpc {methodName} with key {key}");
             byte[] bytes = Serialize(packet);
 
             if (!Settings.IsHost)

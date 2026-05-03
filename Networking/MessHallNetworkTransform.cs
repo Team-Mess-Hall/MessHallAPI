@@ -1,4 +1,5 @@
-﻿using MessHallAPI.Config;
+﻿using MelonLoader;
+using MessHallAPI.Config;
 using MessHallAPI.Debugger;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,7 +9,7 @@ namespace MessHallAPI.Networking
 {
     public class MessHallNetworkTransform : MonoBehaviour
     {
-        public string? ObjectId { get; set; }
+        public string ObjectId;
         public int OwnerId = -1;
 
         public bool SyncPosition = true;
@@ -21,135 +22,140 @@ namespace MessHallAPI.Networking
         public float RotationThreshold = 0.5f;
         public float ScaleThreshold = 0.01f;
         public float LerpSpeed = 12f;
-        public float SettleThreshold = 0.001f;
 
-        private float _syncTimer;
-        private bool _initialized;
+        float timer;
+        bool init, registered, networking;
 
-        private Vector3 _lastSentPos;
-        private Quaternion _lastSentRot;
-        private Vector3 _lastSentScale;
+        Vector3 lastPos, lastScale, targetPos, targetScale;
+        Quaternion lastRot, targetRot;
+        bool hasTarget;
 
-        private Vector3 _targetPos;
-        private Quaternion _targetRot;
-        private Vector3 _targetScale;
-        private bool _hasTarget;
+        const string MOD_ID = "MessHallAPI";
+        const string RPC_SYNC = "SyncTransform";
 
-        private const string MOD_ID = "MessHallAPI";
-        private const string RPC_SYNC = "SyncTransform";
-        private const string RPC_LATE = "LateSync";
+        static Dictionary<string, MessHallNetworkTransform> registry = new Dictionary<string, MessHallNetworkTransform>();
+        static HashSet<string> pending = new HashSet<string>();
 
-        private static readonly Dictionary<string, MessHallNetworkTransform> _registry = new();
-
-        public void Initialize(string id)
+        public static void RegisterObject(string id)
         {
-            if (_initialized) return;
-            ObjectId = id;
-            _registry[ObjectId] = this;
-
-            _lastSentPos = UseLocalSpace ? transform.localPosition : transform.position;
-            _lastSentRot = UseLocalSpace ? transform.localRotation : transform.rotation;
-            _lastSentScale = transform.localScale;
-
-            _targetPos = _lastSentPos;
-            _targetRot = _lastSentRot;
-            _targetScale = _lastSentScale;
-
-            _initialized = true;
-        }
-
-        private void OnDestroy()
-        {
-            if (_initialized && ObjectId != null)
-                _registry.Remove(ObjectId);
-        }
-
-        public static void SendValuesToJoiningPlayer(int joiningPlayerId)
-        {
-            if (!Settings.IsHost) return;
-
-            foreach (var kvp in _registry)
+            var obj = Find(id);
+            if (obj != null)
             {
-                var obj = kvp.Value;
-                if (obj == null || !obj._initialized) continue;
-
-                Vector3 pos = obj.UseLocalSpace ? obj.transform.localPosition : obj.transform.position;
-                Quaternion rot = obj.UseLocalSpace ? obj.transform.localRotation : obj.transform.rotation;
-                Vector3 scale = obj.transform.localScale;
-
-                NetworkManager.InvokeRPC(
-                    MOD_ID,
-                    RPC_LATE,
-                    joiningPlayerId,
-                    kvp.Key,
-                    pos.x, pos.y, pos.z,
-                    rot.x, rot.y, rot.z, rot.w,
-                    scale.x, scale.y, scale.z
-                );
+                obj.Init(id);
+                obj.registered = true;
+                Logging.DebugLog($"Registered {id}");
+            }
+            else
+            {
+                pending.Add(id);
+                Logging.Warn($"Queued {id}");
             }
         }
 
-        private void Update()
+        public static void StartNetworking(string id)
         {
-            if (!_initialized) return;
-
-            bool isOwner = Client.PState.PlayerId == OwnerId ||
-                           (OwnerId == -1 && Settings.IsHost);
-
-            if (!isOwner)
+            if (!registry.TryGetValue(id, out var obj))
             {
-                if (_hasTarget)
-                {
-                    float t = Time.deltaTime * LerpSpeed;
-
-                    if (SyncPosition)
-                    {
-                        Vector3 cur = UseLocalSpace ? transform.localPosition : transform.position;
-                        Vector3 next = Vector3.Distance(cur, _targetPos) > SettleThreshold
-                            ? Vector3.Lerp(cur, _targetPos, t)
-                            : _targetPos;
-                        if (UseLocalSpace) transform.localPosition = next;
-                        else transform.position = next;
-                    }
-
-                    if (SyncRotation)
-                    {
-                        Quaternion cur = UseLocalSpace ? transform.localRotation : transform.rotation;
-                        Quaternion next = Quaternion.Angle(cur, _targetRot) > SettleThreshold
-                            ? Quaternion.Slerp(cur, _targetRot, t)
-                            : _targetRot;
-                        if (UseLocalSpace) transform.localRotation = next;
-                        else transform.rotation = next;
-                    }
-
-                    if (SyncScale)
-                    {
-                        transform.localScale = Vector3.Distance(transform.localScale, _targetScale) > SettleThreshold
-                            ? Vector3.Lerp(transform.localScale, _targetScale, t)
-                            : _targetScale;
-                    }
-                }
+                Logging.Warn($"Start fail {id}");
                 return;
             }
 
-            _syncTimer += Time.deltaTime;
-            if (_syncTimer < SyncInterval) return;
-            _syncTimer = 0f;
+            obj.networking = true;
+            Logging.DebugLog($"Networking {id}");
+        }
 
-            Vector3 pos = UseLocalSpace ? transform.localPosition : transform.position;
-            Quaternion rot = UseLocalSpace ? transform.localRotation : transform.rotation;
+        static MessHallNetworkTransform Find(string id)
+        {
+            var go = GameObject.Find(id);
+            if (go != null)
+            {
+                MessHallNetworkTransform? comp = go.GetComponent<MessHallNetworkTransform>();
+                if (comp != null) return comp;
+            }
+
+            foreach (var o in Resources.FindObjectsOfTypeAll<MessHallNetworkTransform>())
+                if (o && (o.ObjectId == id || o.gameObject.name == id))
+                    return o;
+
+            return null;
+        }
+
+        void Awake()
+        {
+            if (!string.IsNullOrEmpty(ObjectId) && pending.Contains(ObjectId))
+            {
+                Init(ObjectId);
+                registered = true;
+                pending.Remove(ObjectId);
+                Logging.DebugLog($"Auto {ObjectId}");
+            }
+
+            if (pending.Contains(gameObject.name))
+            {
+                ObjectId = gameObject.name;
+                Init(ObjectId);
+                registered = true;
+                pending.Remove(ObjectId);
+                Logging.DebugLog($"Auto name {ObjectId}");
+            }
+        }
+
+        void Init(string id)
+        {
+            if (init) return;
+
+            ObjectId = id;
+            registry[id] = this;
+
+            lastPos = GetPos();
+            lastRot = GetRot();
+            lastScale = transform.localScale;
+
+            targetPos = lastPos;
+            targetRot = lastRot;
+            targetScale = lastScale;
+
+            init = true;
+            Logging.DebugLog($"Init {id}");
+        }
+
+        void Update()
+        {
+            if (!init || !registered) return;
+
+            if (!Settings.IsHost)
+            {
+                if (!hasTarget) return;
+
+                float t = Time.deltaTime * LerpSpeed;
+
+                if (SyncPosition) SetPos(Vector3.Lerp(GetPos(), targetPos, t));
+                if (SyncRotation) SetRot(Quaternion.Slerp(GetRot(), targetRot, t));
+                if (SyncScale) transform.localScale = Vector3.Lerp(transform.localScale, targetScale, t);
+
+                return;
+            }
+
+            if (!networking) return;
+
+            timer += Time.deltaTime;
+            if (timer < SyncInterval) return;
+            timer = 0f;
+
+            Vector3 pos = GetPos();
+            Quaternion rot = GetRot();
             Vector3 scale = transform.localScale;
 
-            bool dirty = false;
-            if (SyncPosition && Vector3.Distance(pos, _lastSentPos) >= PositionThreshold) dirty = true;
-            if (SyncRotation && Quaternion.Angle(rot, _lastSentRot) >= RotationThreshold) dirty = true;
-            if (SyncScale && Vector3.Distance(scale, _lastSentScale) >= ScaleThreshold) dirty = true;
+            bool dirty =
+                (SyncPosition && Vector3.Distance(pos, lastPos) >= PositionThreshold) ||
+                (SyncRotation && Quaternion.Angle(rot, lastRot) >= RotationThreshold) ||
+                (SyncScale && Vector3.Distance(scale, lastScale) >= ScaleThreshold);
 
             if (!dirty) return;
 
-            _lastSentPos = pos;
-            _lastSentRot = rot;
-            _lastSentScale = scale;
+            lastPos = pos;
+            lastRot = rot;
+            lastScale = scale;
 
             NetworkManager.InvokeRPC(
                 MOD_ID,
@@ -159,46 +165,47 @@ namespace MessHallAPI.Networking
                 rot.x, rot.y, rot.z, rot.w,
                 scale.x, scale.y, scale.z
             );
+
+            Logging.DebugLog($"Sync {ObjectId}");
         }
 
         [MessHallRPC(RPCTarget.AllInclusive, RPCCaller.HostOnly)]
-        public static void SyncTransform(string objectId, float px, float py, float pz, float rx, float ry, float rz, float rw, float sx, float sy, float sz)
+        public static void SyncTransform(string id, float px, float py, float pz, float rx, float ry, float rz, float rw, float sx, float sy, float sz)
         {
-            if (!_registry.TryGetValue(objectId, out var obj)) return;
-
-            if (obj.SyncPosition) obj._targetPos = new Vector3(px, py, pz);
-            if (obj.SyncRotation) obj._targetRot = new Quaternion(rx, ry, rz, rw);
-            if (obj.SyncScale) obj._targetScale = new Vector3(sx, sy, sz);
-            obj._hasTarget = true;
-
-            bool isOwner = Client.PState.PlayerId == obj.OwnerId ||
-                           (obj.OwnerId == -1 && Settings.IsHost);
-
-            if (isOwner)
+            if (!registry.TryGetValue(id, out var obj))
             {
-                if (obj.UseLocalSpace)
-                {
-                    obj.transform.localPosition = obj._targetPos;
-                    obj.transform.localRotation = obj._targetRot;
-                }
-                else
-                {
-                    obj.transform.position = obj._targetPos;
-                    obj.transform.rotation = obj._targetRot;
-                }
-                obj.transform.localScale = obj._targetScale;
+                Logging.Warn($"RPC miss {id}");
+                return;
             }
+
+            obj.targetPos = new Vector3(px, py, pz);
+            obj.targetRot = new Quaternion(rx, ry, rz, rw);
+            obj.targetScale = new Vector3(sx, sy, sz);
+            obj.hasTarget = true;
         }
 
-        [MessHallRPC(RPCTarget.AllInclusive, RPCCaller.HostOnly)]
-        public static void LateSync([RPCTarget] int targetPlayerId, string objectId, float px, float py, float pz, float rx, float ry, float rz, float rw, float sx, float sy, float sz)
-        {
-            if (!_registry.TryGetValue(objectId, out var obj)) return;
+        Vector3 GetPos() => UseLocalSpace ? transform.localPosition : transform.position;
+        Quaternion GetRot() => UseLocalSpace ? transform.localRotation : transform.rotation;
 
-            if (obj.SyncPosition) obj._targetPos = new Vector3(px, py, pz);
-            if (obj.SyncRotation) obj._targetRot = new Quaternion(rx, ry, rz, rw);
-            if (obj.SyncScale) obj._targetScale = new Vector3(sx, sy, sz);
-            obj._hasTarget = true;
+        void SetPos(Vector3 vector)
+        {
+            if (UseLocalSpace) transform.localPosition = vector;
+            else transform.position = vector;
+        }
+
+        void SetRot(Quaternion rotation)
+        {
+            if (UseLocalSpace) transform.localRotation = rotation;
+            else transform.rotation = rotation;
+        }
+
+        void OnDestroy()
+        {
+            if (ObjectId != null && registry.ContainsKey(ObjectId))
+            {
+                registry.Remove(ObjectId);
+                Logging.DebugLog($"Removed {ObjectId}");
+            }
         }
     }
 }

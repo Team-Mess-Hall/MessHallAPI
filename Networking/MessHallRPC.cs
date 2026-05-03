@@ -1,25 +1,25 @@
 ﻿namespace MessHallAPI.Networking
 {
-        /// <summary>
-        /// Who is allowed to SEND this RPC.
-        /// </summary>
-        public enum RPCCaller
-        {
-            Anyone,
-            HostOnly,
-        }
+    /// <summary>
+    /// Who is allowed to SEND this RPC.
+    /// </summary>
+    public enum RPCCaller
+    {
+        Anyone,
+        HostOnly,
+    }
 
     /// <summary>
     /// Who RECEIVES this RPC when sent. Use RPCTarget.All when using the [RPCTarget] attribute on a parameter to specify the target at runtime
     /// </summary>
     public enum RPCTarget
-        {
-            Host,
-            All,
-            AllInclusive,
+    {
+        Host,
+        All,
+        AllInclusive,
 
-            [Obsolete("InputAuthority is for debugging only and should not be used as a real RPCTarget. Use NetworkManager.ExecuteLocal")]
-            InputAuthority
+        [Obsolete("InputAuthority is for debugging only and should not be used as a real RPCTarget. Use NetworkManager.ExecuteLocal")]
+        InputAuthority
     }
 
     /// <summary>loc

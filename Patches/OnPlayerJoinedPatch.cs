@@ -45,7 +45,6 @@ namespace MessHallAPI.Patches
                 }
 
                 MelonCoroutines.Start(SendKeyLoop(id));
-                SendValuesToJoiningPlayer(id);
             }
         }
 
@@ -60,7 +59,7 @@ namespace MessHallAPI.Patches
                 if (!ReliableKeys.TryGetValue(playerId, out var key))
                     yield break;
 
-                Logging.Log($"send key to {playerId}");
+                Logging.DebugLog($"send key to {playerId}");
 
                 NetworkManager.InvokeRPC("MessHallAPI", "RPC_ExchangeKeys", playerId, key);
 
@@ -86,7 +85,7 @@ namespace MessHallAPI.Patches
             ReliableKeys[localId] = key;
             RPCRegistry.ReliableKey = key;
 
-            Logging.Log("received key");
+            Logging.DebugLog("received key");
 
             NetworkManager.InvokeRPC("MessHallAPI", "RPC_KeyReceived");
         }
@@ -104,7 +103,7 @@ namespace MessHallAPI.Patches
 
             Confirmed.Add(senderId);
 
-            Logging.Log($"key exchange confirmed from {senderId}");
+            Logging.DebugLog($"key exchange confirmed from {senderId}");
         }
     }
 }

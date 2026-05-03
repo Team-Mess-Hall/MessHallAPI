@@ -18,7 +18,7 @@ namespace MessHallAPI.Patches
                     return;
 
                 OnPlayerJoinedPatch.ReliableKeys.Remove(player.PlayerId);
-                Logging.Log($"Player {player.PlayerId} left, removing their key.");
+                Logging.DebugLog($"Player {player.PlayerId} left, removing their key.");
 
                 CustomPetManager.OnPlayerLeft(player.PlayerId);
             }

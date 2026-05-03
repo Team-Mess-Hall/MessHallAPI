@@ -5,10 +5,8 @@ using MessHallAPI.Managers.Cosmetic;
 using MessHallAPI.Networking;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using static MelonLoader.MelonLogger;
 using static MessHallAPI.Base.References;
 using static MessHallAPI.Config.Settings;
-using static UnityEngine.Object;
 
 namespace MessHallAPI.Managers
 {
