@@ -10,6 +10,7 @@ A Custom API to handle a bunch of stuff like
 - Custom Button Handling (Planned)
 - Custom Gamemode Handling (Planned)
 - Custom Map Registery (Planned)
+- HandShake (Planned)
 
 ## Disclaimer
 This mod is not affiliated with Among us, Among Us 3D, Innersloth LLC, and the content contained therein is not endorsed or otherwise sponsored by Innersloth LLC. Portions of the materials contained herein are property of Innersloth LLC. © Innersloth LLC.
