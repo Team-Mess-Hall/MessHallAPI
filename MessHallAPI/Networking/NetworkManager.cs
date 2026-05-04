@@ -111,6 +111,13 @@ namespace MessHallAPI.Networking
 
                                 if (targetType == typeof(byte))
                                     value = (byte)element.GetInt32();
+                                else if (targetType == typeof(uint))
+                                    value = (uint)element.GetInt64();
+                                else if (targetType == typeof(long))
+                                    value = element.GetInt64();
+
+                                else if (targetType == typeof(ulong))
+                                    value = (ulong)element.GetInt64();
 
                                 else if (targetType == typeof(short))
                                     value = (short)element.GetInt32();
@@ -118,23 +125,14 @@ namespace MessHallAPI.Networking
                                 else if (targetType == typeof(ushort))
                                     value = (ushort)element.GetInt32();
 
-                                else if (targetType == typeof(int))
-                                    value = element.GetInt32();
-
-                                else if (targetType == typeof(uint))
-                                    value = (uint)element.GetInt64();
-
-                                else if (targetType == typeof(long))
-                                    value = element.GetInt64();
-
-                                else if (targetType == typeof(ulong))
-                                    value = (ulong)element.GetInt64();
-
-                                else if (targetType == typeof(float))
-                                    value = element.GetSingle();
-
                                 else if (targetType == typeof(double))
                                     value = element.GetDouble();
+
+                                else if (element.TryGetInt32(out int iVal))
+                                    value = iVal;
+
+                                else if (element.TryGetSingle(out float fVal))
+                                    value = fVal;
 
                                 else
                                     value = element.GetDouble();
@@ -151,7 +149,6 @@ namespace MessHallAPI.Networking
                                 break;
                         }
                     }
-
                     RpcArgs[i] = value;
                 }
 
