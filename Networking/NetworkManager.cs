@@ -1,18 +1,11 @@
-﻿using System.Numerics;
-using System.Reflection;
-using System.Security.Cryptography;
-using System.Text;
+﻿using System.Reflection;
 using System.Text.Json;
 using Il2CppFusion;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
-using Il2CppSG.Airlock;
 using Il2CppSystem.IO;
-using MelonLoader;
-using MessHallAPI.Base;
 using MessHallAPI.Config;
 using MessHallAPI.Debugger;
 using MessHallAPI.Patches;
-using UnityEngine.Playables;
 using static MessHallAPI.Base.References;
 using static MessHallAPI.Networking.RPCRegistry;
 
@@ -20,6 +13,14 @@ namespace MessHallAPI.Networking
 {
     public static class NetworkManager
     {
+        /// <summary>
+        /// If true, players who failed to respond to key exchange (aka does not have the mod installed)
+        /// are allowed to stay in the server.
+        /// If false, only players who successfully complete the API key exchange are allowed, others will be disconnected.
+        /// In short, only allow users who have the mod installed in the lobby
+        /// </summary>
+        public static bool AllowUnregisteredPlayers = true;
+        
         public static void InvokeRPC(string modId, string methodName, params object[] args)
         {
             if (!Settings.InGame)
@@ -27,32 +28,24 @@ namespace MessHallAPI.Networking
 
             string rpcKey = modId + "::" + methodName;
 
-            if (!RPCRegistry.TryGet(rpcKey, out var entry))
+            if (!RPCRegistry.TryGet(rpcKey, out RPCEntry? entry))
             {
                 Logging.DebugLog("rpc not found " + rpcKey);
                 return;
             }
 
-            int actorId = Client.PState.PlayerId;
-
             if (entry.Attr.Caller == RPCCaller.HostOnly && !Settings.IsHost)
-            {
                 return;
-            }
-            string key = "";
-
-            if (OnPlayerJoinedPatch.TryGetKey(actorId, out var k))
-                key = k;
 
             RPCPacket packet = new RPCPacket
             {
                 ModId = modId,
                 Method = methodName,
-                ActorId = actorId,
+                ActorId = Client.PState.PlayerId,
                 ReliableKey = RPCRegistry.ReliableKey,
                 Args = args
             };
-            Logging.DebugLog($"invoke rpc {methodName} with key {key}");
+
             byte[] bytes = Serialize(packet);
 
             if (!Settings.IsHost)
@@ -102,6 +95,10 @@ namespace MessHallAPI.Networking
                 {
                     object value = raw[i];
 
+                    Type targetType = i < entry.Method.GetParameters().Length
+                        ? entry.Method.GetParameters()[i].ParameterType
+                        : typeof(object);
+
                     if (value is JsonElement element)
                     {
                         switch (element.ValueKind)
@@ -109,18 +106,46 @@ namespace MessHallAPI.Networking
                             case JsonValueKind.String:
                                 value = element.GetString();
                                 break;
+
                             case JsonValueKind.Number:
-                                if (element.TryGetInt32(out int iVal))
-                                    value = iVal;
-                                else if (element.TryGetSingle(out float fVal))
-                                    value = fVal;
+
+                                if (targetType == typeof(byte))
+                                    value = (byte)element.GetInt32();
+
+                                else if (targetType == typeof(short))
+                                    value = (short)element.GetInt32();
+
+                                else if (targetType == typeof(ushort))
+                                    value = (ushort)element.GetInt32();
+
+                                else if (targetType == typeof(int))
+                                    value = element.GetInt32();
+
+                                else if (targetType == typeof(uint))
+                                    value = (uint)element.GetInt64();
+
+                                else if (targetType == typeof(long))
+                                    value = element.GetInt64();
+
+                                else if (targetType == typeof(ulong))
+                                    value = (ulong)element.GetInt64();
+
+                                else if (targetType == typeof(float))
+                                    value = element.GetSingle();
+
+                                else if (targetType == typeof(double))
+                                    value = element.GetDouble();
+
                                 else
-                                    value = (float)element.GetDouble();
+                                    value = element.GetDouble();
+
                                 break;
+
                             case JsonValueKind.True:
                             case JsonValueKind.False:
                                 value = element.GetBoolean();
                                 break;
+
                             default:
                                 value = element.ToString();
                                 break;
@@ -157,7 +182,7 @@ namespace MessHallAPI.Networking
                         {
                             FinalOperationInfo[paremeter] = new MessHallRpcInfo
                             {
-                                SenderId = sender.PlayerId,
+                                Sender = sender.PlayerId,
                                 IsHost = Settings.IsHost
                             };
                         }
@@ -185,7 +210,7 @@ namespace MessHallAPI.Networking
 
                     if (packet.Method != "RPC_ExchangeKeys")
                     {
-                        if (!OnPlayerJoinedPatch.TryGetKey(ReliableSender, out var expectedKey))
+                        if (!OnPlayerJoinedPatch.TryGetKey(ReliableSender, out string? expectedKey))
                             return;
 
                         if (string.IsNullOrEmpty(packet.ReliableKey))
@@ -197,7 +222,7 @@ namespace MessHallAPI.Networking
 
                     int rpcTarget = -1;
 
-                    var methodParams = entry.Method.GetParameters();
+                    ParameterInfo[]? methodParams = entry.Method.GetParameters();
                     for (int i = 0; i < methodParams.Length && i < RpcArgs.Length; i++)
                     {
                         if (Attribute.IsDefined(methodParams[i], typeof(RPCTargetAttribute)))
@@ -212,7 +237,7 @@ namespace MessHallAPI.Networking
                     {
                         if (rpcTarget == networkRunner.LocalPlayer)
                             ExecuteLocal(entry, FinalOperationInfo);
-                        else if (OnPlayerJoinedPatch.TryGetKey(rpcTarget, out var targetKey))
+                        else if (OnPlayerJoinedPatch.TryGetKey(rpcTarget, out string? targetKey))
                         {
                             packet.ReliableKey = targetKey;
                             NetworkSender.SendToPlayer(rpcTarget, Serialize(packet));
@@ -236,22 +261,21 @@ namespace MessHallAPI.Networking
                         ExecuteLocal(entry, FinalOperationInfo);
                     }
 
-                    foreach (var player in networkRunner.ActivePlayers.ToArray())
+                    foreach (PlayerRef player in networkRunner.ActivePlayers.ToArray())
                     {
-                        int id = player.PlayerId;
 
-                        if (id == networkRunner.LocalPlayer)
+                        if (player.PlayerId == networkRunner.LocalPlayer)
                             continue;
 
-                        if (entry.Attr.Target == RPCTarget.All && id == ReliableSender)
+                        if (entry.Attr.Target == RPCTarget.All && player.PlayerId == ReliableSender)
                             continue;
 
-                        if (!OnPlayerJoinedPatch.TryGetKey(id, out var playerKey))
+                        if (!OnPlayerJoinedPatch.TryGetKey(player.PlayerId, out string? playerKey))
                             continue;
 
                         packet.ReliableKey = playerKey;
 
-                        NetworkSender.SendToPlayer(id, Serialize(packet));
+                        NetworkSender.SendToPlayer(player.PlayerId, Serialize(packet));
                     }
                 }
                 else
@@ -260,7 +284,7 @@ namespace MessHallAPI.Networking
 
                     bool isKeyExchange = packet.Method == "RPC_ExchangeKeys";
 
-                    bool hasKey = OnPlayerJoinedPatch.TryGetKey(localId, out var expectedKey);
+                    bool hasKey = OnPlayerJoinedPatch.TryGetKey(localId, out string? expectedKey);
 
                     if (!isKeyExchange)
                     {
@@ -273,7 +297,7 @@ namespace MessHallAPI.Networking
 
                     int rpcTarget = -1;
 
-                    var methodParams = entry.Method.GetParameters();
+                    ParameterInfo[]? methodParams = entry.Method.GetParameters();
                     for (int i = 0; i < methodParams.Length && i < RpcArgs.Length; i++)
                     {
                         if (Attribute.IsDefined(methodParams[i], typeof(RPCTargetAttribute)))
@@ -322,6 +346,11 @@ namespace MessHallAPI.Networking
         {
             try
             {
+                if (args.Length != entry.Method.GetParameters().Length && entry.Method.GetParameters().All(param => !Attribute.IsDefined(param, typeof(RPCInfoAttribute))))
+                {
+                    Logging.Error($"RPC '{entry.Method.Name}' argument mismatch.");
+                    return;
+                }
                 entry.Method.Invoke(entry.Owner, args);
             }
             catch (Exception ex)

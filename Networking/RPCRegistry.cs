@@ -133,7 +133,7 @@ namespace MessHallAPI.Networking
             if (method.ReturnType != typeof(void))
                 throw new InvalidOperationException($"RPC '{method.Name}' must return void.");
 
-            var supported = new[] {
+            Type[] supported = new[] {
                 typeof(int), typeof(float), typeof(bool),
                 typeof(string), typeof(byte)
             };
@@ -150,23 +150,30 @@ namespace MessHallAPI.Networking
                     continue;
                 }
 
-                Type t = param.ParameterType;
+                Type type = param.ParameterType;
 
-                if (t != typeof(int) &&
-                    t != typeof(float) &&
-                    t != typeof(bool) &&
-                    t != typeof(string) &&
-                    t != typeof(byte))
+                if (type != typeof(byte) &&
+                    type != typeof(short) &&
+                    type != typeof(ushort) &&
+                    type != typeof(int) &&
+                    type != typeof(uint) &&
+                    type != typeof(long) &&
+                    type != typeof(ulong) &&
+                    type != typeof(float) &&
+                    type != typeof(double) &&
+                    type != typeof(bool) &&
+                    type != typeof(string))
                 {
                     throw new NotSupportedException(
-                        $"RPC '{method.Name}' has unsupported parameter type '{t.Name}'. Supported: int, float, bool, string, byte.");
+                        $"RPC '{method.Name}' has unsupported parameter type '{type.Name}'. Supported: byte, short, ushort, int, uint, long, ulong, float, double, bool, string."
+                    );
                 }
             }
         }
 
         private static object TryGetInstance(Type type)
         {
-            var instanceProp = type.GetProperty("Instance", BindingFlags.Static | BindingFlags.Public)
+            PropertyInfo? instanceProp = type.GetProperty("Instance", BindingFlags.Static | BindingFlags.Public)
                             ?? type.GetProperty("Singleton", BindingFlags.Static | BindingFlags.Public);
 
             if (instanceProp != null)

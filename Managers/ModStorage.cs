@@ -6,7 +6,7 @@ using static UnityEngine.Object;
 namespace MessHallAPI.Managers
 {
     [Obsolete("this entire class is handled automatically in the API, nothing you need is here.")]
-    public class ModStorage
+    internal class ModStorage
     {
         public static Sprite ModStamp;
 

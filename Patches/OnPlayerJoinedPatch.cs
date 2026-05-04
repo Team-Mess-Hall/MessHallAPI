@@ -5,11 +5,8 @@ using MessHallAPI.Base;
 using MessHallAPI.Config;
 using MessHallAPI.Debugger;
 using MessHallAPI.Networking;
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using static MessHallAPI.Networking.MessHallNetworkTransform;
 
 namespace MessHallAPI.Patches
 {
@@ -32,19 +29,17 @@ namespace MessHallAPI.Patches
                 if (!Settings.IsHost)
                     return;
 
-                int id = player.PlayerId;
-
                 string key = Guid.NewGuid().ToString();
-                ReliableKeys[id] = key;
+                ReliableKeys[player.PlayerId] = key;
 
-                if (id == References.networkRunner.LocalPlayer)
+                if (player.PlayerId == References.networkRunner.LocalPlayer)
                 {
                     RPCRegistry.ReliableKey = key;
-                    Confirmed.Add(id);
+                    Confirmed.Add(player.PlayerId);
                     return;
                 }
 
-                MelonCoroutines.Start(SendKeyLoop(id));
+                MelonCoroutines.Start(SendKeyLoop(player.PlayerId));
             }
         }
 
@@ -54,7 +49,7 @@ namespace MessHallAPI.Patches
 
             yield return new WaitForSeconds(0.5f);
 
-            while (!Confirmed.Contains(playerId) && attempts < 6)
+            while (!Confirmed.Contains(playerId) && attempts < 15)
             {
                 if (!ReliableKeys.TryGetValue(playerId, out var key))
                     yield break;
@@ -71,6 +66,10 @@ namespace MessHallAPI.Patches
             if (!Confirmed.Contains(playerId))
             {
                 Logging.Warn($"key exchange failed for {playerId}");
+                if (!Networking.NetworkManager.AllowUnregisteredPlayers)
+                {
+                    References.networkRunner.Disconnect((PlayerRef)playerId);
+                }
             }
         }
 
@@ -96,14 +95,12 @@ namespace MessHallAPI.Patches
             if (!Settings.IsHost)
                 return;
 
-            int senderId = info.SenderId;
-
-            if (!ReliableKeys.ContainsKey(senderId))
+            if (!ReliableKeys.ContainsKey(info.Sender))
                 return;
 
-            Confirmed.Add(senderId);
+            Confirmed.Add(info.Sender);
 
-            Logging.DebugLog($"key exchange confirmed from {senderId}");
+            Logging.DebugLog($"key exchange confirmed from {info.Sender}");
         }
     }
 }

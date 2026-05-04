@@ -61,11 +61,6 @@ namespace MessHallAPI.Base
             }
         }
 
-        public override void OnSceneWasLoaded(int buildIndex, string sceneName)
-        {
-
-        }
-
         private static System.Collections.IEnumerator DelayedReset()
         {
             if (networkRunner == null)

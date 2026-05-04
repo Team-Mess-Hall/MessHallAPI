@@ -55,11 +55,9 @@
     public sealed class RPCTargetAttribute : Attribute { }
 
 
-
-
     public struct MessHallRpcInfo
     {
-        public int SenderId;
+        public int Sender;
         public bool IsHost;
     }
 
