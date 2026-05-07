@@ -12,7 +12,9 @@ namespace MessHallAPIExample.Managers
         {
             GameObject objtest = new GameObject();
             objtest.AddComponent<MessHallNetworkTransform>();
-            //objtest.GetComponent<MessHallNetworkTransform>().Initialize(objtest.name);
+            var NetworkTransform = objtest.GetComponent<MessHallNetworkTransform>();
+            NetworkTransform.RegisterObject(objtest.name);
+            NetworkTransform.StartNetworking(objtest.name);
         }
     }
 }
