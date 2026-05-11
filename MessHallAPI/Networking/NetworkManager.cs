@@ -66,22 +66,15 @@ namespace MessHallAPI.Networking
         {
             try
             {
-                byte[] data = dataArray;
-
-                if (data == null || data.Length < 2)
+                RPCPacket packet;
+                try
+                {
+                    packet = JsonSerializer.Deserialize<RPCPacket>(dataArray.AsSpan());
+                }
+                catch (JsonException)
+                {
                     return;
-
-                if (data[0] != PacketConstants.MHAPI)
-                    return;
-
-                if (data.Length > 1 && data[1] == PacketConstants.MHAPI)
-                    return;
-
-                ReadOnlySpan<byte> jsonSpan = new ReadOnlySpan<byte>(data, 1, data.Length - 1);
-
-                RPCPacket packet = JsonSerializer.Deserialize<RPCPacket>(jsonSpan);
-                if (packet == null)
-                    return;
+                }
 
                 string rpcKey = packet.ModId + "::" + packet.Method;
 
