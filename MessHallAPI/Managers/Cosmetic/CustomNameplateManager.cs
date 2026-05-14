@@ -114,12 +114,108 @@ namespace MessHallAPI.Managers.Cosmetic
         }
 
         [MessHallRPC(RPCTarget.AllInclusive, RPCCaller.Anyone)]
-        public static void RPC_RefreshMeetingAtlases()
+        public static void RPC_RefreshSkeldMeetingAtlases()
+        {
+            _playerRenderers.Clear();
+            Logging.Log("[MeetingAtlases] Cleared player renderers"); //MeetingScreen_ModMap1Varient(Clone)
+
+            string basePath = "-------- MANAGERS --------/DefaultManagers/VotingManager/VotingUIRoot/MeetingScreen(Clone)/MeetingScreenParent/VotingMain/VotingPlayerLayout_Dynamic/Voting_Player";
+            var found = new List<MeshRenderer>();
+
+            for (int i = 0; i < 10; i++)
+            {
+                string path = i == 0
+                    ? $"{basePath}/SM_UI_PlayerPanel"
+                    : $"{basePath} ({i})/SM_UI_PlayerPanel";
+
+                GameObject panel = GameObject.Find(path);
+                if (panel == null) continue;
+
+                MeshRenderer renderer = panel.GetComponent<MeshRenderer>();
+                if (renderer == null) continue;
+
+                Logging.Log($"[MeetingAtlases] Slot {i}: renderer found -> added as found[{found.Count}]");
+                found.Add(renderer);
+            }
+
+            Logging.Log($"[MeetingAtlases] Total renderers found: {found.Count}");
+
+            var players = new List<int>();
+            foreach (PlayerState player in Spawn.ActivePlayerStates)
+            {
+                if (!player.IsConnected) continue;
+                if (player.IsSpectating) continue;
+
+                players.Add(player.PlayerId);
+                Logging.Log($"[MeetingAtlases] Connected player: {player.PlayerId}");
+            }
+
+            for (int i = 0; i < found.Count && i < players.Count; i++)
+            {
+                _playerRenderers[players[i]] = found[i];
+                Logging.Log($"[MeetingAtlases] found[{i}] -> playerId {players[i]}");
+            }
+
+            Logging.Log($"[MeetingAtlases] Applying nameplates for {_nameplates.Count} players: [{string.Join(", ", _nameplates.Keys)}]");
+            foreach (var playerId in _nameplates.Keys)
+                ApplyToPlayer(playerId);
+        }
+
+        [MessHallRPC(RPCTarget.AllInclusive, RPCCaller.Anyone)]
+        public static void RPC_RefreshMessHallMeetingAtlases()
+        {
+            _playerRenderers.Clear();
+            Logging.Log("[MeetingAtlases] Cleared player renderers"); //MeetingScreen_PolusVariant(Clone)
+
+            string basePath = "-------- MANAGERS --------/DefaultManagers/VotingManager/VotingUIRoot/MeetingScreen_ModMap1Variant(Clone)/MeetingScreenParent/VotingMain/VotingPlayerLayout_Dynamic/Voting_Player";
+            var found = new List<MeshRenderer>();
+
+            for (int i = 0; i < 10; i++)
+            {
+                string path = i == 0
+                    ? $"{basePath}/SM_UI_PlayerPanel"
+                    : $"{basePath} ({i})/SM_UI_PlayerPanel";
+
+                GameObject panel = GameObject.Find(path);
+                if (panel == null) continue;
+
+                MeshRenderer renderer = panel.GetComponent<MeshRenderer>();
+                if (renderer == null) continue;
+
+                Logging.Log($"[MeetingAtlases] Slot {i}: renderer found -> added as found[{found.Count}]");
+                found.Add(renderer);
+            }
+
+            Logging.Log($"[MeetingAtlases] Total renderers found: {found.Count}");
+
+            var players = new List<int>();
+            foreach (PlayerState player in Spawn.ActivePlayerStates)
+            {
+                if (!player.IsConnected) continue;
+                if (player.IsSpectating) continue;
+
+                players.Add(player.PlayerId);
+                Logging.Log($"[MeetingAtlases] Connected player: {player.PlayerId}");
+            }
+
+            for (int i = 0; i < found.Count && i < players.Count; i++)
+            {
+                _playerRenderers[players[i]] = found[i];
+                Logging.Log($"[MeetingAtlases] found[{i}] -> playerId {players[i]}");
+            }
+
+            Logging.Log($"[MeetingAtlases] Applying nameplates for {_nameplates.Count} players: [{string.Join(", ", _nameplates.Keys)}]");
+            foreach (var playerId in _nameplates.Keys)
+                ApplyToPlayer(playerId);
+        }
+
+        [MessHallRPC(RPCTarget.AllInclusive, RPCCaller.Anyone)]
+        public static void RPC_RefreshPolusPointMeetingAtlases()
         {
             _playerRenderers.Clear();
             Logging.Log("[MeetingAtlases] Cleared player renderers");
 
-            string basePath = "-------- MANAGERS --------/DefaultManagers/VotingManager/VotingUIRoot/MeetingScreen(Clone)/MeetingScreenParent/VotingMain/VotingPlayerLayout_Dynamic/Voting_Player";
+            string basePath = "-------- MANAGERS --------/DefaultManagers/VotingManager/VotingUIRoot/MeetingScreen_PolusVariant(Clone)/MeetingScreenParent/VotingMain/VotingPlayerLayout_Dynamic/Voting_Player";
             var found = new List<MeshRenderer>();
 
             for (int i = 0; i < 10; i++)
@@ -205,7 +301,7 @@ namespace MessHallAPI.Managers.Cosmetic
 
     public static class NameplateRegistry
     {
-        private static Dictionary<string, Dictionary<string, Sprite>> _registry = new();
+        public static Dictionary<string, Dictionary<string, Sprite>> _registry = new();
 
         public static void Register(string modName, string nameplateId, Sprite sprite)
         {

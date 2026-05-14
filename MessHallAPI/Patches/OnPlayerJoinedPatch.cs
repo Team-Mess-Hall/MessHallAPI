@@ -66,7 +66,7 @@ namespace MessHallAPI.Patches
             if (!Confirmed.Contains(playerId))
             {
                 Logging.Warn($"key exchange failed for {playerId}");
-                if (!Networking.NetworkManager.AllowUnregisteredPlayers)
+                if (!NetworkManager.AllowUnregisteredPlayers)
                 {
                     References.networkRunner.Disconnect((PlayerRef)playerId);
                 }

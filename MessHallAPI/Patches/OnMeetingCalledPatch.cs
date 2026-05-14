@@ -6,6 +6,7 @@ using MelonLoader;
 using System.Collections;
 using UnityEngine;
 using MessHallAPI.Networking;
+using MessHallAPI.Base;
 
 namespace MessHallAPI.Patches
 {
@@ -32,7 +33,18 @@ namespace MessHallAPI.Patches
         internal static IEnumerator Run()
         {
             yield return new WaitForSeconds(3f);
-            NetworkManager.InvokeRPC("MessHallAPI", "RPC_RefreshMeetingAtlases");
+            if (Core.SceneName == "Skeld")
+            {
+                NetworkManager.InvokeRPC("MessHallAPI", "RPC_RefreshSkeldMeetingAtlases");
+            }
+            else if (Core.SceneName == "PolusPoint")
+            {
+                NetworkManager.InvokeRPC("MessHallAPI", "RPC_RefreshPolusPointMeetingAtlases");
+            }
+            else if (Core.SceneName == "MessHall")
+            {
+                NetworkManager.InvokeRPC("MessHallAPI", "RPC_RefreshMessHallMeetingAtlases");
+            }
         }
     }
 }

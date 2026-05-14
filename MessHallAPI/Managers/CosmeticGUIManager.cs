@@ -66,22 +66,16 @@ namespace MessHallAPI.Managers
         }
 
 
-        public static void OnGUI()
+        private static void DrawWindow()
         {
-            if (InGame && GameState.InLobbyState())
-            {
-                if (!_visible) return;
-                GUI.Window(WindowId, new Rect(100, 100, 400, 580), (GUI.WindowFunction)DrawWindow, "Cosmetics");
-            }
-            else
-            {
-                _visible = false;
-            }
-        }
+            string[] tabs = { "Nameplates", "Pets", "Hats", "Visors", "Backpacks" };
+            float btnWidth = 380f / tabs.Length;
 
-        private static void DrawWindow(int id)
-        {
-            _activeTab = GUI.Toolbar(new Rect(10, 25, 380, 30), _activeTab, _row1Tabs);
+            for (int i = 0; i < tabs.Length; i++)
+            {
+                if (GUI.Button(new Rect(10 + i * btnWidth, 25, btnWidth, 30), tabs[i]))
+                    _activeTab = i;
+            }
 
             switch (_activeTab)
             {
@@ -91,8 +85,23 @@ namespace MessHallAPI.Managers
                 case 3: DrawVisorsTab(); break;
                 case 4: DrawBackpacksTab(); break;
             }
+        }
 
-            GUI.DragWindow();
+        public static void OnGUI()
+        {
+            if (InGame && GameState.InLobbyState())
+            {
+                if (!_visible) return;
+
+                GUI.Box(new Rect(100, 100, 400, 580), "Cosmetics");
+                GUI.BeginGroup(new Rect(100, 100, 400, 580));
+                DrawWindow();
+                GUI.EndGroup();
+            }
+            else
+            {
+                _visible = false;
+            }
         }
 
         private static void DrawNameplatesTab()
