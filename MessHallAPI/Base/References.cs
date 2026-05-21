@@ -4,6 +4,9 @@ using Il2CppSG.Airlock.XR;
 using static UnityEngine.Object;
 using static MessHallAPI.Config.Settings;
 using static MessHallAPI.Debugger.Logging;
+using Il2CppSG.Airlock.Graphics;
+using Il2CppSG.Airlock.Roles;
+using Il2CppSG.Airlock.Localization;
 
 namespace MessHallAPI.Base
 {
@@ -14,6 +17,11 @@ namespace MessHallAPI.Base
         public static GameStateManager GameState;
         public static SpawnManager Spawn;
         public static AirlockNetworkRunner networkRunner;
+        public static PowerUpData powerData;
+        public static NetworkedKillBehaviour Killing;
+        public static RoleManager roleManager;
+        public static LocalizationManager localization;
+
         public static void ResetReferences()
         {
             string trace = "";
@@ -27,6 +35,9 @@ namespace MessHallAPI.Base
                 GameState = null;
                 Spawn = null;
                 networkRunner = null;
+                powerData = null;
+                Killing = null;
+                roleManager = null;
 
                 trace = "Client";
                 Client = FindObjectOfType<XRRig>();
@@ -39,6 +50,15 @@ namespace MessHallAPI.Base
                 trace = "networkRunner";
                 networkRunner = FindObjectOfType<AirlockNetworkRunner>();
                 IsHost = Peer.Runner.LocalPlayer.PlayerId == 9;
+                trace = "powerData";
+                powerData = FindObjectOfType<PowerUpData>();
+                trace = "NetworkedKillBehaviour";
+                Killing = FindObjectOfType<NetworkedKillBehaviour>();
+                trace = "RoleManager";
+                roleManager = FindObjectOfType<RoleManager>();
+                trace = "LocalizationManager";
+                localization = FindObjectOfType<LocalizationManager>();
+            
             }
             catch
             {
