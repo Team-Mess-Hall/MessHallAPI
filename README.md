@@ -6,8 +6,8 @@ A Custom API to handle a bunch of stuff like
 - A Network transform so you can sync Vanilla and Custom GameObjects to every client.
 - Custom RPC's
 - Custom RPC Protection
-- Custom Role Handling (Planned)
-- Custom Button Handling (Planned)
+- Custom Role Handling
+- Custom Power and Targeted Action Handling
 - Custom Gamemode Handling (Planned)
 - Custom Map Registery (Planned)
 - HandShake (Planned)
