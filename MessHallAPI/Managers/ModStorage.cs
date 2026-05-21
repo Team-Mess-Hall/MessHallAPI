@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using Il2CppSteamworks;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
 using static UnityEngine.Object;
@@ -13,6 +14,8 @@ namespace MessHallAPI.Managers
         public static Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MessHallAPI.Assets.ModStamp.png");
 
         public static Sprite NameplateTest;
+
+        public static Texture2D MapTest = null!;
 
         public static void LoadModStamp()
         {
@@ -75,6 +78,21 @@ namespace MessHallAPI.Managers
                 new Vector4(0, 0, 0, 0),
                 false, null
             );
+        }
+
+        public static Texture2D LoadTextureFromResource(string resourcePath)
+        {
+            Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourcePath);
+            if (stream == null) return null;
+
+            MemoryStream ms = new MemoryStream();
+            stream.CopyTo(ms);
+            byte[] bytes = ms.ToArray();
+
+            Texture2D tex = new Texture2D(1, 1);
+            ImageConversion.LoadImage(tex, bytes);
+
+            return tex;
         }
     }
 }
