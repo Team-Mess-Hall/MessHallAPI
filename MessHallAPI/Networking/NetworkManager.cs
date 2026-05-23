@@ -329,7 +329,6 @@ namespace MessHallAPI.Networking
             }
             catch { }
         }
-
         public static byte[] Serialize(RPCPacket packet)
         {
             byte[] json = JsonSerializer.SerializeToUtf8Bytes(packet);

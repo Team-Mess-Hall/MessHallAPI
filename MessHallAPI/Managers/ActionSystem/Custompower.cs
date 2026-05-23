@@ -37,7 +37,7 @@ namespace MessHallAPI.Managers.ActionSystem
         internal PowerUps AllocatedType { get; set; }
 
         public abstract string PowerName { get; }
-        public abstract void OnUseTarget(PlayerState target);
+        public abstract void OnUseTarget(int target);
         public virtual Sprite PowerIcon => null!;
         public virtual string Keybind => eKey;
         public virtual void OnUpdate() { }

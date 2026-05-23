@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace MessHallAPI.Patches
 {
-    [HarmonyPatch(typeof(GameStateManager),nameof(GameStateManager.StartKickAnimation))]
+    [HarmonyPatch(typeof(GameStateManager), nameof(GameStateManager.StartKickAnimation))]
     public class EjectionPatch
     {
         public static void Prefix(GameStateManager __instance, ref GameRole playerEjectedRole, PlayerRef kickedPlayer, int aliveImposters, int aliveCrewmates, bool isVigilanteAlive)
@@ -29,11 +29,33 @@ namespace MessHallAPI.Patches
                     }
                 }
 
-                Logging.Log($"PlayerRole: {playerEjectedRole}, EjectedPlayerID: {kickedPlayer}, AliveImpostors: {aliveImposters}, AliveCrewmates: {aliveCrewmates}, isVigilanteAlive: {isVigilanteAlive}");
+                Logging.DebugLog($"PlayerRole: {playerEjectedRole}, EjectedPlayerID: {kickedPlayer}, AliveImpostors: {aliveImposters}, AliveCrewmates: {aliveCrewmates}, isVigilanteAlive: {isVigilanteAlive}");
                 if (CustomRoleManager.TryGetCachedRole(kickedPlayer.PlayerId, out int resolvedRole))
                 {
                     playerEjectedRole = (GameRole)resolvedRole;
                     Logging.Log($"[EjectionPatch] Overriding ejected role to: {resolvedRole} for player {kickedPlayer.PlayerId}");
+                }
+            }
+        }
+
+        [HarmonyPatch(typeof(GameStateManager), nameof(GameStateManager.StartVotingResult))]
+        public class EjectionPatch2
+        {
+            public static void Prefix(GameStateManager __instance, ref GameRole playerRole, int bootedPlayer)
+            {
+                if (playerRole == GameRole.NotSet)
+                {
+                    if (Settings.IsHost)
+                    {
+                        CustomRoleManager.GetTrueRole(bootedPlayer);
+                    }
+
+                    Logging.DebugLog($"PlayerRole: {playerRole}, EjectedPlayerID: {bootedPlayer}");
+                    if (CustomRoleManager.TryGetCachedRole(bootedPlayer, out int resolvedRole))
+                    {
+                        playerRole = (GameRole)resolvedRole;
+                        Logging.Log($"[EjectionPatch] Overriding ejected role to: {resolvedRole} for player {bootedPlayer}");
+                    }
                 }
             }
         }

@@ -47,6 +47,6 @@ namespace MessHallAPI.Managers.ActionSystem
         bool isMeetingAction { get; }
 
         void OnUpdate() { }
-        void OnUseTarget(PlayerState target);
+        void OnUseTarget(int target);
     }
 }

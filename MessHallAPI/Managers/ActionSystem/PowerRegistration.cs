@@ -15,7 +15,7 @@ namespace MessHallAPI.Managers.ActionSystem
 {
     public static class PowerRegistration
     {
-        private static readonly Dictionary<PowerUps, (PowerUp Definition, UIInteractButton? Button, Action<PlayerState?> OnUse, Action? OnUpdate, string PowerName, Func<Sprite> PowerIcon, bool IsTargeted, string Keybind)> _powers = new(); private static PlayerState Caller = null!;
+        private static readonly Dictionary<PowerUps, (PowerUp Definition, UIInteractButton? Button, Action<int> OnUse, Action? OnUpdate, string PowerName, Func<Sprite> PowerIcon, bool IsTargeted, string Keybind)> _powers = new(); private static PlayerState Caller = null!;
         private static PlayerState Target = null!;
 
         public static string PowerNameLabel = "-------- VR MANAGEMENT --------/XRRig_Gameplay/UI/3DHUD_Canvas/3DHUD_Frame/LowerRightParent/UI_PowerUpIcon/SM_PowerUp_256_Button/NameLabel";
@@ -45,9 +45,9 @@ namespace MessHallAPI.Managers.ActionSystem
             Logging.Log($"PowerRegistration: Registered power {power}.");
         }
 
-        public static void RegisterTargeted(PowerUps power, PowerUp definition, Action<PlayerState> onUse, string powerName, Func<Sprite> powerIcon, string keybind = "E", Action? onUpdate = null)
+        public static void RegisterTargeted(PowerUps power, PowerUp definition, Action<int> onUse, string powerName, Func<Sprite> powerIcon, string keybind = "E", Action? onUpdate = null)
         {
-            if (!_powers.TryAdd(power, (definition, null, target => onUse(target!), onUpdate, powerName, powerIcon, true, keybind)))
+            if (!_powers.TryAdd(power, (definition, null, onUse, onUpdate, powerName, powerIcon, true, keybind)))
             {
                 Logging.Warn($"PowerRegistration: Targeted power {power} already registered.");
                 return;
@@ -68,7 +68,7 @@ namespace MessHallAPI.Managers.ActionSystem
             foreach (var (power, entry) in _powers)
             {
                 powers.Add(entry.Definition);
-                Logging.Log($"PowerRegistration: Created power {power}.");
+                Logging.DebugLog($"PowerRegistration: Created power {power}.");
             }
 
             return powers;
@@ -84,7 +84,7 @@ namespace MessHallAPI.Managers.ActionSystem
 
             if (_powers.TryGetValue(power, out var entry))
             {
-                entry.OnUse.Invoke(null);
+                entry.OnUse.Invoke(CallerPlayerID);
             }
             else
             {
@@ -105,7 +105,7 @@ namespace MessHallAPI.Managers.ActionSystem
 
             if (_powers.TryGetValue(power, out var entry))
             {
-                entry.OnUse.Invoke(Target);
+                entry.OnUse.Invoke(TargetID);
                 Caller.ActivePowerUps = PowerUps.None;
             }
             else
@@ -154,7 +154,7 @@ namespace MessHallAPI.Managers.ActionSystem
                             mr.material.mainTexture = scaled;
                             mr.material.mainTextureScale = new Vector2(1f, 1f);
                             mr.material.mainTextureOffset = new Vector2(0f, 0f);
-                            Logging.Log($"PowerRegistration: Re-referenced texture for power {active}.");
+                            Logging.DebugLog($"PowerRegistration: Re-referenced texture for power {active}.");
                         }
                     }
 
@@ -265,7 +265,7 @@ namespace MessHallAPI.Managers.ActionSystem
 
         public static void BuildIcon(
             PowerUps power,
-            (PowerUp Definition, UIInteractButton? Button, Action<PlayerState?> OnUse, Action? OnUpdate, string PowerName, Func<Sprite> PowerIcon, bool IsTargeted, string Keybind) entry,
+            (PowerUp Definition, UIInteractButton? Button, Action<int> OnUse, Action? OnUpdate, string PowerName, Func<Sprite> PowerIcon, bool IsTargeted, string Keybind) entry,
             GameObject disinfectObj,
             PowerUpIconParent iconParent)
         {
@@ -330,7 +330,7 @@ namespace MessHallAPI.Managers.ActionSystem
 
             _powers[power] = entry with { Button = button };
 
-            Logging.Log($"PowerRegistration: Built icon for power {power}.");
+            Logging.DebugLog($"PowerRegistration: Built icon for power {power}.");
         }
 
         public static void BuildIcons()

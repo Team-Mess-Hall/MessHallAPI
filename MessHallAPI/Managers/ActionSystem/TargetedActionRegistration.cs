@@ -15,7 +15,7 @@ namespace MessHallAPI.Managers.ActionSystem
 {
     public static class TargetedActionRegistration
     {
-        private static readonly Dictionary<ProximityTargetedAction, (UIInteractButton? Button, Action<PlayerState> OnUse, Action? OnUpdate, string ActionName, string Keybind, ITargetedActionHandler Handler)> _targetedActions = new();
+        private static readonly Dictionary<ProximityTargetedAction, (UIInteractButton? Button, Action<int> OnUse, Action? OnUpdate, string ActionName, string Keybind, ITargetedActionHandler Handler)> _targetedActions = new();
         private static PlayerState Caller = null!;
         private static PlayerState Target = null!;
 
@@ -58,7 +58,7 @@ namespace MessHallAPI.Managers.ActionSystem
             }
 
             if (_targetedActions.TryGetValue(action, out var entry))
-                entry.OnUse.Invoke(Target);
+                entry.OnUse.Invoke(Target.PlayerId);
             else
                 Logging.Warn($"TargetedActionRegistration: No handler registered for action {action}.");
         }
@@ -128,7 +128,7 @@ namespace MessHallAPI.Managers.ActionSystem
             }
         }
 
-        public static void BuildIcon(ProximityTargetedAction action, (UIInteractButton? Button, Action<PlayerState> OnUse, Action? OnUpdate, string ActionName, string Keybind, ITargetedActionHandler Handler) entry, GameObject trackerObj)
+        public static void BuildIcon(ProximityTargetedAction action, (UIInteractButton? Button, Action<int> OnUse, Action? OnUpdate, string ActionName, string Keybind, ITargetedActionHandler Handler) entry, GameObject trackerObj)
         {
             var cloned = GameObject.Instantiate(trackerObj, trackerObj.transform.parent);
             cloned.name = $"SM_TargetedAction_{action}_Button";
@@ -155,7 +155,7 @@ namespace MessHallAPI.Managers.ActionSystem
             }
 
             _targetedActions[action] = entry with { Button = button };
-            Logging.Log($"TargetedActionRegistration: Built icon for action {action}.");
+            Logging.DebugLog($"TargetedActionRegistration: Built icon for action {action}.");
         }
 
         public static void BuildIcons()

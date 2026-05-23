@@ -60,7 +60,7 @@ namespace MessHallAPI.Managers.ActionSystem
         PowerUp Definition { get; }
         string PowerName { get; }
         void OnUpdate() { }
-        void OnUseTarget(PlayerState Target);
+        void OnUseTarget(int Target);
         Sprite PowerIcon { get; }
         string Keybind { get; }
     }

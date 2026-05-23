@@ -1,9 +1,11 @@
 ﻿using Harmony;
 using Il2CppSG.Airlock;
+using Il2CppSG.Airlock.Graphics;
 using Il2CppSG.Airlock.Localization;
 using Il2CppSG.Airlock.Roles;
 using Il2CppSG.Airlock.UI;
 using Il2CppSG.GlobalEvents.Variables;
+using MelonLoader;
 using MessHallAPI.Debugger;
 using MessHallAPI.Networking;
 using System.Reflection;
@@ -131,7 +133,7 @@ namespace MessHallAPI.Managers.Role
                     if (roleManager.gameRoleToPlayerIds != null && !roleManager.gameRoleToPlayerIds.ContainsKey(role))
                     {
                         roleManager.gameRoleToPlayerIds[role] = new Il2CppSystem.Collections.Generic.List<int>();
-                        Logging.Log($"CustomRoleManager: Initialized gameRoleToPlayerIds entry for {source.RoleName}");
+                        Logging.DebugLog($"CustomRoleManager: Initialized gameRoleToPlayerIds entry for {source.RoleName}");
                     }
                     var settingsDescKey = CreateTextKey();
                     RegisterTextKey(source.RoleDesc, settingsDescKey);
@@ -142,7 +144,7 @@ namespace MessHallAPI.Managers.Role
             }
             catch (Exception e)
             {
-                Logging.Log(e.ToString());
+                Logging.Error(e.ToString());
             }
         }
 
@@ -162,7 +164,7 @@ namespace MessHallAPI.Managers.Role
 
             _roles.Remove(role);
 
-            Logging.Log($"CustomRoleManager: Unregistered role {role}");
+            Logging.DebugLog($"CustomRoleManager: Unregistered role {role}");
         }
 
         public static bool IsCustomRole(GameRole role)
@@ -206,19 +208,24 @@ namespace MessHallAPI.Managers.Role
 
         public static void AutoRegisterRoles()
         {
-            foreach (var type in Assembly.GetExecutingAssembly().GetTypes())
+            foreach (var mod in MelonMod.RegisteredMelons)
             {
-                var attr = type.GetCustomAttribute<RoleDefinitionAttribute>();
-                if (attr == null) continue;
+                var assembly = mod.GetType().Assembly;
 
-                if (!typeof(ICustomRole).IsAssignableFrom(type))
+                foreach (var type in assembly.GetTypes())
                 {
-                    Logging.Warn($"{type.Name} has [RoleDefinition] but does not implement ICustomRole.");
-                    continue;
-                }
+                    var attr = type.GetCustomAttribute<RoleDefinitionAttribute>();
+                    if (attr == null) continue;
 
-                var role = (ICustomRole)Activator.CreateInstance(type)!;
-                Register(AllocateRole(), role);
+                    if (!typeof(ICustomRole).IsAssignableFrom(type))
+                    {
+                        Logging.Warn($"{type.Name} has [RoleDefinition] but does not implement ICustomRole.");
+                        continue;
+                    }
+
+                    var role = (ICustomRole)Activator.CreateInstance(type)!;
+                    Register(AllocateRole(), role);
+                }
             }
         }
 
@@ -227,7 +234,7 @@ namespace MessHallAPI.Managers.Role
         {
             var role = (GameRole)gameRole;
             _roleCache[playerID] = (int)role;
-            Logging.Log($"[RoleSync] Received role {role} for player {playerID}");
+            Logging.DebugLog($"[RoleSync] Received role {role} for player {playerID}");
         }
         public static void GetTrueRole(int PlayerID)
         {
@@ -277,6 +284,17 @@ namespace MessHallAPI.Managers.Role
         public static IReadOnlyList<ICustomRole> GetRegisteredRoles()
         {
             return _roles.Values.Select(e => e.Source).ToList();
+        }
+
+        public static void ClearRoles()
+        {
+            foreach (var roleEntry in roleManager.gameRoleToPlayerIds)
+            {
+                Logging.Log($"Cleared Value: {roleEntry.Value}");
+                roleEntry.Value.Clear();
+                Logging.Log($"Clear value: {roleEntry.value}");
+                roleEntry.value.Clear();
+            }
         }
     }
 

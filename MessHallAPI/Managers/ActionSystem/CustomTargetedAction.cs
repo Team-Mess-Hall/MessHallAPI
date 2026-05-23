@@ -9,7 +9,7 @@ namespace MessHallAPI.Managers.ActionSystem
     {
         public abstract string ActionName { get; }
         public abstract ProximityTargetedAction action { get; }
-        public abstract void OnUseTarget(PlayerState target);
+        public abstract void OnUseTarget(int target);
 
         public virtual Sprite ActionIcon => null!;
         public virtual string Keybind => qKey;
