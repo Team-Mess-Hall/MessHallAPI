@@ -1,9 +1,11 @@
-﻿using System;
+﻿using MessHallAPI.Debugger;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace MessHallAPI.Managers
 {
@@ -78,154 +80,113 @@ namespace MessHallAPI.Managers
         {
             switch (Keybind)
             {
-                case "space":
-                    return 0;
-                case "enter":
-                    return 1;
-                case "tab":
-                    return 3;
-                case "backquote":
-                    return 4;
-                case "quote":
-                    return 5;
-                case "semicolon":
-                    return 6;
-                case "comma":
-                    return 7;
-                case "period":
-                    return 8;
-                case "slash":
-                    return 9;
-                case "backslash":
-                    return 10;
-                case "leftbracket":
-                    return 11;
-                case "rightbracket":
-                    return 12;
-                case "minus":
-                    return 13;
-                case "equals":
-                    return 14;
-                case "a":
-                    return 15;
-                case "b":
-                    return 16;
-                case "c":
-                    return 17;
-                case "d":
-                    return 18;
-                case "e":
-                    return 19;
-                case "f":
-                    return 20;
-                case "g":
-                    return 21;
-                case "h":
-                    return 22;
-                case "i":
-                    return 23;
-                case "j":
-                    return 24;
-                case "k":
-                    return 25;
-                case "l":
-                    return 26;
-                case "m":
-                    return 27;
-                case "n":
-                    return 28;
-                case "o":
-                    return 29;
-                case "p":
-                    return 30;
-                case "q":
-                    return 31;
-                case "r":
-                    return 32;
-                case "s":
-                    return 33;
-                case "t":
-                    return 34;
-                case "u":
-                    return 35;
-                case "v":
-                    return 36;
-                case "w":
-                    return 37;
-                case "x":
-                    return 38;
-                case "y":
-                    return 39;
-                case "z":
-                    return 40;
-                case "1":
-                    return 41;
+                case "space": return 0;
+                case "enter": return 1;
+                case "tab": return 2;
+                case "backquote": return 3;
+                case "quote": return 4;
+                case "semicolon": return 5;
+                case "comma": return 6;
+                case "period": return 7;
+                case "slash": return 8;
+                case "backslash": return 9;
+                case "leftbracket": return 10;
+                case "rightbracket": return 11;
+                case "minus": return 12;
+                case "equals": return 13;
+                case "a": return 14;
+                case "b": return 15;
+                case "c": return 16;
+                case "d": return 17;
+                case "e": return 18;
+                case "f": return 19;
+                case "g": return 20;
+                case "h": return 21;
+                case "i": return 22;
+                case "j": return 23;
+                case "k": return 24;
+                case "l": return 25;
+                case "m": return 26;
+                case "n": return 27;
+                case "o": return 28;
+                case "p": return 29;
+                case "q": return 30;
+                case "r": return 31;
+                case "s": return 32;
+                case "t": return 33;
+                case "u": return 34;
+                case "v": return 35;
+                case "w": return 36;
+                case "x": return 37;
+                case "y": return 38;
+                case "z": return 39;
+                case "1": return 40;
                 case "2":
-                    return 42;
+                    return 41;
                 case "3":
-                    return 43;
+                    return 42;
                 case "4":
-                    return 44;
+                    return 43;
                 case "5":
-                    return 45;
+                    return 44;
                 case "6":
-                    return 46;
+                    return 45;
                 case "7":
-                    return 47;
+                    return 46;
                 case "8":
-                    return 48;
+                    return 47;
                 case "9":
-                    return 49;
+                    return 48;
                 case "0":
-                    return 50;
+                    return 49;
                 case "leftshift":
-                    return 51;
+                    return 50;
                 case "rightshift":
-                    return 52;
+                    return 51;
                 case "leftalt":
-                    return 53;
+                    return 52;
                 case "rightalt":
-                    return 54;
+                    return 53;
                 case "leftcrlt":
-                    return 55;
+                    return 54;
                 case "rightcrlt":
-                    return 56;
+                    return 55;
                 case "leftmeta":
-                    return 57;
+                    return 56;
                 case "rightmeta":
-                    return 58;
+                    return 57;
                 case "contextmenu":
-                    return 59;
+                    return 58;
                 case "escape":
-                    return 60;
+                    return 59;
                 case "leftarrow":
-                    return 61;
+                    return 60;
                 case "downarrow":
-                    return 62;
+                    return 61;
                 case "rightarrow":
-                    return 63;
+                    return 62;
                 case "uparrow":
-                    return 64;
+                    return 63;
                 case "backspace":
-                    return 65;
+                    return 64;
                 case "pagedown":
-                    return 66;
+                    return 65;
                 case "pageup":
-                    return 67;
+                    return 66;
                 case "home":
-                    return 68;
+                    return 67;
                 case "end":
-                    return 69;
+                    return 68;
                 case "insert":
-                    return 70;
+                    return 69;
                 case "delete":
-                    return 71;
+                    return 70;
                 case "capslock":
-                    return 72;
+                    return 71;
                 case "numlock":
-                    return 73;
+                    return 72;
                 case "printscreen":
-                    return 74;
+                    return 73;
                 case "scrolllock":
                     return 75;
                 case "pause":
@@ -634,6 +595,14 @@ namespace MessHallAPI.Managers
                     return true;
             }
             return false;
+        }
+        public static void DumpKeyIndices()
+        {
+            var keys = Keyboard.current.allKeys;
+            for (int i = 0; i < keys.Count; i++)
+            {
+                Logging.Log($"[KeyDump] Index {i} = {keys[i].keyCode}");
+            }
         }
     }
 }

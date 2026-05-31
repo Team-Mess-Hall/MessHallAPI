@@ -39,6 +39,7 @@ namespace MessHallAPI.Base
             PowerRegistration.AutoRegister();
             CustomRoleManager.AutoRegisterRoles();
             TargetedActionRegistration.AutoRegister();
+            Custom3DPanelManager.AutoRegisterPanels();
             IsVR = Application.productName.Contains("VR");
         }
 
@@ -47,6 +48,7 @@ namespace MessHallAPI.Base
             PowerRegistration.OnUpdate();
             CosmeticGUIManager.OnUpdate();
             SettingsManager.OnUpdate();
+            Custom3DPanelManager.OnUpdate();
         }
 
         public override void OnSceneWasInitialized(int buildIndex, string sceneName)
@@ -96,6 +98,7 @@ namespace MessHallAPI.Base
             yield return new WaitForSeconds(3);
             CustomRoleManager.FlushRoles();
             SettingsManager.BuildSettingsPages();
+            Custom3DPanelManager.FlushPanels();
         }
         public override void OnGUI()
         {
