@@ -9,6 +9,7 @@ A Custom API to handle a bunch of stuff like
 - Custom Role Handling
 - Custom Power and Targeted Action Handling
 - HandShake
+- Custom Panels
 - Custom Gamemode Handling (Planned)
 - Custom Map Registery (Planned)
 
