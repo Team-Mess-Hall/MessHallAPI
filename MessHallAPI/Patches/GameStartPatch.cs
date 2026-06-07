@@ -1,8 +1,14 @@
 ﻿using HarmonyLib;
 using Il2CppSG.Airlock;
+using Il2CppSG.Airlock.Roles;
+using MelonLoader;
 using MessHallAPI.Config;
 using MessHallAPI.Debugger;
 using MessHallAPI.Managers.Role;
+using MessHallAPI.Networking;
+using System.Collections;
+using System.Runtime.CompilerServices;
+using UnityEngine;
 using static MessHallAPI.Base.References;
 
 namespace MessHallAPI.Patches
@@ -23,6 +29,28 @@ namespace MessHallAPI.Patches
                         roleManager.gameRoleToPlayerIds[role] = new Il2CppSystem.Collections.Generic.List<int>();
                         Logging.Log($"CustomRoleManager: Re-injected '{role}' into gameRoleToPlayerIds");
                     }
+                }
+            }
+        }
+
+        public static void Postfix()
+        {
+            if (Settings.IsHost)
+            {
+                MelonCoroutines.Start(GameStartPatch.SendRoles());
+            }
+        }
+
+        private static IEnumerator SendRoles()
+        {
+            yield return new WaitForSeconds(3);
+
+            foreach (var kvp in roleManager.gameRoleToPlayerIds)
+            {
+                GameRole role = kvp.Key;
+                foreach (int playerId in kvp.Value)
+                {
+                    NetworkManager.InvokeRPC("MessHallAPI", "RPC_SendRole", playerId, (int)role);
                 }
             }
         }

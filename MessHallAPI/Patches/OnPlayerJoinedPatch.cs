@@ -1,9 +1,13 @@
 ﻿using HarmonyLib;
 using Il2CppFusion;
+using Il2CppSG.Airlock.Network;
 using MelonLoader;
 using MessHallAPI.Base;
 using MessHallAPI.Config;
 using MessHallAPI.Debugger;
+using MessHallAPI.Managers.ActionSystem;
+using MessHallAPI.Managers.Role;
+using MessHallAPI.Managers.RoleSettings;
 using MessHallAPI.Networking;
 using System.Collections;
 using UnityEngine;
@@ -101,6 +105,22 @@ namespace MessHallAPI.Patches
             Confirmed.Add(info.Sender);
 
             Logging.DebugLog($"key exchange confirmed from {info.Sender}");
+        }
+    }
+
+    [HarmonyPatch(typeof(NetworkedLocomotionPlayer), nameof(NetworkedLocomotionPlayer.RPC_SpawnInitialization))]
+    public class SpawnInitPatch
+    {
+        public static void Postfix(NetworkedLocomotionPlayer __instance)
+        {
+            if (__instance.PlayerID == References.Client.PState.PlayerId)
+            {
+                PowerRegistration.BuildIcons();
+                TargetedActionRegistration.BuildIcons();
+                CustomRoleManager.FlushRoles();
+                SettingsManager.BuildSettingsPages();
+                Custom3DPanelManager.FlushPanels();
+            }
         }
     }
 }

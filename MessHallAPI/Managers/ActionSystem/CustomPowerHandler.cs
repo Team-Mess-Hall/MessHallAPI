@@ -41,9 +41,9 @@ namespace MessHallAPI.Managers.ActionSystem
     }
 
     [AttributeUsage(AttributeTargets.Class)]
-    public sealed class PowerUpDefinitionAttribute : Attribute
+    public sealed class PowerUpDefinition : Attribute
     {
-        public PowerUpDefinitionAttribute() { }
+        public PowerUpDefinition() { }
     }
 
     public interface IPowerUpHandler

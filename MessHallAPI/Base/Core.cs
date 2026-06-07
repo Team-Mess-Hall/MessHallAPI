@@ -40,6 +40,7 @@ namespace MessHallAPI.Base
             CustomRoleManager.AutoRegisterRoles();
             TargetedActionRegistration.AutoRegister();
             Custom3DPanelManager.AutoRegisterPanels();
+            VanillaRoleManager.AutoRegisterRoles();
             IsVR = Application.productName.Contains("VR");
         }
 
@@ -49,6 +50,14 @@ namespace MessHallAPI.Base
             CosmeticGUIManager.OnUpdate();
             SettingsManager.OnUpdate();
             Custom3DPanelManager.OnUpdate();
+            CustomButtonSystem.OnUpdate();
+            TargetedActionRegistration.OnUpdate();
+            ButtonPositionManager.OnUpdate();
+
+            if (InGame && RoleSelectionPanel.kbm != null && RoleSelectionPanel.kbm.XTile != 5 && RoleSelectionPanel.kbm.XTile != 0)
+            {
+                RoleSelectionPanel.kbm.SetTileOffset(KeybindManager.StringToV2(KeybindManager.fKey));
+            }
         }
 
         public override void OnSceneWasInitialized(int buildIndex, string sceneName)
@@ -70,16 +79,10 @@ namespace MessHallAPI.Base
                     ResetReferences();
                     MelonCoroutines.Start(DelayedReset());
                 }
+                ModStorage.LoadIcons();
             }
         }
 
-        public override void OnSceneWasLoaded(int buildIndex, string sceneName)
-        {
-            if (sceneName != "Title" && sceneName != "Boot")
-            {
-                MelonCoroutines.Start(DelayedBuild());
-            }
-        }
 
         private static System.Collections.IEnumerator DelayedReset()
         {
@@ -90,16 +93,6 @@ namespace MessHallAPI.Base
             }
         }
 
-        private static System.Collections.IEnumerator DelayedBuild()
-        {
-            yield return new WaitForSeconds(5);
-            PowerRegistration.BuildIcons();
-            TargetedActionRegistration.BuildIcons();
-            yield return new WaitForSeconds(3);
-            CustomRoleManager.FlushRoles();
-            SettingsManager.BuildSettingsPages();
-            Custom3DPanelManager.FlushPanels();
-        }
         public override void OnGUI()
         {
             CosmeticGUIManager.OnGUI();

@@ -175,7 +175,7 @@ namespace MessHallAPI.Managers.RoleSettings
                     if (roleDescComp == null)
                         continue;
 
-                    roleDescComp._roleDescription = CustomRoleManager._roles[entry.GameRole].text;
+                    roleDescComp._roleDescription = roleData.RolePromptTK;
                     roleDescComp._roleName = roleData.RoleNameTK;
                     roleDescComp._gameTeam = roleData.Team;
                     roleDescComp._crewOrImpText.text = "<color=#636363>Neutral</color>";
