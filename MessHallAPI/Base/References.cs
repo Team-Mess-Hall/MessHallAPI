@@ -1,12 +1,12 @@
-﻿using Il2CppSG.Airlock;
-using Il2CppSG.Airlock.Network;
-using Il2CppSG.Airlock.XR;
+﻿using SG.Airlock;
+using SG.Airlock.Network;
+using SG.Airlock.XR;
 using static UnityEngine.Object;
 using static MessHallAPI.Config.Settings;
 using static MessHallAPI.Debugger.Logging;
-using Il2CppSG.Airlock.Graphics;
-using Il2CppSG.Airlock.Roles;
-using Il2CppSG.Airlock.Localization;
+using SG.Airlock.Roles;
+using SG.Airlock.Localization;
+using SG.Airlock.Customization;
 
 namespace MessHallAPI.Base
 {
@@ -21,6 +21,8 @@ namespace MessHallAPI.Base
         public static NetworkedKillBehaviour Killing;
         public static RoleManager roleManager;
         public static LocalizationManager localization;
+        public static LocationManager locationManager;
+        public static CustomizationManager customizationManager;
 
         public static void ResetReferences()
         {
@@ -38,6 +40,8 @@ namespace MessHallAPI.Base
                 powerData = null;
                 Killing = null;
                 roleManager = null;
+                locationManager = null;
+                customizationManager = null;
 
                 trace = "Client";
                 Client = FindObjectOfType<XRRig>();
@@ -58,7 +62,10 @@ namespace MessHallAPI.Base
                 roleManager = FindObjectOfType<RoleManager>();
                 trace = "LocalizationManager";
                 localization = FindObjectOfType<LocalizationManager>();
-            
+                trace = "LocationManager";
+                locationManager = FindObjectOfType<LocationManager>();
+                trace = "CustomizationManager";
+                customizationManager = FindObjectOfType<CustomizationManager>();
             }
             catch
             {

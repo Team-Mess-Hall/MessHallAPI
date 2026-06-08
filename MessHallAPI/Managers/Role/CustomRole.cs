@@ -1,16 +1,19 @@
-﻿using Il2CppSG.Airlock.Roles;
-using MessHallAPI.Managers.Role;
+﻿using MessHallAPI.Managers.Role;
 using UnityEngine;
+using Fusion;
+using SG.Airlock.Roles;
 
+/// <summary>
+/// Base class for all custom roles. Override <see cref="BuildRoleData"/> to
+/// change role properties, and any of the event methods to react to game events.
+/// </summary>
 public abstract class CustomRole : ICustomRole
 {
     public abstract string RoleName { get; }
     public abstract string RoleDesc { get; }
     public abstract string RoleRevealPrompt { get; }
-    /// <summary>
-    /// Override this to change the default values
-    /// </summary>
-    /// <returns>Custom RoleData</returns>
+    public virtual Sprite RoleIcon => null;
+
     public virtual RoleData BuildRoleData()
     {
         return new RoleData
@@ -28,13 +31,11 @@ public abstract class CustomRole : ICustomRole
             IsUniversalKnowledge = false,
 
             GestureHandColor = -1,
-
             MaxNumOfRole = null,
             IsGhostRole = false,
 
             PlayerSpeedMultiplier = 1f,
             VisionRange = 1f,
-
             TargetedActionRadius = 2,
             CameraHeight = 1.334f,
 
@@ -57,4 +58,12 @@ public abstract class CustomRole : ICustomRole
             _ventUseCooldown = null
         };
     }
+
+    public virtual void OnEmergencyMeetingCalled(PlayerRef sourcePlayer, NetworkBool forceVote) { }
+    public virtual void OnBodyCalled(int foundPlayer, PlayerRef sourcePlayer, NetworkBool forceVote) { }
+    public virtual void OnRoleRevealed(GameRole role) { }
+    public virtual void OnPlayerWasKilled(PlayerRef victim, PlayerRef killer, bool vigiKill, bool selfKill) { }
+    public virtual void OnEndGame(GameTeam winningTeam) { }
+    public virtual void OnEndVote() { }
+    public virtual void OnTargetedAction() { }
 }

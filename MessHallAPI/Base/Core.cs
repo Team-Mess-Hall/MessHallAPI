@@ -1,9 +1,7 @@
-﻿using Il2CppFusion;
+﻿using BepInEx;
+using BepInEx.Unity.IL2CPP;
+using HarmonyLib;
 using Il2CppInterop.Runtime.Injection;
-using Il2CppSystem.Collections;
-using Il2CppSystem.IO;
-using MelonLoader;
-using MessHallAPI.Config;
 using MessHallAPI.Managers;
 using MessHallAPI.Managers.ActionSystem;
 using MessHallAPI.Managers.Cosmetic;
@@ -11,22 +9,19 @@ using MessHallAPI.Managers.Role;
 using MessHallAPI.Managers.RoleSettings;
 using MessHallAPI.Networking;
 using MessHallAPI.Patches;
-using System.Text.Json;
 using UnityEngine;
-using UnityEngine.Playables;
+using UnityEngine.SceneManagement;
 using static MessHallAPI.Base.References;
 using static MessHallAPI.Config.Settings;
 
 namespace MessHallAPI.Base
 {
-    public class Core : MelonMod
+    [BepInPlugin("plugin.teammesshall.com", "MessHallAPI", "1.0.0")]
+    public class Core : BasePlugin
     {
         public static string SceneName;
-        public static bool ShouldMakeAnotherInstance()
-        {
-            return System.Diagnostics.Process.GetProcessesByName(System.Diagnostics.Process.GetCurrentProcess().ProcessName).Length == 1;
-        }
-        public override void OnInitializeMelon()
+
+        public override void Load()
         {
             foreach (Type type in System.Reflection.Assembly.GetExecutingAssembly().GetTypes())
             {
@@ -35,27 +30,60 @@ namespace MessHallAPI.Base
                     ClassInjector.RegisterTypeInIl2Cpp(type);
                 }
             }
+
             RPCRegistry.AutoDiscover();
             PowerRegistration.AutoRegister();
             CustomRoleManager.AutoRegisterRoles();
             TargetedActionRegistration.AutoRegister();
             Custom3DPanelManager.AutoRegisterPanels();
+            VanillaRoleManager.AutoRegisterRoles();
             IsVR = Application.productName.Contains("VR");
+
+            var go = new GameObject("MessHallAPI_Runner");
+            GameObject.DontDestroyOnLoad(go);
+            go.AddComponent<CoreBehaviour>();
+            new Harmony("plugin.teammesshall.com").PatchAll();
+        }
+    }
+
+    public class CoreBehaviour : MonoBehaviour
+    {
+        public CoreBehaviour(IntPtr ptr) : base(ptr) { }
+        private Action<Scene, LoadSceneMode> _onSceneLoaded;
+        public static CoreBehaviour Instance { get; private set; }
+
+        private void Start()
+        {
+            Instance = this;
+            _onSceneLoaded = new Action<Scene, LoadSceneMode>(OnSceneLoaded);
+            SceneManager.sceneLoaded += _onSceneLoaded;
         }
 
-        public override void OnUpdate()
+        private void Update()
         {
             PowerRegistration.OnUpdate();
             CosmeticGUIManager.OnUpdate();
             SettingsManager.OnUpdate();
             Custom3DPanelManager.OnUpdate();
+            CustomButtonSystem.OnUpdate();
+            TargetedActionRegistration.OnUpdate();
+            ButtonPositionManager.OnUpdate();
+
+            if (InGame && RoleSelectionPanel.kbm != null &&
+                RoleSelectionPanel.kbm.XTile != 5 &&
+                RoleSelectionPanel.kbm.XTile != 0)
+            {
+                RoleSelectionPanel.kbm.SetTileOffset(
+                    KeybindManager.StringToV2(KeybindManager.fKey));
+            }
         }
 
-        public override void OnSceneWasInitialized(int buildIndex, string sceneName)
+        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
-            SceneName = sceneName;
-            InGame = SceneName != "Title" && SceneName != "Boot";
-            if (SceneName == "Title")
+            Core.SceneName = scene.name;
+            InGame = Core.SceneName != "Title" && Core.SceneName != "Boot";
+
+            if (Core.SceneName == "Title")
             {
                 ModStorage.LoadModStamp();
                 RPCRegistry.ReliableKey = string.Empty;
@@ -63,46 +91,33 @@ namespace MessHallAPI.Base
                 NameplateRegistry._registry.Clear();
                 ReferencesSet = false;
             }
+
             if (InGame)
             {
                 if (!ReferencesSet)
                 {
                     ResetReferences();
-                    MelonCoroutines.Start(DelayedReset());
+                    StartCoroutine(DelayedReset().ToString());
                 }
-            }
-        }
-
-        public override void OnSceneWasLoaded(int buildIndex, string sceneName)
-        {
-            if (sceneName != "Title" && sceneName != "Boot")
-            {
-                MelonCoroutines.Start(DelayedBuild());
+                ModStorage.LoadIcons();
             }
         }
 
         private static System.Collections.IEnumerator DelayedReset()
         {
+            yield return new WaitForSeconds(2.5f);
             if (networkRunner == null)
-            {
-                yield return new WaitForSeconds(2.5f);
                 ResetReferences();
-            }
         }
 
-        private static System.Collections.IEnumerator DelayedBuild()
-        {
-            yield return new WaitForSeconds(5);
-            PowerRegistration.BuildIcons();
-            TargetedActionRegistration.BuildIcons();
-            yield return new WaitForSeconds(3);
-            CustomRoleManager.FlushRoles();
-            SettingsManager.BuildSettingsPages();
-            Custom3DPanelManager.FlushPanels();
-        }
-        public override void OnGUI()
+        private void OnGUI()
         {
             CosmeticGUIManager.OnGUI();
+        }
+
+        private void OnDestroy()
+        {
+            SceneManager.sceneLoaded -= _onSceneLoaded;
         }
     }
 }

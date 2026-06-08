@@ -1,6 +1,6 @@
-﻿using Il2CppSG.Airlock;
-using Il2CppSG.Airlock.Roles;
-using Il2CppSG.Airlock.UI;
+﻿using SG.Airlock;
+using SG.Airlock.Roles;
+using SG.Airlock.UI;
 using MessHallAPI.Base;
 using MessHallAPI.Debugger;
 using UnityEngine;

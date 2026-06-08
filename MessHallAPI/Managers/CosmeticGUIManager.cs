@@ -1,4 +1,4 @@
-﻿using Il2CppSG.Airlock;
+﻿using SG.Airlock;
 using MessHallAPI.Base;
 using MessHallAPI.Debugger;
 using MessHallAPI.Managers.Cosmetic;

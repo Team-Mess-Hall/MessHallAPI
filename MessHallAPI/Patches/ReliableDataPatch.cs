@@ -1,8 +1,8 @@
-﻿using Il2CppFusion;
-using Il2CppInterop.Runtime.InteropTypes.Arrays;
+﻿using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using MessHallAPI.Networking;
 using HarmonyLib;
 using MessHallAPI.Debugger;
+using Fusion;
 
 namespace MessHallAPI.Patches
 {

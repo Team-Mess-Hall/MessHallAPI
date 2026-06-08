@@ -1,12 +1,10 @@
-﻿using Il2CppSG.Airlock;
-using Il2CppSG.Airlock.Localization;
-using Il2CppSG.Airlock.Roles;
-using Il2CppSG.Airlock.Settings;
-using Il2CppSG.Airlock.UI;
-using Il2CppSG.GlobalEvents.Variables;
+﻿using SG.Airlock.Localization;
+using SG.Airlock.Settings;
+using SG.Airlock.UI;
 using MessHallAPI.Debugger;
 using MessHallAPI.Managers.Role;
-using System.Collections.Generic;
+using SG.Airlock;
+using SG.Airlock.Roles;
 using UnityEngine;
 
 namespace MessHallAPI.Managers.RoleSettings
@@ -175,7 +173,7 @@ namespace MessHallAPI.Managers.RoleSettings
                     if (roleDescComp == null)
                         continue;
 
-                    roleDescComp._roleDescription = CustomRoleManager._roles[entry.GameRole].text;
+                    roleDescComp._roleDescription = roleData.RolePromptTK;
                     roleDescComp._roleName = roleData.RoleNameTK;
                     roleDescComp._gameTeam = roleData.Team;
                     roleDescComp._crewOrImpText.text = "<color=#636363>Neutral</color>";

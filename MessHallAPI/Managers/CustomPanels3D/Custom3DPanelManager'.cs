@@ -1,11 +1,13 @@
-﻿using Il2CppSG.Airlock;
-using Il2CppSG.Airlock.Minigames;
-using Il2CppSG.Airlock.UI.Moderation;
-using Il2CppSG.Airlock.XR;
-using MelonLoader;
+﻿using BepInEx;
+using BepInEx.Unity.IL2CPP;
 using MessHallAPI.Debugger;
 using MessHallAPI.Managers;
+using SG.Airlock;
+using SG.Airlock.Minigames;
+using SG.Airlock.UI.Moderation;
+using SG.Airlock.XR;
 using System.Reflection;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using static MessHallAPI.Base.References;
@@ -84,15 +86,33 @@ public static class Custom3DPanelManager
                     if (minigameButton != null)
                         minigameButton.OnButtonPressed.AddListener(new Action<XRHand>((hand) =>
                         {
-                            if (tab == null || tab._localPlayerState.IsConnected == false) return;
-                            panel.OnPlayerSelected(clone, tab._localPlayerState);
-                            Logging.Log($"Player: {tab._localPlayerState.NetworkName}, PlayerID: {tab._localPlayerState.PlayerId}");
+                            panel.OnPlayerSelected(clone, playerId);
+                            Logging.Log($"Custom3DPanelManager: Selected slot {playerId}.");
                         }));
                 }
             }
 
             if (panel.OpenTrigger == PanelOpenTrigger.Keybind && !IsKeyAccepted(panel.Keybind))
                 Logging.Error($"Custom3DPanelManager: {panel.Keybind} is not a valid key for panel {panel.PanelName}, falling back to {eKey}.");
+
+            var nameTextTransform = playerlist.transform.Find("PlayersPanel/UI_Moderation/UI_Moderation_PlayerPanel/Name Text");
+            if (nameTextTransform != null)
+            {
+                var closeBtn = GameObject.Instantiate(nameTextTransform, clone.transform);
+                closeBtn.name = "CloseButton";
+                GameObject.DestroyImmediate(closeBtn.GetComponent<TextMeshPro>());
+                GameObject.DestroyImmediate(closeBtn.GetComponent<MeshRenderer>());
+                closeBtn.gameObject.AddComponent<SpriteRenderer>().sprite = ModStorage.CloseButton;
+                closeBtn.transform.localPosition = new Vector3(-0.261f, 0.2814f, -0.1316f);
+                closeBtn.transform.localScale = new Vector3(0.1f, 0.1f, 1f);
+
+                var panelName = panel.PanelName;
+                var closeBtnSys = new CustomButtonSystem
+                {
+                    Target = closeBtn.gameObject,
+                    OnPressed = () => ClosePanel(panelName)
+                };
+            }
 
             panel.OnPanelCreated(clone);
             extraPanels[panel.PanelName] = clone;
@@ -104,6 +124,16 @@ public static class Custom3DPanelManager
 
     public static void OnUpdate()
     {
+        var center = GameObject.Find(CenterPath);
+        if (center != null && !center.activeSelf)
+        {
+            foreach (var (name, panelObj) in extraPanels)
+            {
+                if (panelObj != null && panelObj.activeSelf)
+                    ClosePanel(name);
+            }
+        }
+
         foreach (var (name, panel) in _registeredPanels)
         {
             if (panel.OpenTrigger != PanelOpenTrigger.Keybind) continue;
@@ -123,12 +153,24 @@ public static class Custom3DPanelManager
             center.SetActive(true);
 
         panel.SetActive(true);
+
+        if (_registeredPanels.TryGetValue(panelName, out var customPanel))
+            customPanel.OnPanelOpened(panel);
     }
 
     public static void ClosePanel(string panelName)
     {
         if (!extraPanels.TryGetValue(panelName, out var panel)) return;
+
+
+        var center = GameObject.Find(CenterPath);
+        if (center != null)
+            center.SetActive(false);
+
         panel.SetActive(false);
+
+        if (_registeredPanels.TryGetValue(panelName, out var customPanel))
+            customPanel.OnPanelClosed(panel);
     }
 
     public static void TogglePanel(string panelName)
@@ -142,9 +184,11 @@ public static class Custom3DPanelManager
 
     public static void AutoRegisterPanels()
     {
-        foreach (var mod in MelonMod.RegisteredMelons)
+        foreach (var pluginInfo in IL2CPPChainloader.Instance.Plugins.Values)
         {
-            var assembly = mod.GetType().Assembly;
+            if (pluginInfo.Instance == null) continue;
+
+            var assembly = pluginInfo.Instance.GetType().Assembly;
             foreach (var type in assembly.GetTypes())
             {
                 var attr = type.GetCustomAttribute<PanelDefinitionAttribute>();
@@ -164,7 +208,13 @@ public static class Custom3DPanelManager
 
     public enum PanelOpenTrigger
     {
+        /// <summary>
+        /// Keybind field is requiredand when said keybind is press panel opens.
+        /// </summary>
         Keybind,
+        /// <summary>
+        /// Allows you to activate the panel manually, doesnt require a keybind.
+        /// </summary>
         Manual
     }
 
@@ -179,8 +229,27 @@ public static class Custom3DPanelManager
         string PanelName { get; }
         PanelOpenTrigger OpenTrigger { get; }
         string Keybind { get; }
+        /// <summary>
+        /// this method is called when the panel finishes creating and can have anything hooked into it, EX: An AnimationClip for Vitals
+        /// </summary>
+        /// <param name="panel">the custom panel that was made</param>
         void OnPanelCreated(GameObject panel);
-        void OnPlayerSelected(GameObject panel, PlayerState player);
+        /// <summary>
+        /// THis method allows you to do specific stuff like call an rpc on the player you select, EX: an rpc that makes the shapeshift as another player
+        /// </summary>
+        /// <param name="panel">The panel that was used</param>
+        /// <param name="playerID">The playerID that was selected</param>
+        void OnPlayerSelected(GameObject panel, int playerID);
+        /// <summary>
+        /// THis method is called when the panel is opened use this for specific actions when the panel is opened
+        /// </summary>
+        /// <param name="panel">the panel that was opened</param>
+        void OnPanelOpened(GameObject panel);
+        /// <summary>
+        /// THis method is called when the panel is closed use this for specific actions when the panel is closed
+        /// </summary>
+        /// <param name="panel">the panel that was opened</param>
+        void OnPanelClosed(GameObject panel);
     }
 
     public abstract class CustomPanel : ICustomPanel
@@ -189,6 +258,8 @@ public static class Custom3DPanelManager
         public abstract PanelOpenTrigger OpenTrigger { get; }
         public virtual string Keybind => eKey;
         public virtual void OnPanelCreated(GameObject panel) { }
-        public virtual void OnPlayerSelected(GameObject panel, PlayerState player) { }
+        public virtual void OnPlayerSelected(GameObject panel, int player) { }
+        public virtual void OnPanelOpened(GameObject panel) { }
+        public virtual void OnPanelClosed(GameObject panel) { }
     }
 }

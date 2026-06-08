@@ -1,10 +1,11 @@
-﻿using Il2CppFusion;
+﻿using Fusion;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
-using Il2CppSG.Airlock.Network;
+using SG.Airlock.Network;
 using Il2CppSystem.IO;
 using MessHallAPI.Debugger;
 using MessHallAPI.Patches;
 using System.Text.Json;
+using UnityEngine.Playables;
 using static MessHallAPI.Base.References;
 using static MessHallAPI.Networking.RPCRegistry;
 
@@ -17,7 +18,7 @@ namespace MessHallAPI.Networking
         /// </summary>
         internal static void SendToPlayer(PlayerRef target, byte[] payload)
         {
-            if (networkRunner == null && target.IsValid)
+            if (networkRunner == null && target.IsValid())
             {
                 Logging.Error("NetworkRunner not available.");
                 networkRunner = UnityEngine.Object.FindObjectOfType<AirlockNetworkRunner>();

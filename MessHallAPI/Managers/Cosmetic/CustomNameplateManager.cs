@@ -1,8 +1,8 @@
-﻿using Il2CppSG.Airlock;
-using Il2CppSG.Airlock.Minigames;
-using Il2CppSG.Airlock.XR;
-using Il2CppSG.LightUI;
-using Il2CppTMPro;
+﻿using SG.Airlock;
+using SG.Airlock.Minigames;
+using SG.Airlock.XR;
+using SG.LightUI;
+using TMPro;
 using MessHallAPI.Debugger;
 using MessHallAPI.Networking;
 using System.Reflection;

@@ -1,5 +1,4 @@
-﻿using MelonLoader;
-using MessHallAPI.Config;
+﻿using MessHallAPI.Config;
 using MessHallAPI.Debugger;
 using System.Collections.Generic;
 using UnityEngine;

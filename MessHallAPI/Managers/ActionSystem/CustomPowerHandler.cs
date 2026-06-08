@@ -1,6 +1,6 @@
-﻿using Il2CppSG.Airlock;
-using Il2CppSG.Airlock.Graphics;
-using Il2CppSG.Airlock.Roles;
+﻿using SG.Airlock;
+using SG.Airlock.Graphics;
+using SG.Airlock.Roles;
 using MessHallAPI.Debugger;
 using MessHallAPI.Networking;
 using UnityEngine;
@@ -41,9 +41,9 @@ namespace MessHallAPI.Managers.ActionSystem
     }
 
     [AttributeUsage(AttributeTargets.Class)]
-    public sealed class PowerUpDefinitionAttribute : Attribute
+    public sealed class PowerUpDefinition : Attribute
     {
-        public PowerUpDefinitionAttribute() { }
+        public PowerUpDefinition() { }
     }
 
     public interface IPowerUpHandler

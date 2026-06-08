@@ -1,6 +1,4 @@
-﻿using Il2CppSG.Airlock;
-using Il2CppSG.CoreLite;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;

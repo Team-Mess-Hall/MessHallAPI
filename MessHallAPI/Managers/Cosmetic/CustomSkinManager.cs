@@ -1,4 +1,4 @@
-﻿using Il2CppSG.Airlock.Customization;
+﻿using SG.Airlock.Customization;
 using System;
 using System.Collections.Generic;
 using System.Linq;

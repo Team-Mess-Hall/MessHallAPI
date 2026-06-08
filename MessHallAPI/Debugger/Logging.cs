@@ -1,4 +1,5 @@
-﻿using MelonLoader;
+﻿using BepInEx;
+using BepInEx.Logging;
 using static MessHallAPI.Config.Settings;
 
 namespace MessHallAPI.Debugger
@@ -7,18 +8,7 @@ namespace MessHallAPI.Debugger
     {
         static void Print(string message = "", int type = 0)
         {
-            if (type == 0)
-            {
-                MelonLogger.Msg(message);
-            }
-            else if (type == 1)
-            {
-                MelonLogger.Warning(message);
-            }
-            else if (type == 2)
-            {
-                MelonLogger.Error(message);
-            }
+                Logger.CreateLogSource(message);
         }
 
         public static void Log(string message)

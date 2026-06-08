@@ -1,6 +1,6 @@
 ﻿using System;
+using Fusion;
 using HarmonyLib;
-using Il2CppFusion;
 using MessHallAPI.Config;
 using MessHallAPI.Debugger;
 using MessHallAPI.Managers.Cosmetic;

@@ -1,6 +1,7 @@
-﻿using System.Reflection;
-using MelonLoader;
+﻿using BepInEx;
+using BepInEx.Unity.IL2CPP;
 using MessHallAPI.Debugger;
+using System.Reflection;
 
 namespace MessHallAPI.Networking
 {
@@ -31,10 +32,12 @@ namespace MessHallAPI.Networking
 
         internal static void AutoDiscover()
         {
-            foreach (var mod in MelonMod.RegisteredMelons)
+            foreach (var pluginInfo in IL2CPPChainloader.Instance.Plugins.Values)
             {
-                var assembly = mod.GetType().Assembly;
-                var modId = mod.Info.Name;
+                if (pluginInfo.Instance == null) continue;
+
+                var assembly = pluginInfo.Instance.GetType().Assembly;
+                var modId = pluginInfo.Metadata.GUID; // BepInEx equivalent of a mod ID
 
                 foreach (var type in assembly.GetTypes())
                 {
@@ -43,8 +46,7 @@ namespace MessHallAPI.Networking
                     foreach (var method in methods)
                     {
                         var attr = method.GetCustomAttribute<MessHallRPCAttribute>();
-                        if (attr == null)
-                            continue;
+                        if (attr == null) continue;
 
                         object instance = null;
 

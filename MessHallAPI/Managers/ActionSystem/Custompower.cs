@@ -1,12 +1,6 @@
-﻿using Il2CppSG.Airlock;
-using Il2CppSG.Airlock.Roles;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SG.Airlock;
+using SG.Airlock.Roles;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using static MessHallAPI.Managers.KeybindManager;
 
 namespace MessHallAPI.Managers.ActionSystem
@@ -17,7 +11,8 @@ namespace MessHallAPI.Managers.ActionSystem
 
         public abstract string PowerName { get; }
         public abstract void OnUse();
-        public virtual Sprite PowerIcon => null!;
+
+        public virtual Sprite PowerIcon => null;
         public virtual string Keybind => eKey;
         public virtual void OnUpdate() { }
 
@@ -38,7 +33,8 @@ namespace MessHallAPI.Managers.ActionSystem
 
         public abstract string PowerName { get; }
         public abstract void OnUseTarget(int target);
-        public virtual Sprite PowerIcon => null!;
+
+        public virtual Sprite PowerIcon => null;
         public virtual string Keybind => eKey;
         public virtual void OnUpdate() { }
 

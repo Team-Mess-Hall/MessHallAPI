@@ -1,6 +1,6 @@
-﻿using Il2CppSG.Airlock;
-using Il2CppSG.Airlock.Customization;
-using Il2CppSG.Airlock.Network;
+﻿using SG.Airlock;
+using SG.Airlock.Customization;
+using SG.Airlock.Network;
 using MessHallAPI.Networking;
 using UnityEngine;
 using static MessHallAPI.Base.References;

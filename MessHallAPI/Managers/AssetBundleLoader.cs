@@ -1,5 +1,4 @@
-﻿using MelonLoader.Utils;
-using UnityEngine;
+﻿using UnityEngine;
 using static MessHallAPI.Debugger.Logging;
 
 namespace MessHallAPI.Managers
@@ -25,7 +24,7 @@ namespace MessHallAPI.Managers
         /// <param name="ModName">name of the mod folder in UserData so for example "MessHallAPI" would be UserData/MessHallAPI</param>
         public static void RequestLoadAssetBundle(string bundlename, string ModName)
         {
-            string basePath = Path.Combine(MelonEnvironment.UserDataDirectory, ModName);
+            string basePath = Path.Combine(BepInEx.Paths.PluginPath, ModName);
             string assetsPath = Path.Combine(basePath, bundlename);
             assetBundles[bundlename] = AssetBundle.LoadFromFile(assetsPath);
             if (assetBundles[bundlename] == null)
@@ -42,7 +41,7 @@ namespace MessHallAPI.Managers
         /// <param name="Modname">name of the mod folder in UserData so for example "MessHallAPI" would be UserData/MessHallAPI</param>
         public static void RequestLoadSceneBundle(string sceneBundlename, string Modname)
         {
-            string basePath = Path.Combine(MelonEnvironment.UserDataDirectory, Modname);
+            string basePath = Path.Combine(BepInEx.Paths.PluginPath, Modname);
             string scenebundlepath = Path.Combine(basePath, sceneBundlename);
             sceneBundles[sceneBundlename] = AssetBundle.LoadFromFile(scenebundlepath);
             if (sceneBundles[sceneBundlename] == null)

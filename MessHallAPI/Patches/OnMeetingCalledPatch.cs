@@ -1,12 +1,15 @@
-﻿using HarmonyLib;
-using Il2CppFusion;
-using Il2CppSG.Airlock;
+﻿using Fusion;
+using HarmonyLib;
+using MessHallAPI.Base;
+using MessHallAPI.Config;
 using MessHallAPI.Managers.Cosmetic;
-using MelonLoader;
+using MessHallAPI.Managers.Role;
+using MessHallAPI.Networking;
+using SG.Airlock;
+using SG.Airlock.Localization;
+using SG.Airlock.Roles;
 using System.Collections;
 using UnityEngine;
-using MessHallAPI.Networking;
-using MessHallAPI.Base;
 
 namespace MessHallAPI.Patches
 {
@@ -15,7 +18,12 @@ namespace MessHallAPI.Patches
     {
         public static void Postfix(int foundPlayer, PlayerRef sourcePlayer, NetworkBool forceVote, RpcInfo info)
         {
-            MelonCoroutines.Start(DelayedRefresh.Run());
+            CoreBehaviour.Instance.StartCoroutine(DelayedRefresh.Run().ToString());
+        }
+
+        public static void Prefix(VoteManager __instance, int foundPlayer, PlayerRef sourcePlayer, NetworkBool forceVote, RpcInfo info)
+        {
+            Meetinghandler.HandleBodyCalled(__instance, foundPlayer, sourcePlayer, forceVote, info);
         }
     }
 
@@ -24,7 +32,12 @@ namespace MessHallAPI.Patches
     {
         public static void Postfix(PlayerRef sourcePlayer, NetworkBool forceVote, RpcInfo info)
         {
-            MelonCoroutines.Start(DelayedRefresh.Run());
+            CoreBehaviour.Instance.StartCoroutine(DelayedRefresh.Run().ToString());
+        }
+
+        public static void Prefix(VoteManager __instance, PlayerRef sourcePlayer, NetworkBool forceVote, RpcInfo info)
+        {
+            Meetinghandler.HandleEmergencyMeetingCalled(__instance, sourcePlayer, forceVote, info);
         }
     }
 
@@ -44,6 +57,53 @@ namespace MessHallAPI.Patches
             else if (Core.SceneName == "MessHall")
             {
                 NetworkManager.InvokeRPC("MessHallAPI", "RPC_RefreshMessHallMeetingAtlases");
+            }
+        }
+    }
+
+    public class Meetinghandler
+    {
+        public static void HandleEmergencyMeetingCalled(VoteManager __instance, PlayerRef sourcePlayer, NetworkBool forceVote, RpcInfo info)
+        {
+            if (Settings.IsHost)
+            {
+                foreach (PlayerState playerState in References.Spawn.ActivePlayerStates)
+                {
+                    GameRole trueRoleHost = CustomRoleManager.GetTrueRoleHost(playerState.PlayerId);
+                    NetworkManager.InvokeRPC("MessHallAPI", "RPC_EmergencyMeetingCalled", playerState.PlayerId, (int)trueRoleHost, sourcePlayer.PlayerId, forceVote);
+                }
+            }
+        }
+
+        public static void HandleBodyCalled(VoteManager __instance, int foundPlayer, PlayerRef sourcePlayer, NetworkBool forceVote, RpcInfo info)
+        {
+            if (Settings.IsHost)
+            {
+                foreach (PlayerState playerState in References.Spawn.ActivePlayerStates)
+                {
+                    GameRole trueRoleHost = CustomRoleManager.GetTrueRoleHost(playerState.PlayerId);
+                    NetworkManager.InvokeRPC("MessHallAPI", "RPC_BodyCalled", playerState.PlayerId, (int)trueRoleHost, foundPlayer, sourcePlayer.PlayerId, forceVote);
+                }
+            }
+        }
+
+        [MessHallRPC(RPCTarget.All, RPCCaller.HostOnly)]
+        public static void RPC_EmergencyMeetingCalled([RPCTarget] int target, int gameRole, int sourcePlayer, bool forceVote)
+        {
+            ValueTuple<RoleData, string, string, string, ICustomRole, TextKey> valueTuple;      
+            if (CustomRoleManager._roles.TryGetValue((GameRole)gameRole, out valueTuple))
+            {
+                valueTuple.Item5.OnEmergencyMeetingCalled(sourcePlayer, forceVote);
+            }
+        }
+
+        [MessHallRPC(RPCTarget.All, RPCCaller.HostOnly)]
+        public static void RPC_BodyCalled([RPCTarget] int target, int gameRole, int foundPlayer, int sourcePlayer, bool forceVote)
+        {
+            ValueTuple<RoleData, string, string, string, ICustomRole, TextKey> valueTuple;
+            if (CustomRoleManager._roles.TryGetValue((GameRole)gameRole, out valueTuple))
+            {
+                valueTuple.Item5.OnBodyCalled(foundPlayer, sourcePlayer, forceVote);
             }
         }
     }

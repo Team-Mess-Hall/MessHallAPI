@@ -1,16 +1,13 @@
-﻿using HarmonyLib;
-using Il2CppFusion;
-using Il2CppSG.Airlock;
-using Il2CppSG.Airlock.Roles;
+﻿using Fusion;
+using HarmonyLib;
+using MessHallAPI.Base;
 using MessHallAPI.Config;
 using MessHallAPI.Debugger;
 using MessHallAPI.Managers.Role;
 using MessHallAPI.Networking;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SG.Airlock;
+using SG.Airlock.Localization;
+using SG.Airlock.Roles;
 
 namespace MessHallAPI.Patches
 {
@@ -56,6 +53,42 @@ namespace MessHallAPI.Patches
                         playerRole = (GameRole)resolvedRole;
                         Logging.Log($"[EjectionPatch] Overriding ejected role to: {resolvedRole} for player {bootedPlayer}");
                     }
+                }
+            }
+        }
+
+        [HarmonyPatch(typeof(VoteManager),nameof(VoteManager.EndVote))]
+        public class EjectionPatch3
+        {
+            public static void Prefix(VoteManager __instance)
+            {
+                EjectionPatch.EndVoteHandler.EndVote(__instance);
+            }
+        }
+
+        public class EndVoteHandler
+        {
+            public static void EndVote(VoteManager voteManager)
+            {
+                bool flag = !Settings.IsHost;
+                if (!flag)
+                {
+                    foreach (PlayerState playerState in References.Spawn.ActivePlayerStates)
+                    {
+                        GameRole trueRoleHost = CustomRoleManager.GetTrueRoleHost(playerState.PlayerId);
+                        NetworkManager.InvokeRPC("MessHallAPI", "RPC_EndVote", playerState.PlayerId, (int)trueRoleHost);
+                    }
+                }
+            }
+
+            [MessHallRPC(RPCTarget.All, RPCCaller.HostOnly)]
+            public static void RPC_EndVote([RPCTarget] int target, int gameRole)
+            {
+                ValueTuple<RoleData, string, string, string, ICustomRole, TextKey> valueTuple;
+                bool flag = !CustomRoleManager._roles.TryGetValue((GameRole)gameRole, out valueTuple);
+                if (!flag)
+                {
+                    valueTuple.Item5.OnEndVote();
                 }
             }
         }

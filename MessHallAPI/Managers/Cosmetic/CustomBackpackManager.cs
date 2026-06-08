@@ -1,4 +1,4 @@
-﻿using Il2CppSG.Airlock;
+﻿using SG.Airlock;
 using MessHallAPI.Debugger;
 using MessHallAPI.Networking;
 using UnityEngine;
