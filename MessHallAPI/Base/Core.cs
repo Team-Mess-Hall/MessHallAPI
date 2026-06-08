@@ -2,6 +2,8 @@
 using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
 using Il2CppInterop.Runtime.Injection;
+using MessHallAPI.Base;
+using MessHallAPI.Debugger;
 using MessHallAPI.Managers;
 using MessHallAPI.Managers.ActionSystem;
 using MessHallAPI.Managers.Cosmetic;
@@ -9,6 +11,8 @@ using MessHallAPI.Managers.Role;
 using MessHallAPI.Managers.RoleSettings;
 using MessHallAPI.Networking;
 using MessHallAPI.Patches;
+using System.Reflection;
+using System.Xml.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using static MessHallAPI.Base.References;
@@ -20,36 +24,58 @@ namespace MessHallAPI.Base
     public class Core : BasePlugin
     {
         public static string SceneName;
+        public static Core Instance;
 
         public override void Load()
         {
-            foreach (Type type in System.Reflection.Assembly.GetExecutingAssembly().GetTypes())
+            try
             {
-                if (type.IsSubclassOf(typeof(MonoBehaviour)))
+                new Harmony("plugin.teammesshall.com").PatchAll();
+                foreach (Type type in Assembly.GetExecutingAssembly().GetTypes())
                 {
-                    ClassInjector.RegisterTypeInIl2Cpp(type);
+                    try
+                    {
+                        if (type.IsSubclassOf(typeof(MonoBehaviour)))
+                        {
+                            ClassInjector.RegisterTypeInIl2Cpp(type);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.LogWarning($"Failed to register {type.FullName}: {ex.Message}");
+                    }
                 }
-            }
 
+                IsVR = Application.productName.Contains("VR");
+                Instance = this;
+
+                Log.LogInfo("Initialization complete");
+            }
+            catch (Exception ex)
+            {
+                Log.LogError(ex);
+            }
+        }
+
+        public static void OnInit()
+        {
             RPCRegistry.AutoDiscover();
             PowerRegistration.AutoRegister();
             CustomRoleManager.AutoRegisterRoles();
             TargetedActionRegistration.AutoRegister();
             Custom3DPanelManager.AutoRegisterPanels();
             VanillaRoleManager.AutoRegisterRoles();
-            IsVR = Application.productName.Contains("VR");
-
             var go = new GameObject("MessHallAPI_Runner");
-            GameObject.DontDestroyOnLoad(go);
+            UnityEngine.Object.DontDestroyOnLoad(go);
             go.AddComponent<CoreBehaviour>();
-            new Harmony("plugin.teammesshall.com").PatchAll();
         }
     }
 
+
     public class CoreBehaviour : MonoBehaviour
     {
-        public CoreBehaviour(IntPtr ptr) : base(ptr) { }
-        private Action<Scene, LoadSceneMode> _onSceneLoaded;
+        public CoreBehaviour(System.IntPtr ptr) : base(ptr) { }
+        private System.Action<Scene, LoadSceneMode> _onSceneLoaded;
         public static CoreBehaviour Instance { get; private set; }
 
         private void Start()

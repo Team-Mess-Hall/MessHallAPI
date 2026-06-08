@@ -10,6 +10,6 @@
         public static bool InGame;
         public static bool IsVR;
         public static bool IsHost;
-        public static bool ReferencesSet;
+        public static bool ReferencesSet = false;
     }
 }

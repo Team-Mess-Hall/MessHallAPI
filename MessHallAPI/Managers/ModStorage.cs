@@ -183,6 +183,20 @@ namespace MessHallAPI.Managers
             TrackerIcon = LoadSpriteFromResource("MessHallAPI.Assets.3D_Tracker_Icon.png");
             EngineerIcon = LoadSpriteFromResource("MessHallAPI.Assets.3D_Engineer_Icon.png");
             RoleButton = LoadSpriteFromResource("MessHallAPI.Assets.3D_Roles_button.png");
+
+            CloseButton.hideFlags |= HideFlags.DontUnloadUnusedAsset;
+            WraithIcon.hideFlags |= HideFlags.DontUnloadUnusedAsset;
+            LeftArrow.hideFlags |= HideFlags.DontUnloadUnusedAsset;
+            RightArrow.hideFlags |= HideFlags.DontUnloadUnusedAsset;
+            ImpostorIcon.hideFlags |= HideFlags.DontUnloadUnusedAsset;
+            VigilanteIcon.hideFlags |= HideFlags.DontUnloadUnusedAsset;
+            DeputyIcon.hideFlags |= HideFlags.DontUnloadUnusedAsset;
+            ScannerIcon.hideFlags |= HideFlags.DontUnloadUnusedAsset;
+            TrackerIcon.hideFlags |= HideFlags.DontUnloadUnusedAsset;
+            GuardianAngelIcon.hideFlags |= HideFlags.DontUnloadUnusedAsset;
+            InfectedIcon.hideFlags |= HideFlags.DontUnloadUnusedAsset;
+            EngineerIcon.hideFlags |= HideFlags.DontUnloadUnusedAsset;
+            RoleButton.hideFlags |= HideFlags.DontUnloadUnusedAsset;
         }
     }
 }
