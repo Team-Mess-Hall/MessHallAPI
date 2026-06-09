@@ -20,7 +20,7 @@ using static MessHallAPI.Config.Settings;
 
 namespace MessHallAPI.Base
 {
-    [BepInPlugin("plugin.teammesshall.com", "MessHallAPI", "1.0.0")]
+    [BepInPlugin("plugin.teammesshall.messhallapi", "MessHallAPI", "1.0.0")]
     public class Core : BasePlugin
     {
         public static string SceneName;

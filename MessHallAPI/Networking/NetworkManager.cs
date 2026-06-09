@@ -1,11 +1,11 @@
-﻿using System.Reflection;
-using System.Text.Json;
-using Fusion;
+﻿using Fusion;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using Il2CppSystem.IO;
 using MessHallAPI.Config;
 using MessHallAPI.Debugger;
 using MessHallAPI.Patches;
+using System.Reflection;
+using System.Text.Json;
 using static MessHallAPI.Base.References;
 using static MessHallAPI.Networking.RPCRegistry;
 
@@ -20,7 +20,7 @@ namespace MessHallAPI.Networking
         /// In short, only allow users who have the mod installed in the lobby
         /// </summary>
         public static bool AllowUnregisteredPlayers = true;
-        
+
         public static void InvokeRPC(string modId, string methodName, params object[] args)
         {
             if (!Settings.InGame)
@@ -177,10 +177,14 @@ namespace MessHallAPI.Networking
                     {
                         if (paremeter == InfoIndex)
                         {
+                            int _ReliableSender = sender.PlayerId;
+                            if (_ReliableSender == 0 && sender.PlayerId != packet.ActorId)
+                                _ReliableSender = packet.ActorId;
+
                             FinalOperationInfo[paremeter] = new MessHallRpcInfo
                             {
-                                Sender = sender.PlayerId,
-                                IsHost = Settings.IsHost
+                                Sender = _ReliableSender,
+                                IsHost = _ReliableSender == networkRunner.LocalPlayer
                             };
                         }
                         else

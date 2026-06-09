@@ -66,10 +66,10 @@ namespace MessHallAPI.Managers
             image.sprite = ModStamp;
 
             RectTransform rect = imageobj.GetComponent<RectTransform>();
-            rect.anchorMin = new Vector2(0, 0);
-            rect.anchorMax = new Vector2(0, 0);
-            rect.pivot = new Vector2(0, 0);
-            rect.anchoredPosition = new Vector2(1180f, 540f);
+            rect.anchorMin = new Vector2(1, 1);
+            rect.anchorMax = new Vector2(1, 1);
+            rect.pivot = new Vector2(1, 1);
+            rect.anchoredPosition = new Vector2(-20f, -20f);
 
             DontDestroyOnLoad(stampobj);
         }
