@@ -177,10 +177,14 @@ namespace MessHallAPI.Networking
                     {
                         if (paremeter == InfoIndex)
                         {
+                            int _ReliableSender = sender.PlayerId;
+                            if (_ReliableSender == 0 && sender.PlayerId != packet.ActorId)
+                                _ReliableSender = packet.ActorId;
+
                             FinalOperationInfo[paremeter] = new MessHallRpcInfo
                             {
-                                Sender = sender.PlayerId,
-                                IsHost = Settings.IsHost
+                                Sender = _ReliableSender,
+                                IsHost = _ReliableSender == networkRunner.LocalPlayer
                             };
                         }
                         else
